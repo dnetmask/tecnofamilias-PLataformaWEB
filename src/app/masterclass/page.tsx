@@ -123,7 +123,8 @@ const PARAR = [
 export default async function MasterclassPage() {
   const [mc, pricing] = await Promise.all([getMasterclass(), getPricing()]);
   const usd = mc.service?.priceUsd ?? 0;
-  const price = pricing.price(usd);
+  const cop = mc.service?.priceCop;
+  const price = pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
   const buyHref = mc.service ? `/checkout?servicio=${mc.service.slug}` : "/planes";
   const Reserve = ({ className = "btn btn-yellow", label = `Reservar mi cupo · ${price}` }: { className?: string; label?: string }) =>
@@ -358,7 +359,7 @@ export default async function MasterclassPage() {
             <h3 style={{ margin: 0, fontSize: "1.7rem" }}>Masterclass: Crianza digital segura</h3>
             <div>
               <span className="price" style={{ fontSize: "2.6rem" }}>{price}</span> <span className="muted">por persona</span>
-              {usd > 0 && <div className="small muted">Se cobra hoy {formatCop(pricing.charge(usd))} · precio base USD {usd}</div>}
+              {usd > 0 && <div className="small muted">Se cobra hoy {formatCop(pricing.charge(usd, cop))} · precio base USD {usd}</div>}
             </div>
             <CurrencySwitcher current={pricing.currency} />
             <ul style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 6 }}>

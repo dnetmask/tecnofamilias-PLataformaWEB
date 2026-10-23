@@ -28,12 +28,14 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
   let title = "";
   let detail = "";
   let amount = 0;
+  let cop: number | null = null;
   if (planSlug) {
     const plan = await db.plan.findUnique({ where: { slug: planSlug } });
     if (!plan || !plan.active) redirect("/planes");
     const sub = await getActiveSubscription(user.id);
     title = plan.name;
     amount = plan.priceUsd;
+    cop = plan.priceCop;
     detail = sub
       ? `Ya tienes una suscripción activa hasta el ${formatDate(sub.currentPeriodEnd)}. Este pago la extiende un ${plan.interval === "YEAR" ? "año" : "mes"} más.`
       : `Acceso a todo el contenido incluido durante un ${plan.interval === "YEAR" ? "año" : "mes"}.`;
@@ -50,6 +52,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
     if (!service || !service.active || !service.priceUsd) redirect("/servicios");
     title = service.name;
     amount = service.priceUsd;
+    cop = service.priceCop;
     detail = `${service.unit}. Después del pago te contactamos para agendar.`;
   } else {
     redirect("/planes");
@@ -63,10 +66,10 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
           <h3>{title}</h3>
           <p className="muted small">{detail}</p>
           <div className="price">USD {amount}</div>
-          {pricing.currency !== "USD" && <div className="small muted">≈ {pricing.price(amount)}</div>}
-          <div style={{ marginTop: 10, fontWeight: 700 }}>Total a pagar hoy: {formatCop(pricing.charge(amount))}</div>
+          {pricing.currency !== "USD" && <div className="small muted">≈ {pricing.price(amount, cop)}</div>}
+          <div style={{ marginTop: 10, fontWeight: 700 }}>Total a pagar hoy: {formatCop(pricing.charge(amount, cop))}</div>
           <div className="small muted">
-            Tasa del día: 1 USD = {formatCop(pricing.rates.COP)}. Mercado Pago cobra en pesos colombianos; si tu tarjeta es de otro país, tu banco hace la conversión final.
+            {cop ? "Precio fijo en pesos colombianos." : <>Tasa del día: 1 USD = {formatCop(pricing.rates.COP)}.</>} Mercado Pago cobra en pesos colombianos; si tu tarjeta es de otro país, tu banco hace la conversión final.
           </div>
         </div>
         <CurrencySwitcher current={pricing.currency} />

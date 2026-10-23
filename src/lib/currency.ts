@@ -55,15 +55,16 @@ function money(amount: number, currency: Currency) {
 
 const num = (n: number, max = 0) => new Intl.NumberFormat("es-CO", { maximumFractionDigits: max }).format(n);
 
-/** Precio fijo en la moneda elegida, p. ej. "USD 60" o "MXN 1.110". */
-export function formatPrice(usd: number, currency: Currency, rates: Rates) {
+/** Precio fijo en la moneda elegida, p. ej. "USD 60" o "MXN 1.110". `cop` es un precio fijo en pesos colombianos. */
+export function formatPrice(usd: number, currency: Currency, rates: Rates, cop?: number | null) {
   if (currency === "USD") return money(usd, "USD");
+  if (currency === "COP" && cop) return money(cop, "COP");
   return money(niceRound(convert(usd, currency, rates)), currency);
 }
 
 /** Rango de referencia, p. ej. "USD 750–1.250" o "COP 3–5 M". */
-export function formatRange(fromUsd: number, toUsd: number, currency: Currency, rates: Rates) {
-  if (fromUsd === toUsd) return formatPrice(fromUsd, currency, rates);
+export function formatRange(fromUsd: number, toUsd: number, currency: Currency, rates: Rates, cop?: number | null) {
+  if (fromUsd === toUsd) return formatPrice(fromUsd, currency, rates, cop);
   if (currency === "USD") return `${money(fromUsd, "USD")}–${num(toUsd)}`;
   const a = convert(fromUsd, currency, rates);
   const b = convert(toUsd, currency, rates);
@@ -71,7 +72,8 @@ export function formatRange(fromUsd: number, toUsd: number, currency: Currency, 
   return `${money(roundSig(a), currency)}–${num(roundSig(b))}`;
 }
 
-/** Monto exacto a cobrar en COP para un precio en dólares (redondeado a 100). */
-export function chargeCop(usd: number, rates: Rates) {
+/** Monto exacto a cobrar en COP: el precio fijo en COP si existe o el dólar convertido (redondeado a 100). */
+export function chargeCop(usd: number, rates: Rates, cop?: number | null) {
+  if (cop) return cop;
   return Math.max(100, Math.round((usd * rates.COP) / 100) * 100);
 }

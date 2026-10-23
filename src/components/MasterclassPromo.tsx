@@ -19,7 +19,7 @@ export async function MasterclassPromo({ compact = false }: { compact?: boolean 
             {" "}{mc.dateLabel} · {mc.time} ({mc.timezone}) · {mc.modality}.
           </p>
           <div className="row" style={{ marginTop: 6 }}>
-            <Link href="/masterclass" className="btn btn-yellow">Reservar mi cupo · {pricing.price(mc.service.priceUsd ?? 0)}</Link>
+            <Link href="/masterclass" className="btn btn-yellow">Reservar mi cupo · {pricing.price(mc.service.priceUsd ?? 0, mc.service.priceCop)}</Link>
             <Link href="/masterclass#contenido" className="btn btn-light">Ver el contenido</Link>
           </div>
         </div>

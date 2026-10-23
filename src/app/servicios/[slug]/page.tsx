@@ -51,11 +51,11 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
         <aside className={`card stack${service.featured ? " service-dark" : ""}`}>
           <div className="service-price" style={{ alignItems: "flex-start", textAlign: "left" }}>
-            <div className="price-label">{pricing.range(service.priceFromUsd, service.priceToUsd)}</div>
+            <div className="price-label">{pricing.range(service.priceFromUsd, service.priceToUsd, service.priceCop)}</div>
             <div className="small">{service.unit}</div>
           </div>
           <CurrencySwitcher current={pricing.currency} dark={service.featured} />
-          {service.priceUsd ? <div className="small">Se cobra hoy {formatCop(pricing.charge(service.priceUsd))}</div> : null}
+          {service.priceUsd ? <div className="small">Se cobra hoy {formatCop(pricing.charge(service.priceUsd, service.priceCop))}</div> : null}
           <CurrencyNote currency={pricing.currency} />
           {service.priceUsd ? (
             user ? (

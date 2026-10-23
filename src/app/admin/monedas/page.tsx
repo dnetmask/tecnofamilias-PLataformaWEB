@@ -1,6 +1,7 @@
 import { SubmitButton } from "@/components/SubmitButton";
 import { chargeCop, CURRENCIES, formatPrice, formatRange } from "@/lib/currency";
 import { formatCop, formatDateTime } from "@/lib/format";
+import { db } from "@/lib/db";
 import { getRatesInfo, getRatesSetting } from "@/lib/pricing";
 import { saveRatesAction } from "../actions";
 import { Notice, type NoticeParams } from "../Notice";
@@ -16,10 +17,14 @@ export default async function AdminCurrenciesPage({ searchParams }: { searchPara
   const [setting, info] = await Promise.all([getRatesSetting(), getRatesInfo()]);
   const { rates } = info;
   const autoFailed = setting.mode === "auto" && info.source !== "auto";
+  const [plan, advisory] = await Promise.all([
+    db.plan.findUnique({ where: { slug: "anual" } }),
+    db.service.findUnique({ where: { slug: "asesoria-personalizada" } }),
+  ]);
   const examples = [
-    { label: "Plan anual", from: 60, to: 60 },
-    { label: "Asesoría personalizada", from: 300, to: 300 },
-    { label: "Programa anual colegios", from: 3000, to: 5000 },
+    { label: "Plan anual", from: plan?.priceUsd ?? 70, to: plan?.priceUsd ?? 70, cop: plan?.priceCop },
+    { label: "Asesoría personalizada", from: advisory?.priceUsd ?? 300, to: advisory?.priceUsd ?? 300, cop: advisory?.priceCop },
+    { label: "Programa anual colegios", from: 3000, to: 5000, cop: null },
   ];
   return (
     <>
@@ -27,7 +32,7 @@ export default async function AdminCurrenciesPage({ searchParams }: { searchPara
       <Notice error={error} ok={ok} />
       <p className="small muted">
         Todos los precios se definen en <strong>dólares</strong>. Se muestran convertidos a COP, MXN o PEN según la moneda del visitante, y
-        al pagar se convierten a <strong>pesos colombianos</strong>, que es lo que cobra Mercado Pago. Cada orden guarda el precio en USD y la tasa usada.
+        al pagar se convierten a <strong>pesos colombianos</strong>, que es lo que cobra Mercado Pago. Cada orden guarda el precio en USD y la tasa usada. Los planes y servicios con <strong>precio fijo en COP</strong> se cobran por ese valor.
       </p>
 
       <div className="card stack">
@@ -76,9 +81,9 @@ export default async function AdminCurrenciesPage({ searchParams }: { searchPara
               <tr key={e.label}>
                 <td>{e.label}</td>
                 {(["USD", "COP", "MXN", "PEN"] as const).map((c) => (
-                  <td key={c}>{e.from === e.to ? formatPrice(e.from, c, rates) : formatRange(e.from, e.to, c, rates)}</td>
+                  <td key={c}>{e.from === e.to ? formatPrice(e.from, c, rates, e.cop) : formatRange(e.from, e.to, c, rates)}</td>
                 ))}
-                <td>{e.from === e.to ? formatCop(chargeCop(e.from, rates)) : "Cotización"}</td>
+                <td>{e.from === e.to ? <>{formatCop(chargeCop(e.from, rates, e.cop))}{e.cop ? " (fijo)" : ""}</> : "Cotización"}</td>
               </tr>
             ))}
           </tbody>

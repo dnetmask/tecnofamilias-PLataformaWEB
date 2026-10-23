@@ -38,6 +38,11 @@ export default async function AdminServicePage({ params, searchParams }: { param
             <input className="input" name="priceUsd" type="number" min={1} step={1} defaultValue={s?.priceUsd ?? ""} />
             <span className="hint">Déjalo vacío para que sea “Solicitar cotización”. Si lo llenas, el rango toma este mismo valor. Los precios se muestran convertidos a COP, MXN y PEN con la tasa del día, y se cobran en COP.</span>
           </div>
+          <div className="field">
+            <label>Precio fijo en COP (opcional)</label>
+            <input className="input" name="priceCop" type="number" min={100} step={100} defaultValue={s?.priceCop ?? ""} placeholder="Convertir con la tasa del día" />
+            <span className="hint">Solo para compra en línea. Si lo llenas, en pesos colombianos se muestra y se cobra este valor en lugar de convertir el dólar.</span>
+          </div>
           <div className="field"><label>Orden</label><input className="input" name="order" type="number" defaultValue={s?.order ?? 0} /></div>
           <div className="field"><label>Slug (URL)</label><input className="input" name="slug" defaultValue={s?.slug} placeholder="Se genera del nombre" /></div>
         </div>

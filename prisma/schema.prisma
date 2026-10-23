@@ -107,6 +107,8 @@ model Plan {
   description String       @default("")
   /// Precio base en dólares; se convierte a COP al pagar.
   priceUsd    Int
+  /// Precio fijo en COP (opcional); si existe reemplaza la conversión del dólar.
+  priceCop    Int?
   interval    PlanInterval
   active      Boolean      @default(true)
   order       Int          @default(0)
@@ -336,6 +338,8 @@ model Service {
   details     String          @default("")
   /// Precio en dólares para la compra en línea; null = solo cotización.
   priceUsd     Int?
+  /// Precio fijo en COP (opcional) para la compra en línea; si existe reemplaza la conversión.
+  priceCop     Int?
   /// Rango de referencia en dólares; se muestra convertido a la moneda elegida.
   priceFromUsd Int
   priceToUsd   Int

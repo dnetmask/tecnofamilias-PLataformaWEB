@@ -73,9 +73,9 @@ export const getPricing = cache(async () => {
     currency,
     rates,
     info,
-    price: (usd: number) => formatPrice(usd, currency, rates),
-    range: (fromUsd: number, toUsd: number) => formatRange(fromUsd, toUsd, currency, rates),
+    price: (usd: number, cop?: number | null) => formatPrice(usd, currency, rates, cop),
+    range: (fromUsd: number, toUsd: number, cop?: number | null) => formatRange(fromUsd, toUsd, currency, rates, cop),
     /** Lo que efectivamente cobra Mercado Pago hoy, en COP. */
-    charge: (usd: number) => chargeCop(usd, rates),
+    charge: (usd: number, cop?: number | null) => chargeCop(usd, rates, cop),
   };
 });

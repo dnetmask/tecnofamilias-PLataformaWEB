@@ -13,9 +13,13 @@ export async function createOrderAction(formData: FormData) {
   const lessonSlug = formData.get("clase");
   const serviceSlug = formData.get("servicio");
   const user = await requireUser("/planes");
-  // El precio base está en dólares: se convierte a COP con la tasa del día y se guarda la tasa usada.
+  // El precio base está en dólares: se convierte a COP con la tasa del día (o se usa el precio fijo en COP)
+  // y se guarda la tasa efectiva.
   const { rates } = await getRatesInfo();
-  const amounts = (usd: number) => ({ amountUsd: usd, amountCop: chargeCop(usd, rates), fxRate: rates.COP });
+  const amounts = (usd: number, cop?: number | null) => {
+    const amountCop = chargeCop(usd, rates, cop);
+    return { amountUsd: usd, amountCop, fxRate: cop ? amountCop / usd : rates.COP };
+  };
 
   let order;
   if (typeof planSlug === "string" && planSlug) {
@@ -27,7 +31,7 @@ export async function createOrderAction(formData: FormData) {
         kind: "SUBSCRIPTION",
         planId: plan.id,
         description: `Tecnofamilias · ${plan.name}`,
-        ...amounts(plan.priceUsd),
+        ...amounts(plan.priceUsd, plan.priceCop),
         provider: paymentsMode(),
       },
     });
@@ -57,7 +61,7 @@ export async function createOrderAction(formData: FormData) {
         kind: "SERVICE",
         serviceId: service.id,
         description: `Servicio: ${service.name}`,
-        ...amounts(service.priceUsd),
+        ...amounts(service.priceUsd, service.priceCop),
         provider: paymentsMode(),
       },
     });

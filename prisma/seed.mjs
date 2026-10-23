@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 const db = new PrismaClient();
 
 const PLANS = [
-  { slug: "anual", name: "Anual", priceUsd: 60, interval: "YEAR", order: 1, description: "Acceso completo durante 12 meses." },
+  { slug: "anual", name: "Anual", priceUsd: 70, priceCop: 200000, interval: "YEAR", order: 1, description: "Acceso completo durante 12 meses." },
 ];
 
 // Precios (en USD) y textos de referencia: ajustarlos desde /admin antes de lanzar.

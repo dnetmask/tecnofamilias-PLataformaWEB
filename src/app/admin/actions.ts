@@ -333,6 +333,7 @@ const planSchema = z.object({
   name: z.string().trim().min(2).max(80),
   description: z.string().trim().max(300).default(""),
   priceUsd: z.coerce.number().int().min(1),
+  priceCop: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(100).nullable()),
   interval: z.enum(["MONTH", "YEAR"]),
   order: z.coerce.number().int().default(0),
   active: checkbox,
@@ -372,6 +373,7 @@ const serviceSchema = z.object({
   description: z.string().trim().max(600).default(""),
   details: z.string().trim().max(3000).default(""),
   priceUsd: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(1).nullable()),
+  priceCop: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(100).nullable()),
   priceFromUsd: z.coerce.number().int().min(0),
   priceToUsd: z.coerce.number().int().min(0),
   unit: z.string().trim().max(60).default(""),
@@ -388,6 +390,8 @@ export async function saveServiceAction(formData: FormData) {
     // Con precio en línea el rango mostrado es ese mismo precio.
     data.priceFromUsd = data.priceUsd;
     data.priceToUsd = data.priceUsd;
+  } else {
+    data.priceCop = null;
   }
   if (data.priceToUsd < data.priceFromUsd) fail(path, "El precio “hasta” debe ser mayor o igual al “desde”");
   if (data.priceFromUsd === 0) fail(path, "Escribe el rango de precio de referencia en USD");
