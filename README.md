@@ -47,12 +47,7 @@ npm run dev
    - `PAYMENTS_MODE` — `mercadopago`
    - `MP_ACCESS_TOKEN` — token de producción de Mercado Pago Colombia
    - `MP_WEBHOOK_SECRET` — clave secreta de webhooks (Mercado Pago → Tus integraciones → Webhooks, evento *Pagos*, URL `https://<dominio>/api/webhooks/mercadopago`)
-4. **Desplegar**, y luego crear el administrador y los datos iniciales una sola vez desde tu equipo:
-   ```bash
-   vercel env pull .env.production.local
-   set -a; . ./.env.production.local; set +a
-   ADMIN_EMAIL=admin@tecnofamilias.com ADMIN_PASSWORD='una-clave-fuerte' npm run db:seed
-   ```
+4. **Administrador inicial:** agregar `ADMIN_EMAIL` y `ADMIN_PASSWORD` (tipo *Sensitive*) y desplegar. El build ejecuta `prisma/seed.mjs`, que crea el administrador y, si la base está vacía, carga el contenido de ejemplo. Después del primer ingreso se puede borrar `ADMIN_PASSWORD` (cambiar la clave desde *Mi cuenta*).
 5. Ingresar a `/admin` y reemplazar el contenido de ejemplo (videos de las clases, recursos, precios).
 
 ## Videos de las clases

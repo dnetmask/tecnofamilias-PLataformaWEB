@@ -1,5 +1,8 @@
-// Datos iniciales. Es idempotente: se puede correr varias veces sin duplicar.
-// Uso: npm run db:seed  (requiere DATABASE_URL, ADMIN_EMAIL y ADMIN_PASSWORD)
+// Datos iniciales. Corre en cada build de Vercel y también con `npm run db:seed`.
+// - El contenido de ejemplo solo se carga si la base está vacía (sin planes),
+//   para no recrear lo que se haya borrado desde /admin.
+// - El administrador se crea solo si existen ADMIN_EMAIL y ADMIN_PASSWORD; si el
+//   correo ya existe, se asegura que sea ADMIN y esté activo (no cambia su clave).
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -253,6 +256,10 @@ async function main() {
     console.log("ADMIN_EMAIL / ADMIN_PASSWORD no definidos: no se creó administrador");
   }
 
+  if ((await db.plan.count()) > 0) {
+    console.log("La base ya tiene contenido: no se cargan datos de ejemplo");
+    return;
+  }
   for (const p of PLANS) await db.plan.upsert({ where: { slug: p.slug }, create: p, update: {} });
   for (const l of LESSONS) {
     await db.lesson.upsert({ where: { slug: l.slug }, create: { ...l, published: true, instructor: "Equipo Tecnofamilias" }, update: {} });
@@ -262,7 +269,7 @@ async function main() {
     await db.pactTemplate.upsert({ where: { slug: t.slug }, create: { ...t, order: i + 1 }, update: {} });
   }
   for (const c of CATEGORIES) await db.forumCategory.upsert({ where: { slug: c.slug }, create: c, update: {} });
-  console.log("Datos iniciales listos");
+  console.log("Datos de ejemplo cargados");
 }
 
 main()
