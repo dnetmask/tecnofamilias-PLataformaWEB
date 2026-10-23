@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
+import { getPricing } from "@/lib/pricing";
 import { AUDIENCE_ORDER, AUDIENCES } from "@/lib/services";
 
 /** Servicios adicionales agrupados por público (diapositivas 7 a 9 de la presentación). */
 export async function ServicesCatalog() {
-  const services = await db.service.findMany({ where: { active: true }, orderBy: { order: "asc" } });
+  const [services, pricing] = await Promise.all([
+    db.service.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
+    getPricing(),
+  ]);
   return (
     <div className="stack" style={{ gap: 36 }}>
       {AUDIENCE_ORDER.map((aud) => {
@@ -28,7 +32,7 @@ export async function ServicesCatalog() {
                     <p className="small" style={{ margin: 0 }}>{s.description}</p>
                   </div>
                   <div className="service-price">
-                    <div className="price-label">{s.priceLabel}</div>
+                    <div className="price-label">{pricing.range(s.priceFromCop, s.priceToCop)}</div>
                     <div className="small">{s.unit}</div>
                     <span className={`btn btn-sm ${s.priceCop ? "btn-red" : s.featured ? "btn-yellow" : ""}`} style={{ marginTop: 10 }}>
                       {s.priceCop ? "Comprar" : "Solicitar cotización"}

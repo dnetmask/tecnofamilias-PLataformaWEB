@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PlanCards } from "@/components/PlanCards";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { MemberHome } from "./MemberHome";
 import { AGE_STAGES } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -46,8 +47,9 @@ const PILLARS = [
 
 export default async function Home() {
   const user = await getCurrentUser();
-  // Con sesión iniciada la sección de planes ya no se muestra.
-  const plans = user ? [] : await db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } });
+  // Con sesión iniciada se muestra un inicio orientado a usar el contenido.
+  if (user) return <MemberHome user={user} />;
+  const plans = await db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } });
   return (
     <>
       <section className="hero">
@@ -62,17 +64,8 @@ export default async function Home() {
               los contacta. Todo en una sola plataforma.
             </p>
             <div className="row" style={{ marginTop: 24 }}>
-              {user ? (
-                <>
-                  <Link href="/clases" className="btn btn-yellow">Ir a mis clases</Link>
-                  <Link href="/juegos" className="btn btn-light">Jugar en familia</Link>
-                </>
-              ) : (
-                <>
-                  <Link href="/planes" className="btn btn-yellow">Ver planes</Link>
-                  <Link href="/clases" className="btn btn-light">Explorar clases</Link>
-                </>
-              )}
+              <Link href="/planes" className="btn btn-yellow">Ver planes</Link>
+              <Link href="/clases" className="btn btn-light">Explorar clases</Link>
             </div>
           </div>
         </div>

@@ -3,7 +3,8 @@ import Link from "next/link";
 import { getActiveSubscription } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { ACCESS_LABELS, AGE_STAGES, formatCop, stageShort } from "@/lib/format";
+import { ACCESS_LABELS, AGE_STAGES, stageShort } from "@/lib/format";
+import { getPricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Clases" };
@@ -17,6 +18,7 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
   if (tipo === "complementos") where.access = "ADDON";
 
   const user = await getCurrentUser();
+  const pricing = await getPricing();
   const [lessons, sub, purchases] = await Promise.all([
     db.lesson.findMany({ where, orderBy: [{ order: "asc" }, { createdAt: "desc" }] }),
     user ? getActiveSubscription(user.id) : null,
@@ -69,7 +71,7 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
                   </div>
                   <div className="row" style={{ marginBottom: 8 }}>
                     <span className={`badge ${l.access === "ADDON" ? "badge-yellow" : "badge-blue"}`}>
-                      {l.access === "ADDON" ? `Complemento · ${formatCop(l.priceCop)}` : ACCESS_LABELS[l.access]}
+                      {l.access === "ADDON" ? `Complemento · ${pricing.price(l.priceCop)}` : ACCESS_LABELS[l.access]}
                     </span>
                     <span className="badge badge-gray">{stageShort(l.ageStage)}{l.ageStage !== "ALL" ? " años" : ""}</span>
                     {l.durationMin > 0 && <span className="small muted">{l.durationMin} min</span>}

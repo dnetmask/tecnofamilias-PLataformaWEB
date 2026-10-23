@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CurrencyNote } from "@/components/CurrencyNote";
+import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { getCurrentUser } from "@/lib/auth";
+import { getPricing } from "@/lib/pricing";
 import { db } from "@/lib/db";
 import { AUDIENCES } from "@/lib/services";
 import { QuoteForm } from "../QuoteForm";
@@ -14,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [service, user] = await Promise.all([db.service.findUnique({ where: { slug } }), getCurrentUser()]);
+  const [service, user, pricing] = await Promise.all([db.service.findUnique({ where: { slug } }), getCurrentUser(), getPricing()]);
   if (!service || (!service.active && user?.role !== "ADMIN")) notFound();
   const meta = AUDIENCES[service.audience];
   const back = user ? "/servicios" : "/planes#servicios";
@@ -47,9 +50,12 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
         <aside className={`card stack${service.featured ? " service-dark" : ""}`}>
           <div className="service-price" style={{ alignItems: "flex-start", textAlign: "left" }}>
-            <div className="price-label">{service.priceLabel}</div>
+            <div className="price-label">{pricing.range(service.priceFromCop, service.priceToCop)}</div>
             <div className="small">{service.unit}</div>
           </div>
+          <CurrencySwitcher current={pricing.currency} dark={service.featured} />
+          {service.priceCop && pricing.currency !== "COP" && <div className="small">Se cobra {pricing.cop(service.priceCop)}</div>}
+          {!service.priceCop && <CurrencyNote currency={pricing.currency} />}
           {service.priceCop ? (
             user ? (
               <Link className="btn btn-red" href={`/checkout?servicio=${service.slug}`}>Comprar</Link>

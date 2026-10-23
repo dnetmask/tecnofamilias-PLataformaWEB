@@ -10,11 +10,11 @@ const NAV = [
   ["/admin/clases", "Clases"],
   ["/admin/recursos", "Videos y podcasts"],
   ["/admin/pactos", "Plantillas de pactos"],
-  ["/admin/juegos", "Juegos"],
   ["/admin/comunidad", "Comunidad"],
   ["/admin/servicios", "Otros servicios"],
   ["/admin/solicitudes", "Solicitudes"],
   ["/admin/planes", "Planes"],
+  ["/admin/monedas", "Monedas"],
   ["/admin/pagos", "Pagos"],
 ];
 

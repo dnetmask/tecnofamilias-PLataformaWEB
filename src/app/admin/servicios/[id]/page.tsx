@@ -30,12 +30,13 @@ export default async function AdminServicePage({ params, searchParams }: { param
               {AUDIENCE_ORDER.map((a) => <option key={a} value={a}>{AUDIENCES[a].label}</option>)}
             </select>
           </div>
-          <div className="field"><label>Precio mostrado</label><input className="input" name="priceLabel" defaultValue={s?.priceLabel} placeholder="COP 3–5 M" required /></div>
+          <div className="field"><label>Precio de referencia desde (COP)</label><input className="input" name="priceFromCop" type="number" min={0} step={1000} defaultValue={s?.priceFromCop ?? ""} placeholder="3000000" /></div>
+          <div className="field"><label>Precio de referencia hasta (COP)</label><input className="input" name="priceToCop" type="number" min={0} step={1000} defaultValue={s?.priceToCop ?? ""} placeholder="5000000" /></div>
           <div className="field"><label>Unidad</label><input className="input" name="unit" defaultValue={s?.unit} placeholder="por sesión, por año…" /></div>
           <div className="field">
             <label>Precio para compra en línea (COP)</label>
             <input className="input" name="priceCop" type="number" min={1000} step={1000} defaultValue={s?.priceCop ?? ""} />
-            <span className="hint">Déjalo vacío para que sea “Solicitar cotización”.</span>
+            <span className="hint">Déjalo vacío para que sea “Solicitar cotización”. Si lo llenas, el rango toma este mismo valor. Los precios se muestran convertidos a USD, MXN y PEN con las tasas de Monedas.</span>
           </div>
           <div className="field"><label>Orden</label><input className="input" name="order" type="number" defaultValue={s?.order ?? 0} /></div>
           <div className="field"><label>Slug (URL)</label><input className="input" name="slug" defaultValue={s?.slug} placeholder="Se genera del nombre" /></div>

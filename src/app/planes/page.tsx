@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { PlanCards } from "@/components/PlanCards";
 import { ServicesCatalog } from "@/components/ServicesCatalog";
+import { CurrencyNote } from "@/components/CurrencyNote";
+import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { getCurrentUser } from "@/lib/auth";
+import { getPricing } from "@/lib/pricing";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -9,16 +12,18 @@ export const metadata = { title: "Planes" };
 
 export default async function PlansPage({ searchParams }: { searchParams: Promise<{ requiere?: string }> }) {
   const { requiere } = await searchParams;
-  const [plans, user] = await Promise.all([
+  const [plans, user, pricing] = await Promise.all([
     db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
     getCurrentUser(),
+    getPricing(),
   ]);
   return (
     <>
       <div className="page-head">
         <div className="container">
           <h1>Planes</h1>
-          <p>Elige cómo quieres acompañar a tu familia.</p>
+          <p>Un solo plan con acceso a todo el contenido de Tecnofamilias.</p>
+          <div style={{ marginTop: 16 }}><CurrencySwitcher current={pricing.currency} dark /></div>
         </div>
       </div>
       <div className="container section stack">
@@ -28,6 +33,7 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
           </div>
         )}
         <PlanCards plans={plans} />
+        <div className="center"><CurrencyNote currency={pricing.currency} /></div>
         <div className="card card-tint">
           <h3>¿Qué son los cursos complementarios?</h3>
           <p className="muted" style={{ margin: 0 }}>

@@ -330,7 +330,9 @@ model Service {
   details     String          @default("")
   /// Precio para la compra en línea; null = solo cotización.
   priceCop    Int?
-  priceLabel  String
+  /// Rango de referencia en COP; se muestra convertido a la moneda elegida.
+  priceFromCop Int
+  priceToCop   Int
   unit        String          @default("")
   featured    Boolean         @default(false)
   active      Boolean         @default(true)
@@ -360,4 +362,11 @@ model ServiceRequest {
   updatedAt    DateTime             @updatedAt
 
   @@index([status, createdAt])
+}
+
+/// Configuración editable desde el admin (p. ej. tasas de cambio).
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
 }

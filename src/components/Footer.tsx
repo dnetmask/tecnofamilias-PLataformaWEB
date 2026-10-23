@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { getPricing } from "@/lib/pricing";
+import { CurrencySwitcher } from "./CurrencySwitcher";
 
-export function Footer() {
+export async function Footer() {
+  const { currency } = await getPricing();
   return (
     <footer className="footer">
       <div className="container row between" style={{ alignItems: "flex-start", gap: 24 }}>
@@ -12,6 +15,7 @@ export function Footer() {
           <div><Link href="/clases">Clases</Link> · <Link href="/recursos">Videos y podcasts</Link> · <Link href="/pactos">Pactos</Link> · <Link href="/juegos">Juegos</Link> · <Link href="/comunidad">Comunidad</Link></div>
           <div><Link href="/terminos">Términos y tratamiento de datos</Link></div>
           <div>www.tecnofamilias.com · +57 313 874 3101</div>
+          <div><CurrencySwitcher current={currency} dark /></div>
         </div>
       </div>
     </footer>

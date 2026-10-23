@@ -4,7 +4,9 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { canWatchLesson, getActiveSubscription, hasMemberAccess } from "@/lib/access";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { formatCop, formatDate } from "@/lib/format";
+import { CurrencySwitcher } from "@/components/CurrencySwitcher";
+import { formatDate } from "@/lib/format";
+import { getPricing } from "@/lib/pricing";
 import { paymentsMode } from "@/lib/payments";
 import { createOrderAction } from "./actions";
 
@@ -21,6 +23,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
         ? `/checkout?servicio=${servicio}`
         : "/planes";
   const user = await requireUser(next);
+  const pricing = await getPricing();
 
   let title = "";
   let detail = "";
@@ -59,8 +62,12 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
         <div className="card card-tint">
           <h3>{title}</h3>
           <p className="muted small">{detail}</p>
-          <div className="price">{formatCop(amount)}</div>
+          <div className="price">{pricing.cop(amount)}</div>
+          {pricing.currency !== "COP" && (
+            <div className="small muted">≈ {pricing.price(amount)} · el cobro se hace en pesos colombianos y tu banco hace la conversión</div>
+          )}
         </div>
+        <CurrencySwitcher current={pricing.currency} />
         {paymentsMode() === "demo" && (
           <div className="alert alert-info">Modo de pruebas: no se realizará ningún cobro real.</div>
         )}

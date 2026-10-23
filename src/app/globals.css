@@ -227,3 +227,22 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 }
 .services-grid { grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); }
 .game-frame-screen { height: calc(100dvh - 150px); min-height: 560px; }
+
+/* Selector de moneda */
+.currency-switch { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: #fff; border: 1.5px solid var(--line); flex-wrap: wrap; }
+.currency-switch button { border: 0; background: transparent; padding: 6px 12px; border-radius: 999px; font: inherit; font-weight: 700; font-size: .85rem; color: var(--navy); cursor: pointer; }
+.currency-switch button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+.currency-switch[aria-busy="true"] { opacity: .6; }
+.currency-switch.dark { background: rgb(255 255 255 / 8%); border-color: rgb(255 255 255 / 20%); }
+.currency-switch.dark button { color: #dfe8f5; }
+.currency-switch.dark button[aria-pressed="true"] { background: #fff; color: var(--navy); }
+
+/* Inicio con sesión */
+.member-hero { background: var(--navy); color: #fff; padding: 32px 0 28px; }
+.member-hero h1 { color: #fff; margin: 0; font-size: clamp(1.7rem, 3.2vw, 2.3rem); }
+.member-hero p { color: #cfdbec; margin: 4px 0 20px; }
+.shortcuts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.shortcut { display: flex; align-items: center; gap: 10px; background: #fff; color: var(--navy); border-radius: var(--radius); padding: 12px 14px; font-weight: 800; transition: transform .12s ease; }
+.shortcut:hover { text-decoration: none; transform: translateY(-2px); }
+.shortcut .icon-dot { width: 38px; height: 38px; font-size: 1.1rem; }
+@media (max-width: 520px) { .shortcuts { grid-template-columns: repeat(2, 1fr); } }

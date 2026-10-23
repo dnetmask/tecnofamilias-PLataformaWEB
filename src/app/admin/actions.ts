@@ -8,6 +8,7 @@ import { hashPassword, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { slugify } from "@/lib/format";
 import { extendSubscription, fulfillOrder } from "@/lib/payments";
+import { RATES_KEY } from "@/lib/pricing";
 
 function fail(path: string, message: string): never {
   redirect(`${path}${path.includes("?") ? "&" : "?"}error=${encodeURIComponent(message)}`);
@@ -360,59 +361,6 @@ export async function markOrderPaidAction(formData: FormData) {
   done("/admin/pagos", "Orden marcada como pagada y acceso entregado");
 }
 
-/* ---------- Juegos ---------- */
-
-const gameSchema = z.object({
-  id: z.string().optional(),
-  title: z.string().trim().min(2).max(140),
-  slug: z.string().trim().max(80).optional(),
-  description: z.string().trim().max(600).default(""),
-  ageLabel: z.string().trim().max(40).default(""),
-  emoji: z.string().trim().max(8).default("🎲"),
-  color: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Color hexadecimal, ej. #3DAEE4"),
-  order: z.coerce.number().int().default(0),
-  fullHeight: checkbox,
-  published: checkbox,
-});
-
-const MAX_GAME_BYTES = 1_500_000;
-
-export async function saveGameAction(formData: FormData) {
-  await requireAdmin();
-  const id = formData.get("id") || "";
-  const path = `/admin/juegos/${id || "nuevo"}`;
-  const file = formData.get("file");
-  formData.delete("file");
-  const { id: _id, slug, ...data } = parse(gameSchema, formData, path);
-
-  let html: string | undefined;
-  if (file instanceof File && file.size > 0) {
-    if (file.size > MAX_GAME_BYTES) fail(path, "El archivo supera 1,5 MB");
-    html = await file.text();
-    if (!/<html[\s>]/i.test(html)) fail(path, "El archivo debe ser una página HTML completa");
-  }
-  if (!id && !html) fail(path, "Sube el archivo HTML del juego");
-
-  const finalSlug = slugify(slug || data.title);
-  try {
-    const game = id
-      ? await db.game.update({ where: { id: String(id) }, data: { ...data, slug: finalSlug, ...(html ? { html } : {}) } })
-      : await db.game.create({ data: { ...data, slug: finalSlug, html: html! } });
-    revalidatePath("/juegos");
-    done(`/admin/juegos/${game.id}`, html && id ? "Juego actualizado con el nuevo archivo" : "Juego guardado");
-  } catch (err) {
-    if (isUniqueError(err)) fail(path, "Ya existe un juego con ese slug");
-    throw err;
-  }
-}
-
-export async function deleteGameAction(formData: FormData) {
-  await requireAdmin();
-  await db.game.delete({ where: { id: String(formData.get("id")) } });
-  revalidatePath("/juegos");
-  done("/admin/juegos", "Juego eliminado");
-}
-
 /* ---------- Otros servicios ---------- */
 
 const serviceSchema = z.object({
@@ -423,7 +371,8 @@ const serviceSchema = z.object({
   description: z.string().trim().max(600).default(""),
   details: z.string().trim().max(3000).default(""),
   priceCop: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(1000).nullable()),
-  priceLabel: z.string().trim().min(1, "Escribe el precio que se muestra, ej. COP 3–5 M").max(40),
+  priceFromCop: z.coerce.number().int().min(0),
+  priceToCop: z.coerce.number().int().min(0),
   unit: z.string().trim().max(60).default(""),
   order: z.coerce.number().int().default(0),
   featured: checkbox,
@@ -434,6 +383,13 @@ export async function saveServiceAction(formData: FormData) {
   await requireAdmin();
   const path = `/admin/servicios/${formData.get("id") || "nuevo"}`;
   const { id, slug, ...data } = parse(serviceSchema, formData, path);
+  if (data.priceCop) {
+    // Con precio en línea el rango mostrado es ese mismo precio.
+    data.priceFromCop = data.priceCop;
+    data.priceToCop = data.priceCop;
+  }
+  if (data.priceToCop < data.priceFromCop) fail(path, "El precio “hasta” debe ser mayor o igual al “desde”");
+  if (data.priceFromCop === 0) fail(path, "Escribe el rango de precio de referencia");
   const finalSlug = slugify(slug || data.name);
   try {
     const service = id
@@ -460,4 +416,24 @@ export async function updateServiceRequestAction(formData: FormData) {
   const { id, ...data } = parse(requestUpdateSchema, formData, back);
   await db.serviceRequest.update({ where: { id }, data });
   done(back, "Solicitud actualizada");
+}
+
+/* ---------- Monedas ---------- */
+
+const ratesSchema = z.object({
+  USD: z.coerce.number().positive("Tasa no válida"),
+  MXN: z.coerce.number().positive("Tasa no válida"),
+  PEN: z.coerce.number().positive("Tasa no válida"),
+});
+
+export async function saveRatesAction(formData: FormData) {
+  await requireAdmin();
+  const rates = parse(ratesSchema, formData, "/admin/monedas");
+  await db.setting.upsert({
+    where: { key: RATES_KEY },
+    create: { key: RATES_KEY, value: rates },
+    update: { value: rates },
+  });
+  revalidatePath("/", "layout");
+  done("/admin/monedas", "Tasas de cambio actualizadas");
 }

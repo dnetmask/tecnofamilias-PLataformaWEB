@@ -4,7 +4,9 @@ import { VideoPlayer } from "@/components/VideoPlayer";
 import { hasMemberAccess, hasPurchased } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { ACCESS_LABELS, formatCop, stageLabel } from "@/lib/format";
+import { CurrencySwitcher } from "@/components/CurrencySwitcher";
+import { ACCESS_LABELS, stageLabel } from "@/lib/format";
+import { getPricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +21,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const lesson = await db.lesson.findUnique({ where: { slug } });
   if (!lesson || (!lesson.published && user?.role !== "ADMIN")) notFound();
 
-  const member = await hasMemberAccess(user);
+  const [member, pricing] = await Promise.all([hasMemberAccess(user), getPricing()]);
   const owned = user && lesson.access === "ADDON" ? user.role === "ADMIN" || (await hasPurchased(user.id, lesson.id)) : false;
   const canWatch = member && (lesson.access === "INCLUDED" || owned);
   const isAddon = lesson.access === "ADDON";
@@ -73,13 +75,15 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
           ) : !member ? (
             <>
               <p className="muted" style={{ margin: 0 }}>
-                {isAddon ? `Requiere suscripción activa más un pago adicional de ${formatCop(lesson.priceCop)}.` : "Incluida en todos los planes."}
+                {isAddon ? `Requiere suscripción activa más un pago adicional de ${pricing.price(lesson.priceCop)}.` : "Incluida en todos los planes."}
               </p>
               <Link className="btn" href="/planes">Ver planes</Link>
             </>
           ) : (
             <>
-              <div className="price">{formatCop(lesson.priceCop)}</div>
+              <div className="price">{pricing.price(lesson.priceCop)}</div>
+              {pricing.currency !== "COP" && <div className="small muted">Se cobra {pricing.cop(lesson.priceCop)}</div>}
+              <CurrencySwitcher current={pricing.currency} />
               <p className="muted small" style={{ margin: 0 }}>Pago único. Queda en tu cuenta mientras tu suscripción esté activa.</p>
               <Link className="btn btn-red" href={`/checkout?clase=${lesson.slug}`}>Agregar a mi suscripción</Link>
             </>

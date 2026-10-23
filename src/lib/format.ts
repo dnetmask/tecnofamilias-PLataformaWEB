@@ -1,9 +1,11 @@
 import type { AgeStage, LessonAccess, ResourceKind } from "@prisma/client";
 
+/** Montos realmente cobrados o administrativos (siempre en COP). */
 export function formatCop(value: number) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
+    currencyDisplay: "code",
     maximumFractionDigits: 0,
   }).format(value);
 }
