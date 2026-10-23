@@ -1,0 +1,91 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { VideoPlayer } from "@/components/VideoPlayer";
+import { canWatchLesson } from "@/lib/access";
+import { getCurrentUser } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { ACCESS_LABELS, formatCop, stageLabel } from "@/lib/format";
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const lesson = await db.lesson.findUnique({ where: { slug: (await params).slug }, select: { title: true } });
+  return { title: lesson?.title ?? "Clase" };
+}
+
+export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const user = await getCurrentUser();
+  const lesson = await db.lesson.findUnique({ where: { slug } });
+  if (!lesson || (!lesson.published && user?.role !== "ADMIN")) notFound();
+  const canWatch = await canWatchLesson(user, lesson);
+  const next = `/clases/${lesson.slug}`;
+
+  return (
+    <div className="container section">
+      <p className="small"><Link href="/clases">← Volver a clases</Link></p>
+      <div className="layout-aside">
+        <div className="stack" style={{ minWidth: 0 }}>
+          {canWatch ? (
+            // La URL del video solo se envía al navegador si el usuario tiene acceso.
+            <VideoPlayer url={lesson.videoUrl} title={lesson.title} />
+          ) : (
+            <div className="locked">
+              <div>
+                <div style={{ fontSize: "2.4rem" }}>🔒</div>
+                <h3>
+                  {lesson.access === "PAID"
+                    ? "Clase de pago puntual"
+                    : lesson.access === "INCLUDED"
+                      ? "Clase incluida en la suscripción"
+                      : "Crea tu cuenta gratis para verla"}
+                </h3>
+                <p style={{ color: "#cfdbec" }}>
+                  {lesson.access === "PAID"
+                    ? "Cómprala una vez y queda en tu cuenta para siempre."
+                    : lesson.access === "INCLUDED"
+                      ? "Suscríbete para ver esta y todas las clases incluidas."
+                      : "Solo necesitas registrarte."}
+                </p>
+              </div>
+            </div>
+          )}
+          <h1 style={{ fontSize: "1.9rem" }}>{lesson.title}</h1>
+          <div className="row">
+            <span className="badge badge-gray">{stageLabel(lesson.ageStage)}</span>
+            {lesson.durationMin > 0 && <span className="badge badge-gray">{lesson.durationMin} min</span>}
+            {lesson.instructor && <span className="small muted">Con {lesson.instructor}</span>}
+          </div>
+          <p className="muted" style={{ fontSize: "1.05rem" }}>{lesson.summary}</p>
+          {lesson.description && <div style={{ whiteSpace: "pre-wrap" }}>{lesson.description}</div>}
+        </div>
+
+        <aside className="card stack">
+          <span className={`badge ${lesson.access === "PAID" ? "badge-yellow" : lesson.access === "FREE" ? "badge-green" : "badge-blue"}`}>
+            {ACCESS_LABELS[lesson.access]}
+          </span>
+          {canWatch ? (
+            <p style={{ margin: 0, color: "var(--ok)", fontWeight: 700 }}>✓ Tienes acceso a esta clase</p>
+          ) : !user ? (
+            <>
+              <p className="muted" style={{ margin: 0 }}>Ingresa o crea una cuenta para continuar.</p>
+              <Link className="btn" href={`/registro?next=${encodeURIComponent(next)}`}>Crear cuenta</Link>
+              <Link className="btn btn-ghost" href={`/ingresar?next=${encodeURIComponent(next)}`}>Ya tengo cuenta</Link>
+            </>
+          ) : lesson.access === "PAID" ? (
+            <>
+              <div className="price">{formatCop(lesson.priceCop)}</div>
+              <p className="muted small" style={{ margin: 0 }}>Pago único. Acceso permanente.</p>
+              <Link className="btn btn-red" href={`/checkout?clase=${lesson.slug}`}>Comprar clase</Link>
+            </>
+          ) : (
+            <>
+              <p className="muted" style={{ margin: 0 }}>Incluida en todos los planes.</p>
+              <Link className="btn" href="/planes">Ver planes</Link>
+            </>
+          )}
+        </aside>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,42 @@
+import Link from "next/link";
+import type { Plan } from "@prisma/client";
+import { formatCop } from "@/lib/format";
+
+const INCLUDES = [
+  "Todas las clases pregrabadas incluidas",
+  "Videos y podcasts recomendados por etapa",
+  "Pactos digitales ilimitados para firmar con tus hijos",
+  "Comunidad de apoyo entre familias",
+  "Descuentos en clases de pago puntual y asesorías",
+];
+
+export function PlanCards({ plans }: { plans: Plan[] }) {
+  return (
+    <div className="grid grid-3">
+      {plans.map((plan) => {
+        const featured = plan.interval === "YEAR";
+        return (
+          <div key={plan.id} className={`card plan${featured ? " featured" : ""}`}>
+            <div className="row between">
+              <h3 style={{ margin: 0 }}>{plan.name}</h3>
+              {featured && <span className="badge badge-blue">Mejor precio</span>}
+            </div>
+            <div>
+              <span className="price">{formatCop(plan.priceCop)}</span>
+              <span className="muted"> / {plan.interval === "YEAR" ? "año" : "mes"}</span>
+            </div>
+            {plan.description && <p className="muted small" style={{ margin: 0 }}>{plan.description}</p>}
+            <ul className="small">
+              {INCLUDES.map((i) => (
+                <li key={i}>{i}</li>
+              ))}
+            </ul>
+            <Link href={`/checkout?plan=${plan.slug}`} className={`btn${featured ? "" : " btn-ghost"}`} style={{ marginTop: "auto" }}>
+              Suscribirme
+            </Link>
+          </div>
+        );
+      })}
+    </div>
+  );
+}

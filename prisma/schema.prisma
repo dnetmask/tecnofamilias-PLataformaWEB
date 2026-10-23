@@ -1,0 +1,280 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+/// Etapas de edad usadas en toda la plataforma (diapositiva 10 de la presentación).
+enum AgeStage {
+  ALL
+  AGE_0_5
+  AGE_6_10
+  AGE_11_13
+  AGE_14_17
+}
+
+enum LessonAccess {
+  FREE      // visible para cualquier usuario registrado
+  INCLUDED  // incluida en la suscripción
+  PAID      // pago puntual (también para suscriptores)
+}
+
+enum PlanInterval {
+  MONTH
+  YEAR
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+}
+
+enum OrderKind {
+  SUBSCRIPTION
+  LESSON
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum ResourceKind {
+  VIDEO
+  PODCAST
+}
+
+enum PactStatus {
+  DRAFT
+  PARENT_SIGNED
+  SIGNED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(USER)
+  active       Boolean  @default(true)
+  acceptedTermsAt DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  subscription Subscription?
+  purchases    Purchase[]
+  orders       Order[]
+  pacts        Pact[]
+  threads      ForumThread[]
+  posts        ForumPost[]
+  reports      ForumReport[]
+}
+
+model Plan {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  name        String
+  description String       @default("")
+  priceCop    Int
+  interval    PlanInterval
+  active      Boolean      @default(true)
+  order       Int          @default(0)
+  createdAt   DateTime     @default(now())
+
+  subscriptions Subscription[]
+  orders        Order[]
+}
+
+/// Suscripción prepagada: cada pago aprobado extiende currentPeriodEnd.
+model Subscription {
+  id               String             @id @default(cuid())
+  userId           String             @unique
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId           String?
+  plan             Plan?              @relation(fields: [planId], references: [id], onDelete: SetNull)
+  status           SubscriptionStatus @default(ACTIVE)
+  currentPeriodEnd DateTime
+  grantedByAdmin   Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model Lesson {
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  title        String
+  summary      String
+  description  String       @default("")
+  ageStage     AgeStage     @default(ALL)
+  access       LessonAccess @default(INCLUDED)
+  priceCop     Int          @default(0)
+  videoUrl     String       @default("")
+  thumbnailUrl String       @default("")
+  durationMin  Int          @default(0)
+  instructor   String       @default("")
+  published    Boolean      @default(false)
+  order        Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  purchases Purchase[]
+  orders    Order[]
+}
+
+model Purchase {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  orderId   String?  @unique
+  createdAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind        OrderKind
+  planId      String?
+  plan        Plan?       @relation(fields: [planId], references: [id], onDelete: SetNull)
+  lessonId    String?
+  lesson      Lesson?     @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  description String
+  amountCop   Int
+  status      OrderStatus @default(PENDING)
+  provider    String
+  providerRef String?
+  createdAt   DateTime    @default(now())
+  paidAt      DateTime?
+
+  @@index([userId])
+}
+
+model Resource {
+  id          String       @id @default(cuid())
+  kind        ResourceKind
+  title       String
+  author      String       @default("")
+  description String       @default("")
+  url         String
+  ageStage    AgeStage     @default(ALL)
+  published   Boolean      @default(true)
+  order       Int          @default(0)
+  createdAt   DateTime     @default(now())
+}
+
+model PactTemplate {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  appName     String
+  description String   @default("")
+  color       String   @default("#3DAEE4")
+  minAge      Int      @default(0)
+  /// Lista de cláusulas sugeridas (string[])
+  clauses     Json
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  pacts Pact[]
+}
+
+model Pact {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId      String?
+  template        PactTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  appName         String
+  childName       String
+  childAge        Int?
+  parentName      String
+  /// Cláusulas acordadas (string[])
+  clauses         Json
+  rewards         String        @default("")
+  consequences    String        @default("")
+  reviewDate      DateTime?
+  status          PactStatus    @default(DRAFT)
+  parentSignature String?
+  parentSignedAt  DateTime?
+  childSignature  String?
+  childSignedAt   DateTime?
+  /// Token para que el hijo firme desde su propio dispositivo.
+  shareToken      String        @unique @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+}
+
+model ForumCategory {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  name        String
+  description String        @default("")
+  order       Int           @default(0)
+  threads     ForumThread[]
+}
+
+model ForumThread {
+  id         String        @id @default(cuid())
+  categoryId String
+  category   ForumCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  authorId   String
+  author     User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title      String
+  body       String
+  pinned     Boolean       @default(false)
+  locked     Boolean       @default(false)
+  hidden     Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+  lastPostAt DateTime      @default(now())
+
+  posts   ForumPost[]
+  reports ForumReport[]
+
+  @@index([categoryId, lastPostAt])
+}
+
+model ForumPost {
+  id        String      @id @default(cuid())
+  threadId  String
+  thread    ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  body      String
+  hidden    Boolean     @default(false)
+  createdAt DateTime    @default(now())
+
+  reports ForumReport[]
+
+  @@index([threadId, createdAt])
+}
+
+model ForumReport {
+  id         String       @id @default(cuid())
+  reporterId String
+  reporter   User         @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  threadId   String?
+  thread     ForumThread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  postId     String?
+  post       ForumPost?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  reason     String
+  resolved   Boolean      @default(false)
+  createdAt  DateTime     @default(now())
+}
