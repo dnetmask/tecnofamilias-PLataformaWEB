@@ -1188,6 +1188,18 @@ const DICT = [
     ad:'¿Stalkear? Lo que hago con las ofertas del supermercado.',ch:'Si alguien te stalkea demasiado: red flag. Bloquea y cuéntale a un adulto.'},
   {w:'crush',t:'chico',d:'La persona que te gusta.',c:'La persona que te gusta',f:['Un jugo de naranja','Aplastar algo'],
     ad:'¿Crush? La gaseosa de naranja de los noventa. ¡Qué época!',ch:'Ni a mi crush le doy mi contraseña. Aura intacta.'},
+  {w:'bro',a:['brother'],t:'chico',d:'Amigo o hermano: la forma de llamar a un amigo.',c:'Amigo, hermano',f:['Un broche para la corbata','Un pan brioche'],
+    ad:'¿Bro? ¿Broche? Tráeme el de la corbata, que tengo reunión.',ch:'Bro, si me mandas un link raro, no lo abro. Aura.'},
+  {w:'XD',a:['xd'],t:'chico',d:'Una carita que se ríe a carcajadas, con los ojos cerrados.',c:'Una carita riéndose a carcajadas',f:['Una talla de ropa','Un error del teclado'],
+    ad:'¿XD? Talla extra doble. Esa me queda perfecta.',ch:'Me mandaron un meme y XD… pero si es burla de alguien, no lo reenvío.'},
+  {w:'GG',a:['gg','good game'],t:'chico',d:'“Buen juego”: se dice al terminar una partida, se gane o se pierda.',c:'Buen juego',f:['Gracias, gracias','Un grupo de gatos'],
+    ad:'¿GG? Gracias, gracias. Qué niño tan educado.',ch:'GG, buen juego. Y cero insultos en el chat.'},
+  {w:'streamer',a:['stream','stremear','streamear'],t:'chico',d:'Persona que transmite en vivo por internet mientras juega o conversa.',c:'Quien transmite en vivo por internet',f:['Una serpentina de fiesta','Un río pequeño'],
+    ad:'¿Streamer? La serpentina del cumpleaños. Ya la cuelgo.',ch:'Hasta los streamers esconden su ubicación y su colegio. Yo también.'},
+  {w:'sigma',t:'chico',d:'Meme para alguien que se cree solitario, independiente y muy cool.',c:'Alguien que se cree solitario y muy cool',f:['Una marca de jeans','Un examen sorpresa'],
+    ad:'¿Sigma? La sumatoria. Saquen una hoja, quiz sorpresa.',ch:'Lo más sigma es activar el doble factor sin que nadie te lo pida.'},
+  {w:'literal',a:['literalmente'],t:'chico',d:'Muletilla para exagerar o darle fuerza a lo que se dice: “literal, me morí de risa”.',c:'Muletilla para exagerar algo',f:['Un tipo de poema','Un libro de leyes'],
+    ad:'¿Literal? Al pie de la letra, mijo. Como dice el diccionario.',ch:'Literal, puse mi cuenta privada en dos minutos.'},
 
   {w:'dar papaya',a:['papaya','no dar papaya'],t:'adulto',d:'Exponerse o dar la oportunidad para que te pase algo malo. En internet: compartir de más.',c:'Exponerse a que te pase algo malo',f:['Regalar fruta en el colegio','Hacer jugo'],
     ch:'¿Dar papaya? Le llevé una papaya a la profe y me subió la nota.',ad:'Publicar la ubicación en vivo es dar papaya, y yo no doy papaya ni en el mercado.'},
@@ -1221,6 +1233,30 @@ const DICT = [
     ch:'¿A la orden? ¡Sí, mi general!',ad:'A la orden, pero mi contraseña no se la doy ni al técnico del cable.'},
   {w:'echar carreta',a:['carreta'],t:'adulto',d:'Hablar mucho, a veces exagerando o inventando.',c:'Hablar mucho, exagerando',f:['Empujar una carretilla','Pasear en coche de caballos'],
     ch:'¿Carreta? *empuja una carretilla imaginaria*',ad:'Los que prometen premios por internet echan mucha carreta. No les creo.'},
+  {w:'parcero',a:['parce','parcera','parcerito'],t:'adulto',d:'Amigo, compañero. Muy colombiano.',c:'Amigo, compañero',f:['Un parque pequeño','Un pariente lejano'],
+    ch:'¿Parcero? ¿Un parque pequeñito? Ahí juego fútbol.',ad:'Parcero que te pide la clave de tus redes no es tan parcero.'},
+  {w:'chévere',a:['chevere','que chevere','qué chévere'],t:'adulto',d:'Bueno, agradable, genial.',c:'Bueno, agradable',f:['Una fruta tropical','Un paso de salsa'],
+    ch:'¿Chévere? Suena a nombre de dinosaurio. ¡Rawr!',ad:'Chévere es tener la cuenta privada y dormir tranquilo.'},
+  {w:'bacano',a:['bacana','que bacano','qué bacano'],t:'adulto',d:'Muy bueno, excelente.',c:'Muy bueno, excelente',f:['Un pescado del Pacífico','Un tipo de bus'],
+    ch:'¿Bacano? Un pescado frito con patacón, ¿no?',ad:'Bacano el juego nuevo, pero sin chat con desconocidos.'},
+  {w:'mamar gallo',a:['mamagallo','mamadera de gallo','mamagallista'],t:'adulto',d:'Bromear o tomarle el pelo a alguien.',c:'Bromear, tomar el pelo',f:['Darle tetero a un gallo','Madrugar mucho'],
+    ch:'¿Mamar gallo? ¿Al gallo de la finca? Pobre gallo.',ad:'Mamar gallo está bien, pero sin burlarse de nadie en el grupo del curso.'},
+  {w:'cuadrar',a:['cuadremos','cuadrar un plan'],t:'adulto',d:'Ponerse de acuerdo u organizar un plan.',c:'Ponerse de acuerdo',f:['Dibujar un cuadrado','Parquear el carro'],
+    ch:'¿Cuadrar? Ya dibujé un cuadrado. ¿Cuenta?',ad:'Cuadremos el horario de pantallas antes de que empiece la pelea.'},
+  {w:'echar los perros',a:['echarle los perros','perros'],t:'adulto',d:'Coquetear con alguien.',c:'Coquetear',f:['Sacar a pasear a los perros','Ahuyentar a alguien'],
+    ch:'¿Echar los perros? ¡Pobrecitos! ¿Para dónde los echan?',ad:'Si un desconocido te echa los perros por internet: red flag. Cuéntale a un adulto.'},
+  {w:'timbrar',a:['timbrazo','pegar un timbrazo'],t:'adulto',d:'Llamar y colgar antes de que contesten, para que te devuelvan la llamada sin gastar minutos.',c:'Llamar y colgar para que te devuelvan la llamada',f:['Tocar el timbre de la casa','Poner un sello'],
+    ch:'¿Timbrar? Ding dong. Ya abrí la puerta.',ad:'Yo timbraba para ahorrar minutos. Hoy no devuelvo llamadas de números desconocidos.'},
+  {w:'café internet',a:['cafe internet','sala de internet','cabina'],t:'adulto',d:'Local donde se alquilaban computadores por horas para navegar, chatear o jugar.',c:'Un local donde se alquilaban computadores por horas',f:['Un café con Wi-Fi gratis','Una cafetera conectada'],
+    ch:'¿Café internet? ¿Un tinto que se conecta al Wi-Fi?',ad:'En el café internet siempre cerraba sesión. Hoy hago lo mismo en computadores ajenos.'},
+  {w:'BlackBerry',a:['blackberry','bbm','pin de blackberry'],t:'adulto',d:'Celular con teclado físico. Para chatear se compartía un código llamado PIN.',c:'Un celular con teclado físico',f:['Una mora negra','Un postre'],
+    ch:'¿BlackBerry? ¿Una mora negra? Con leche queda rica.',ad:'En el BlackBerry chateaba con el PIN. Hoy no le doy mi número a desconocidos.'},
+  {w:'culebrita',a:['snake','nokia','juego de la culebrita'],t:'adulto',d:'El juego de los celulares Nokia: una culebrita que comía puntos y crecía.',c:'El juego del celular Nokia',f:['Una mascota','Un baile'],
+    ch:'¿Culebrita? ¡Una serpiente! ¿Dónde? ¿Dónde?',ad:'Yo jugaba culebrita sin anuncios ni compras dentro del juego. Qué tiempos.'},
+  {w:'qué pena con usted',a:['que pena','qué pena','que pena con usted'],t:'adulto',d:'Forma colombiana y amable de pedir disculpas o permiso.',c:'Una forma amable de pedir disculpas',f:['Sentirse triste','Pagar una multa'],
+    ch:'¿Qué pena? ¿Por qué estás triste? Toma un abrazo.',ad:'Qué pena con usted, pero el código que me llegó por mensaje no se lo doy a nadie.'},
+  {w:'la última Coca-Cola del desierto',a:['ultima coca cola','última coca-cola','coca cola del desierto'],t:'adulto',d:'Alguien que se cree lo máximo.',c:'Alguien que se cree lo máximo',f:['Una gaseosa perdida','Un oasis'],
+    ch:'¿La última Coca-Cola? Me la tomo, que tengo sed.',ad:'Publicar todo lo que haces no te vuelve la última Coca-Cola del desierto.'},
 
   {w:'phishing',a:['fishing','pishing','suplantacion','suplantación'],t:'ciber',d:'Engaño por correo, mensaje o página falsa para robar tus datos.',l:'¡Phishing detectado! Este pez no muerde el anzuelo 🎣'},
   {w:'malware',a:['virus','troyano','spyware'],t:'ciber',d:'Programa malicioso que daña o espía tu dispositivo.',l:'Descargo apps solo de la tienda oficial. Malware, aquí no entras.'},
@@ -1940,7 +1976,8 @@ function ideasFor(role) {
   return shuffle([...shuffle(own).slice(0, 2), pick(cyb), pick(other)]);
 }
 
-let samplePromise = null, aiOff = false;
+// Fuera de Claude no hay IA: se usa solo el diccionario y el otro jugador decide.
+let samplePromise = null, aiOff = !(window.claude && typeof window.claude.use === 'function');
 function getSample() {
   if (!samplePromise) {
     samplePromise = (window.claude && typeof window.claude.use === 'function') ? window.claude.use('sample').catch(() => null) : Promise.resolve(null);

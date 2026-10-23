@@ -13,4 +13,4 @@ export function withHeightReporter(html: string) {
   return i === -1 ? html + HEIGHT_SCRIPT : html.slice(0, i) + HEIGHT_SCRIPT + html.slice(i);
 }
 
-export const GAME_SANDBOX = "allow-scripts allow-modals allow-popups allow-popups-to-escape-sandbox";
+export const GAME_SANDBOX = "allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox";
