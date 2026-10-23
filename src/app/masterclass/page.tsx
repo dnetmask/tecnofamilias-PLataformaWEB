@@ -341,7 +341,6 @@ export default async function MasterclassPage() {
               <div key={t.name}>
                 <img src={t.img} alt={t.name} width={150} height={150} />
                 <h3>{t.name}</h3>
-                <span className="small" style={{ fontWeight: 800, color: "var(--blue-dark)" }}>{t.role}</span>
                 <p className="small" style={{ margin: 0 }}>{t.bio}</p>
               </div>
             ))}
