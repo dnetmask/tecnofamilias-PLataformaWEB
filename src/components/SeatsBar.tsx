@@ -1,4 +1,4 @@
-/** Barra de cupos ocupados (estilo de la landing original). */
+/** Barra de cupos ocupados con los colores de Tecnofamilias. */
 export function SeatsBar({ pct, label = "Cupos limitados para esta edición" }: { pct: number; label?: string }) {
   return (
     <div className="seats" role="img" aria-label={`${label}: ${pct} % ocupado`}>

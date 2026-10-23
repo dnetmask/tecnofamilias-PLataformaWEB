@@ -248,22 +248,22 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 @media (max-width: 520px) { .shortcuts { grid-template-columns: repeat(2, 1fr); } }
 
 /* ---------- Masterclass ---------- */
-.seats { display: flex; align-items: center; gap: 20px; padding: 22px 26px; border-radius: 20px; color: #fff;
-  background: linear-gradient(115deg, #3e2618 0%, #6b4428 28%, #a46a43 55%, #b97a4b 70%, #b06f54 100%);
-  box-shadow: 0 18px 40px -18px rgb(62 38 24 / 55%); }
-.seats-icon { flex: none; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; color: #f6d9a8;
-  background: rgb(255 255 255 / 14%); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%); }
-.seats-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
-.seats-label { font-weight: 600; font-size: 1.05rem; letter-spacing: .01em; }
-.seats-track { display: block; height: 12px; border-radius: 999px; background: rgb(255 255 255 / 18%); overflow: hidden; }
+.seats { display: flex; align-items: center; gap: 20px; padding: 20px 26px; border-radius: 20px; color: var(--navy);
+  background: #fff; border: 1px solid #e3edf7; box-shadow: 0 18px 40px -20px rgb(20 33 61 / 45%); }
+.seats-icon { flex: none; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; color: var(--navy);
+  background: var(--yellow); }
+.seats-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.seats-label { font-weight: 800; font-size: 1.05rem; color: var(--navy); }
+.seats-track { display: block; height: 14px; border-radius: 999px; background: var(--tint); overflow: hidden;
+  box-shadow: inset 0 0 0 1px #dbe9f6; }
 .seats-fill { display: block; height: 100%; width: var(--pct); border-radius: 999px;
-  background: linear-gradient(90deg, #b97a4b 0%, #e8c4a3 45%, #e8a33c 80%, #f6d9a8 100%);
+  background: linear-gradient(90deg, var(--yellow) 0%, #f68a33 60%, var(--red) 100%);
   animation: seats-grow 1.6s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes seats-grow { from { width: 0; } to { width: var(--pct); } }
 .seats-num { flex: none; text-align: right; display: flex; flex-direction: column; align-items: flex-end; line-height: 1; }
-.seats-pct { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 3.4rem; color: #e8a33c; }
-.seats-pct small { font-size: 1.4rem; margin-left: 2px; }
-.seats-cap { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: #f3e3d3; margin-top: 6px; }
+.seats-pct { font-weight: 900; font-size: 3.2rem; color: var(--red); letter-spacing: -.02em; }
+.seats-pct small { font-size: 1.4rem; margin-left: 2px; font-weight: 800; }
+.seats-cap { font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--navy-soft, #5a6b8c); margin-top: 6px; }
 @media (max-width: 560px) {
   .seats { flex-wrap: wrap; padding: 18px; gap: 14px; }
   .seats-icon { width: 44px; height: 44px; }
