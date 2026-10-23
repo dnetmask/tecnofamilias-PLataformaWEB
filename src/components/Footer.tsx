@@ -13,7 +13,7 @@ export async function Footer() {
         </div>
         <div className="stack small">
           <div><Link href="/clases">Clases</Link> · <Link href="/recursos">Videos y podcasts</Link> · <Link href="/pactos">Pactos</Link> · <Link href="/juegos">Juegos</Link> · <Link href="/comunidad">Comunidad</Link></div>
-          <div><Link href="/terminos">Términos y tratamiento de datos</Link></div>
+          <div><Link href="/quienes-somos">Quiénes somos</Link> · <Link href="/masterclass">Masterclass</Link> · <Link href="/terminos">Términos y tratamiento de datos</Link></div>
           <div>www.tecnofamilias.com · +57 313 874 3101</div>
           <div><CurrencySwitcher current={currency} dark /></div>
         </div>

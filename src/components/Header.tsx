@@ -8,17 +8,19 @@ import { logoutAction } from "@/app/(auth)/actions";
 type Props = { user: { name: string; role: "USER" | "ADMIN"; member: boolean } | null };
 
 const LINKS = [
+  { href: "/", label: "Inicio" },
   { href: "/clases", label: "Clases" },
   { href: "/recursos", label: "Videos y podcasts" },
   { href: "/pactos", label: "Pactos" },
   { href: "/juegos", label: "Juegos" },
   { href: "/comunidad", label: "Comunidad" },
+  { href: "/quienes-somos", label: "Quiénes somos" },
 ];
 
 export function Header({ user }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   return (
     <header className="header">

@@ -5,6 +5,7 @@ import { SeatsBar } from "@/components/SeatsBar";
 import { formatCop } from "@/lib/format";
 import { getMasterclass } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
+import { TEAM } from "@/lib/team";
 
 export const dynamic = "force-dynamic";
 
@@ -118,12 +119,6 @@ const PARAR = [
   ["R", "Recurrir", "Autoridades, colegio y apoyo psicológico. No tienes que resolverlo solo."],
 ];
 
-const TEAM = [
-  { img: "/masterclass/isabel-arcila.png", name: "Isabel Arcila", role: "Cofundadora", bio: "Ingeniera de procesos y especialista en gerencia de mercadeo. Mamá de dos hijos." },
-  { img: "/masterclass/david-cano.png", name: "David Cano Vélez", role: "Cofundador", bio: "Ingeniero de control con más de 13 años en redes, telecomunicaciones y ciberseguridad. Profesor de la Universidad Piloto de Colombia." },
-  { img: "/masterclass/sebastian-castrillon.png", name: "Sebastián Castrillón", role: "Cofundador", bio: "Especialista en seguridad de redes corporativas, infraestructura de datacenter e investigación forense. Papá de dos hijos." },
-  { img: "/masterclass/tata-gomez.png", name: "Tata Gómez", role: "Socia · @nomassopamama", bio: "Bloguera y creadora de No más sopa MAMÁ, con 256 mil seguidores en Instagram. Mamá de tres hijos." },
-];
 
 export default async function MasterclassPage() {
   const [mc, pricing] = await Promise.all([getMasterclass(), getPricing()]);
@@ -338,8 +333,8 @@ export default async function MasterclassPage() {
         <div className="container">
           <div className="mc-head">
             <p className="mc-label">Quiénes dictan la masterclass</p>
-            <h2>Cuatro socios: tecnología y familia en la misma mesa</h2>
-            <p>Los cuatro dictamos charlas y creamos juntos cada contenido de Tecnofamilias.</p>
+            <h2>Somos el equipo Tecnofamilias</h2>
+            <p>Tecnología y familia en la misma mesa: dictamos las charlas y creamos juntos cada contenido de Tecnofamilias.</p>
           </div>
           <div className="mc-team">
             {TEAM.map((t) => (
