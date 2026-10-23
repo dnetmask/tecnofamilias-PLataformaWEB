@@ -3,6 +3,7 @@ import { hasMemberAccess } from "@/lib/access";
 import type { CurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { RESOURCE_LABELS, stageShort } from "@/lib/format";
+import { MasterclassPromo } from "@/components/MasterclassPromo";
 
 const SHORTCUTS = [
   { href: "/clases", icon: "▶", label: "Clases", color: "var(--blue)" },
@@ -75,6 +76,8 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
             <Link href="/planes" className="btn btn-sm" style={{ background: "var(--navy)" }}>Suscribirme</Link>
           </div>
         )}
+
+        <MasterclassPromo compact />
 
         <section>
           <SectionHead title="Sigue aprendiendo" href="/clases" cta="Todas las clases" />

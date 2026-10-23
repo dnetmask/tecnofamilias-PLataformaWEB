@@ -8,6 +8,7 @@ import { hashPassword, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { slugify } from "@/lib/format";
 import { extendSubscription, fulfillOrder } from "@/lib/payments";
+import { MASTERCLASS_KEY } from "@/lib/masterclass";
 import { RATES_KEY } from "@/lib/pricing";
 
 function fail(path: string, message: string): never {
@@ -438,4 +439,29 @@ export async function saveRatesAction(formData: FormData) {
   });
   revalidatePath("/", "layout");
   done("/admin/monedas", "Tasas de cambio actualizadas");
+}
+
+const masterclassSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha no válida"),
+  time: z.string().trim().min(1, "Indica el horario").max(80),
+  timezone: z.string().trim().min(1).max(60),
+  modality: z.string().trim().min(1).max(80),
+  duration: z.string().trim().min(1).max(40),
+  seatsPct: z.coerce.number().int().min(0).max(100),
+  recordingDays: z.coerce.number().int().min(0).max(365),
+  showOnHome: z.preprocess((v) => v === "on", z.boolean()),
+});
+
+export async function saveMasterclassAction(formData: FormData) {
+  await requireAdmin();
+  const data = parse(masterclassSchema, formData, "/admin/masterclass");
+  const row = await db.setting.findUnique({ where: { key: MASTERCLASS_KEY } });
+  const value = { ...((row?.value ?? {}) as Prisma.JsonObject), ...data };
+  await db.setting.upsert({
+    where: { key: MASTERCLASS_KEY },
+    create: { key: MASTERCLASS_KEY, value },
+    update: { value },
+  });
+  revalidatePath("/", "layout");
+  done("/admin/masterclass", "Masterclass actualizada");
 }

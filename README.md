@@ -22,6 +22,13 @@ Plataforma **exclusivamente por suscripción** para familias. La suscripción in
 
 **Panel de administración:** resumen (usuarios, suscriptores, ingresos), usuarios (crear, editar rol, activar/desactivar, otorgar meses de cortesía o complementos, restablecer contraseña, eliminar), clases, videos/podcasts, plantillas de pactos, comunidad, monedas (tasas de cambio) (categorías, reportes, ocultar contenido), planes y precios, pagos (marcar manualmente como pagada una transferencia).
 
+## Masterclass
+
+- Landing pública en **/masterclass** (app.tecnofamilias.com/masterclass) con el contenido de la masterclass "Crianza digital segura" y una barra de cupos.
+- Los dos inicios (con y sin sesión) muestran el aviso "Nuestra próxima masterclass" con enlace a la landing. El aviso se oculta solo cuando pasa la fecha.
+- El cupo se compra como un servicio (`masterclass-crianza-digital-segura`, USD 50, editable en Admin → Otros servicios). Las compras aparecen en Admin → Solicitudes.
+- En Admin → Masterclass se editan la fecha, el horario, la modalidad, la duración, los días de grabación, el % de cupos ocupados y si el aviso se muestra en los inicios.
+
 ## Monedas
 
 - **Precio base en dólares** para todo: plan anual USD 60, asesoría USD 300, complementos USD 30 y rangos de servicios en USD.

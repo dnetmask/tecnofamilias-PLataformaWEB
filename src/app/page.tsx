@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { MemberHome } from "./MemberHome";
 import { AGE_STAGES } from "@/lib/format";
+import { MasterclassPromo } from "@/components/MasterclassPromo";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +71,10 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <div className="container" style={{ marginTop: 40 }}>
+        <MasterclassPromo />
+      </div>
 
       <section className="section">
         <div className="container">
