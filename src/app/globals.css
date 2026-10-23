@@ -216,7 +216,9 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .service-price { text-align: right; flex: none; display: flex; flex-direction: column; align-items: flex-end; }
 .service-price .price-label { font-size: 1.5rem; font-weight: 800; color: var(--blue-dark); line-height: 1.1; white-space: nowrap; }
 .service-price .small { color: var(--subtle); }
-.service-dark { background: var(--navy); }
+.service-dark { background: var(--navy); color: #cfdbec; }
+.service-dark .btn-ghost { color: #fff; border-color: rgba(255, 255, 255, .7); }
+.service-dark .btn-ghost:hover { background: #fff; color: var(--navy); }
 .service-dark h3 { color: #fff; }
 .service-dark p { color: #cfdbec; }
 .service-dark .service-price .price-label { color: var(--yellow); }
