@@ -5,7 +5,7 @@ import { formatCop } from "@/lib/format";
 export default async function AdminHome() {
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const [users, subs, lessons, pacts, threads, reports, revenue, monthRevenue] = await Promise.all([
+  const [users, subs, lessons, pacts, threads, reports, revenue, monthRevenue, requests] = await Promise.all([
     db.user.count(),
     db.subscription.count({ where: { status: "ACTIVE", currentPeriodEnd: { gt: now } } }),
     db.lesson.count({ where: { published: true } }),
@@ -14,6 +14,7 @@ export default async function AdminHome() {
     db.forumReport.count({ where: { resolved: false } }),
     db.order.aggregate({ where: { status: "PAID" }, _sum: { amountCop: true } }),
     db.order.aggregate({ where: { status: "PAID", paidAt: { gte: monthStart } }, _sum: { amountCop: true } }),
+    db.serviceRequest.count({ where: { status: { in: ["NEW", "PAID"] } } }),
   ]);
 
   const stats = [
@@ -23,6 +24,7 @@ export default async function AdminHome() {
     { label: "Pactos creados", value: pacts, href: "/admin/pactos" },
     { label: "Conversaciones", value: threads, href: "/admin/comunidad" },
     { label: "Reportes pendientes", value: reports, href: "/admin/comunidad" },
+    { label: "Solicitudes por atender", value: requests, href: "/admin/solicitudes" },
     { label: "Ingresos del mes", value: formatCop(monthRevenue._sum.amountCop ?? 0), href: "/admin/pagos" },
     { label: "Ingresos totales", value: formatCop(revenue._sum.amountCop ?? 0), href: "/admin/pagos" },
   ];

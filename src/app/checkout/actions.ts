@@ -9,6 +9,7 @@ import { fulfillOrder, paymentsMode, startCheckout } from "@/lib/payments";
 export async function createOrderAction(formData: FormData) {
   const planSlug = formData.get("plan");
   const lessonSlug = formData.get("clase");
+  const serviceSlug = formData.get("servicio");
   const user = await requireUser("/planes");
 
   let order;
@@ -38,6 +39,20 @@ export async function createOrderAction(formData: FormData) {
         lessonId: lesson.id,
         description: `Complemento: ${lesson.title}`,
         amountCop: lesson.priceCop,
+        provider: paymentsMode(),
+      },
+    });
+  } else if (typeof serviceSlug === "string" && serviceSlug) {
+    // Servicios con precio fijo (p. ej. asesoría): no requieren suscripción.
+    const service = await db.service.findUnique({ where: { slug: serviceSlug } });
+    if (!service || !service.active || !service.priceCop) redirect("/servicios");
+    order = await db.order.create({
+      data: {
+        userId: user.id,
+        kind: "SERVICE",
+        serviceId: service.id,
+        description: `Servicio: ${service.name}`,
+        amountCop: service.priceCop,
         provider: paymentsMode(),
       },
     });

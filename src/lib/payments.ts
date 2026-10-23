@@ -132,10 +132,23 @@ export async function fulfillOrder(orderId: string, providerRef?: string) {
       data: { status: "PAID", paidAt: new Date(), ...(providerRef ? { providerRef } : {}) },
     });
     if (updated.count === 0) return false;
-    const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { plan: true } });
+    const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { plan: true, user: true } });
 
     if (order.kind === "SUBSCRIPTION" && order.plan) {
       await extendSubscription(order.userId, order.plan.id, order.plan.interval, false, tx);
+    }
+    if (order.kind === "SERVICE" && order.serviceId) {
+      // Queda como solicitud pagada para que el equipo agende el servicio.
+      await tx.serviceRequest.create({
+        data: {
+          serviceId: order.serviceId,
+          userId: order.userId,
+          orderId: order.id,
+          name: order.user.name,
+          email: order.user.email,
+          status: "PAID",
+        },
+      });
     }
     if (order.kind === "LESSON" && order.lessonId) {
       await tx.purchase.upsert({

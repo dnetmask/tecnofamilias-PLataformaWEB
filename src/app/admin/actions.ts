@@ -371,6 +371,7 @@ const gameSchema = z.object({
   emoji: z.string().trim().max(8).default("🎲"),
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Color hexadecimal, ej. #3DAEE4"),
   order: z.coerce.number().int().default(0),
+  fullHeight: checkbox,
   published: checkbox,
 });
 
@@ -410,4 +411,53 @@ export async function deleteGameAction(formData: FormData) {
   await db.game.delete({ where: { id: String(formData.get("id")) } });
   revalidatePath("/juegos");
   done("/admin/juegos", "Juego eliminado");
+}
+
+/* ---------- Otros servicios ---------- */
+
+const serviceSchema = z.object({
+  id: z.string().optional(),
+  audience: z.enum(["FAMILIAS", "COLEGIOS", "EMPRESAS", "GOBIERNO"]),
+  name: z.string().trim().min(2).max(140),
+  slug: z.string().trim().max(80).optional(),
+  description: z.string().trim().max(600).default(""),
+  details: z.string().trim().max(3000).default(""),
+  priceCop: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(1000).nullable()),
+  priceLabel: z.string().trim().min(1, "Escribe el precio que se muestra, ej. COP 3–5 M").max(40),
+  unit: z.string().trim().max(60).default(""),
+  order: z.coerce.number().int().default(0),
+  featured: checkbox,
+  active: checkbox,
+});
+
+export async function saveServiceAction(formData: FormData) {
+  await requireAdmin();
+  const path = `/admin/servicios/${formData.get("id") || "nuevo"}`;
+  const { id, slug, ...data } = parse(serviceSchema, formData, path);
+  const finalSlug = slugify(slug || data.name);
+  try {
+    const service = id
+      ? await db.service.update({ where: { id }, data: { ...data, slug: finalSlug } })
+      : await db.service.create({ data: { ...data, slug: finalSlug } });
+    revalidatePath("/servicios");
+    revalidatePath("/planes");
+    done(`/admin/servicios/${service.id}`, "Servicio guardado");
+  } catch (err) {
+    if (isUniqueError(err)) fail(path, "Ya existe un servicio con ese slug");
+    throw err;
+  }
+}
+
+const requestUpdateSchema = z.object({
+  id: z.string(),
+  status: z.enum(["NEW", "PAID", "CONTACTED", "WON", "LOST"]),
+  adminNotes: z.string().trim().max(3000).default(""),
+});
+
+export async function updateServiceRequestAction(formData: FormData) {
+  await requireAdmin();
+  const back = String(formData.get("back") || "/admin/solicitudes");
+  const { id, ...data } = parse(requestUpdateSchema, formData, back);
+  await db.serviceRequest.update({ where: { id }, data });
+  done(back, "Solicitud actualizada");
 }

@@ -12,6 +12,8 @@ const NAV = [
   ["/admin/pactos", "Plantillas de pactos"],
   ["/admin/juegos", "Juegos"],
   ["/admin/comunidad", "Comunidad"],
+  ["/admin/servicios", "Otros servicios"],
+  ["/admin/solicitudes", "Solicitudes"],
   ["/admin/planes", "Planes"],
   ["/admin/pagos", "Pagos"],
 ];

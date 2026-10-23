@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { GAME_HEIGHT_MESSAGE, GAME_SANDBOX } from "@/lib/games";
 
-export function GameFrame({ src, title }: { src: string; title: string }) {
+export function GameFrame({ src, title, fullHeight = false }: { src: string; title: string; fullHeight?: boolean }) {
   const ref = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState<number | null>(null);
 
   useEffect(() => {
+    // Los juegos de pantalla completa tienen su propio scroll: alto fijo.
+    if (fullHeight) return;
     const onMessage = (e: MessageEvent) => {
       // Solo se acepta el mensaje de altura del propio iframe del juego.
       if (e.source !== ref.current?.contentWindow) return;
@@ -18,7 +20,7 @@ export function GameFrame({ src, title }: { src: string; title: string }) {
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, []);
+  }, [fullHeight]);
 
   return (
     <div className="stack">
@@ -35,8 +37,8 @@ export function GameFrame({ src, title }: { src: string; title: string }) {
         sandbox={GAME_SANDBOX}
         allow="fullscreen"
         allowFullScreen
-        className="game-frame"
-        style={height ? { height } : undefined}
+        className={`game-frame${fullHeight ? " game-frame-screen" : ""}`}
+        style={!fullHeight && height ? { height } : undefined}
       />
     </div>
   );

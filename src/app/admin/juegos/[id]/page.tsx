@@ -13,7 +13,7 @@ export default async function AdminGamePage({ params, searchParams }: { params: 
       ? null
       : await db.game.findUnique({
           where: { id },
-          select: { id: true, slug: true, title: true, description: true, ageLabel: true, emoji: true, color: true, order: true, published: true, updatedAt: true },
+          select: { id: true, slug: true, title: true, description: true, ageLabel: true, emoji: true, color: true, order: true, fullHeight: true, published: true, updatedAt: true },
         });
   if (id !== "nuevo" && !g) notFound();
 
@@ -41,6 +41,10 @@ export default async function AdminGamePage({ params, searchParams }: { params: 
           <input className="input" name="file" type="file" accept=".html,text/html" required={!g} />
           <span className="hint">Un solo archivo .html con sus estilos y scripts incluidos, hasta 1,5 MB.</span>
         </div>
+        <label className="check">
+          <input type="checkbox" name="fullHeight" defaultChecked={g?.fullHeight ?? false} />
+          <span>Pantalla fija: el juego ocupa el alto de la pantalla y tiene su propio scroll (para juegos por pantallas con ventanas emergentes)</span>
+        </label>
         <label className="check"><input type="checkbox" name="published" defaultChecked={g?.published ?? true} /> Publicado</label>
         <div><SubmitButton>Guardar juego</SubmitButton></div>
       </form>

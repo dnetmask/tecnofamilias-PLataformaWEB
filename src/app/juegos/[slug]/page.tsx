@@ -14,13 +14,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function GamePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const user = await requireSubscriber(`/juegos/${slug}`);
-  const game = await db.game.findUnique({ where: { slug }, select: { slug: true, title: true, published: true } });
+  const game = await db.game.findUnique({ where: { slug }, select: { slug: true, title: true, published: true, fullHeight: true } });
   if (!game || (!game.published && user.role !== "ADMIN")) notFound();
 
   return (
     <div className="container section stack">
       <p className="small"><Link href="/juegos">← Juegos</Link></p>
-      <GameFrame src={`/juegos/${game.slug}/jugar`} title={game.title} />
+      <GameFrame src={`/juegos/${game.slug}/jugar`} title={game.title} fullHeight={game.fullHeight} />
     </div>
   );
 }

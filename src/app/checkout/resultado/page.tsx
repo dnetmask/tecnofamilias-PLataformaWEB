@@ -43,7 +43,12 @@ export default async function ResultPage({
             <div style={{ fontSize: "3rem" }}>🎉</div>
             <h1 style={{ fontSize: "1.6rem" }}>¡Pago aprobado!</h1>
             <p className="muted">{order.description} · {formatCop(order.amountCop)}</p>
-            {order.kind === "LESSON" && order.lesson ? (
+            {order.kind === "SERVICE" ? (
+              <>
+                <p>Te contactaremos por correo o WhatsApp en las próximas 24 horas hábiles para agendar.</p>
+                <Link className="btn" href="/cuenta">Ir a mi cuenta</Link>
+              </>
+            ) : order.kind === "LESSON" && order.lesson ? (
               <Link className="btn" href={`/clases/${order.lesson.slug}`}>Ver la clase</Link>
             ) : (
               <Link className="btn" href="/clases">Empezar a ver clases</Link>
@@ -64,7 +69,7 @@ export default async function ResultPage({
             <div style={{ fontSize: "3rem" }}>⚠️</div>
             <h1 style={{ fontSize: "1.6rem" }}>El pago no se completó</h1>
             <p className="muted">No se realizó ningún cobro. Puedes intentarlo de nuevo.</p>
-            <Link className="btn" href="/planes">Volver a intentar</Link>
+            <Link className="btn" href={order.kind === "SERVICE" ? "/servicios" : order.kind === "LESSON" && order.lesson ? `/clases/${order.lesson.slug}` : "/planes"}>Volver a intentar</Link>
           </>
         )}
       </div>

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { PlanCards } from "@/components/PlanCards";
+import { ServicesCatalog } from "@/components/ServicesCatalog";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +9,10 @@ export const metadata = { title: "Planes" };
 
 export default async function PlansPage({ searchParams }: { searchParams: Promise<{ requiere?: string }> }) {
   const { requiere } = await searchParams;
-  const plans = await db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } });
+  const [plans, user] = await Promise.all([
+    db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
+    getCurrentUser(),
+  ]);
   return (
     <>
       <div className="page-head">
@@ -32,6 +37,15 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
           </p>
         </div>
       </div>
+      {!user && (
+        <div className="container section" id="servicios" style={{ borderTop: "1px solid var(--line)" }}>
+          <h2>Otros servicios</h2>
+          <p className="muted" style={{ marginBottom: 28 }}>
+            Además de la suscripción: asesoría personalizada para tu familia y programas para colegios, empresas y entidades públicas.
+          </p>
+          <ServicesCatalog />
+        </div>
+      )}
     </>
   );
 }

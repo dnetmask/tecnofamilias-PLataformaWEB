@@ -40,8 +40,12 @@ export function Header({ user }: Props) {
               {l.label}
             </Link>
           ))}
-          {/* Con sesión iniciada no se muestra Planes; quien no tiene plan ve "Suscribirme". */}
-          {!user && (
+          {/* Sin sesión: Planes (incluye otros servicios). Con sesión: Otros servicios. */}
+          {user ? (
+            <Link href="/servicios" className={isActive("/servicios") ? "active" : undefined}>
+              Otros servicios
+            </Link>
+          ) : (
             <Link href="/planes" className={isActive("/planes") ? "active" : undefined}>
               Planes
             </Link>

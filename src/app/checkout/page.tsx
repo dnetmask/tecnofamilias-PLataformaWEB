@@ -11,9 +11,15 @@ import { createOrderAction } from "./actions";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Pago" };
 
-export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ plan?: string; clase?: string }> }) {
-  const { plan: planSlug, clase } = await searchParams;
-  const next = planSlug ? `/checkout?plan=${planSlug}` : clase ? `/checkout?clase=${clase}` : "/planes";
+export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ plan?: string; clase?: string; servicio?: string }> }) {
+  const { plan: planSlug, clase, servicio } = await searchParams;
+  const next = planSlug
+    ? `/checkout?plan=${planSlug}`
+    : clase
+      ? `/checkout?clase=${clase}`
+      : servicio
+        ? `/checkout?servicio=${servicio}`
+        : "/planes";
   const user = await requireUser(next);
 
   let title = "";
@@ -36,6 +42,12 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
     title = lesson.title;
     amount = lesson.priceCop;
     detail = "Curso complementario: pago único, disponible mientras tu suscripción esté activa.";
+  } else if (servicio) {
+    const service = await db.service.findUnique({ where: { slug: servicio } });
+    if (!service || !service.active || !service.priceCop) redirect("/servicios");
+    title = service.name;
+    amount = service.priceCop;
+    detail = `${service.unit}. Después del pago te contactamos para agendar.`;
   } else {
     redirect("/planes");
   }
@@ -55,10 +67,11 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
         <form action={createOrderAction} className="form">
           {planSlug && <input type="hidden" name="plan" value={planSlug} />}
           {clase && <input type="hidden" name="clase" value={clase} />}
+          {servicio && <input type="hidden" name="servicio" value={servicio} />}
           <SubmitButton pendingText="Redirigiendo al pago…">Ir a pagar</SubmitButton>
         </form>
         <p className="small muted center">
-          Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo). <Link href="/planes">Volver</Link>
+          Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo). <Link href={servicio ? `/servicios/${servicio}` : clase ? `/clases/${clase}` : "/planes"}>Volver</Link>
         </p>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { getActiveSubscription } from "@/lib/access";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatCop, formatDate, formatDateTime } from "@/lib/format";
+import { REQUEST_STATUS } from "@/lib/services";
 import { PasswordForm, ProfileForm } from "./Forms";
 
 export const dynamic = "force-dynamic";
@@ -17,10 +18,11 @@ const ORDER_STATUS = {
 
 export default async function AccountPage() {
   const user = await requireUser("/cuenta");
-  const [sub, purchases, orders] = await Promise.all([
+  const [sub, purchases, orders, requests] = await Promise.all([
     getActiveSubscription(user.id),
     db.purchase.findMany({ where: { userId: user.id }, include: { lesson: true }, orderBy: { createdAt: "desc" } }),
     db.order.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" }, take: 20 }),
+    db.serviceRequest.findMany({ where: { userId: user.id }, include: { service: true }, orderBy: { createdAt: "desc" }, take: 10 }),
   ]);
 
   return (
@@ -63,6 +65,18 @@ export default async function AccountPage() {
             </ul>
           )}
         </div>
+
+        {requests.length > 0 && (
+          <div className="card stack" style={{ gridColumn: "1 / -1" }}>
+            <h3>Otros servicios</h3>
+            {requests.map((r) => (
+              <div key={r.id} className="row between">
+                <span>{r.service.name} <span className="small muted">· {formatDate(r.createdAt)}</span></span>
+                <span className={`badge ${REQUEST_STATUS[r.status][1]}`}>{r.status === "PAID" ? "Pagado · te contactaremos" : REQUEST_STATUS[r.status][0]}</span>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="card"><h3>Mis datos</h3><ProfileForm name={user.name} email={user.email} /></div>
         <div className="card"><h3>Contraseña</h3><PasswordForm /></div>
