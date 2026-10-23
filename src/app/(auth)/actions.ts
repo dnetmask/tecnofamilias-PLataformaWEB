@@ -46,7 +46,8 @@ export async function loginAction(_: FormState, formData: FormData): Promise<For
   }
   if (!user.active) return { error: "Tu cuenta está desactivada. Escríbenos para reactivarla." };
   await startSession(user);
-  const fallback = user.role === "ADMIN" ? "/admin" : (await isSubscriber(user.id)) ? "/clases" : "/planes";
+  // Al ingresar se va al inicio; quien aún no tiene plan va a elegirlo.
+  const fallback = user.role === "ADMIN" || (await isSubscriber(user.id)) ? "/" : "/planes";
   redirect(safeNext(formData.get("next"), fallback));
 }
 

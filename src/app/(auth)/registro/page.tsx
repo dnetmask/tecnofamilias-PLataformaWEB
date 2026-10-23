@@ -7,7 +7,7 @@ export const metadata = { title: "Crear cuenta" };
 
 export default async function RegisterPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams;
-  if (await getCurrentUser()) redirect(safeNext(next));
+  if (await getCurrentUser()) redirect(safeNext(next, "/"));
   return (
     <div className="container">
       <div className="card auth-card">

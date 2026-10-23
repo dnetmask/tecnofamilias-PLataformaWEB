@@ -7,7 +7,7 @@ export const metadata = { title: "Ingresar" };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams;
-  if (await getCurrentUser()) redirect(safeNext(next));
+  if (await getCurrentUser()) redirect(safeNext(next, "/"));
   return (
     <div className="container">
       <div className="card auth-card">
