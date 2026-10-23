@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Modo Familia: cartas para conectar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E7F0EC; --surface:#FFFFFF; --ink:#1C2A4A; --muted:#56627A; --line:#C9D7D1;
+  --parent:#3150A8; --parent-soft:#E3E9F8; --kid:#E99A22; --kid-soft:#FDF1DC;
+  --reto:#23906A; --reto-soft:#DDF3EA; --alert:#C0443B; --alert-soft:#FBE6E3;
+  --on-color:#FFFFFF;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#142033; --surface:#1D2C44; --ink:#EEF3F8; --muted:#A9B6C9; --line:#30425E;
+    --parent:#7393EC; --parent-soft:#24365A; --kid:#F4B550; --kid-soft:#3A3122;
+    --reto:#4CC497; --reto-soft:#1E3B35; --alert:#F07D72; --alert-soft:#41272A;
+    --on-color:#101A2B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#142033; --surface:#1D2C44; --ink:#EEF3F8; --muted:#A9B6C9; --line:#30425E;
+  --parent:#7393EC; --parent-soft:#24365A; --kid:#F4B550; --kid-soft:#3A3122;
+  --reto:#4CC497; --reto-soft:#1E3B35; --alert:#F07D72; --alert-soft:#41272A;
+  --on-color:#101A2B; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.5}
+h1,h2,h3{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;line-height:1.1;margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--parent);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 20px 60px}
+
+/* Encabezado */
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.brand h1{font-size:clamp(2.4rem,7vw,4rem);font-weight:800;letter-spacing:-.01em}
+.brand h1 .p{color:var(--parent)} .brand h1 .k{color:var(--kid)}
+.brand p{margin:.3rem 0 0;color:var(--muted);max-width:52ch}
+.counter{display:flex;gap:10px;flex-wrap:wrap}
+.pill{background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.92rem}
+
+/* Mesa */
+.table{display:grid;grid-template-columns:1fr minmax(280px,420px) 1fr;gap:22px;align-items:center;background:var(--surface);border-radius:28px;padding:26px;border:2px solid var(--line)}
+.deck{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.deck-btn{position:relative;width:150px;height:205px;border:none;background:none;padding:0;transition:transform .15s}
+.deck-btn:hover{transform:translateY(-4px) rotate(-1deg)}
+.deck-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.deck-btn .layer{position:absolute;inset:0;border-radius:16px;border:3px solid var(--surface)}
+.deck-btn .layer:nth-child(1){transform:translate(8px,8px)}
+.deck-btn .layer:nth-child(2){transform:translate(4px,4px)}
+.deck.parent .layer{background:var(--parent)}
+.deck.kid .layer{background:var(--kid)}
+.deck-btn .layer.front{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--on-color);
+  background-image:radial-gradient(circle at 20% 20%,rgba(255,255,255,.18) 0 18px,transparent 19px),radial-gradient(circle at 80% 85%,rgba(255,255,255,.14) 0 26px,transparent 27px)}
+.deck-btn .emoji{font-size:2.6rem}
+.deck-btn .lbl{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:1.25rem;line-height:1}
+.deck-btn .sub{font-size:.8rem;font-weight:700;opacity:.9}
+.deck .left{font-size:.88rem;color:var(--muted);font-weight:700}
+.deck.turn .deck-btn{animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.turn-tag{font-size:.85rem;font-weight:800;padding:3px 10px;border-radius:999px;visibility:hidden}
+.deck.turn .turn-tag{visibility:visible}
+.deck.parent .turn-tag{background:var(--parent-soft);color:var(--parent)}
+.deck.kid .turn-tag{background:var(--kid-soft);color:var(--kid)}
+
+/* Carta en juego */
+.stage{perspective:1400px;min-height:430px;display:flex}
+.card{position:relative;width:100%;min-height:430px;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.card.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+.face.back{background:var(--bg);border:3px dashed var(--line);align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted)}
+.face.back h3{font-size:1.6rem;color:var(--ink);margin-bottom:6px}
+.face.front{transform:rotateY(180deg);background:var(--surface);border:4px solid var(--deck,var(--parent));box-shadow:0 14px 30px -18px rgba(20,30,60,.55)}
+.face.front .band{background:var(--deck,var(--parent));color:var(--on-color);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.band .who{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:1.05rem;line-height:1.1}
+.band .num{font-weight:800;font-size:.85rem;opacity:.9}
+.face.front .body{padding:18px 20px 16px;display:flex;flex-direction:column;gap:12px;flex:1;overflow:auto}
+.chip{align-self:flex-start;font-weight:800;font-size:.82rem;padding:4px 11px;border-radius:999px;background:var(--chip-bg,var(--parent-soft));color:var(--ink)}
+.question{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:clamp(1.35rem,3.2vw,1.65rem);line-height:1.18}
+.guide{font-size:.92rem;border-radius:14px;padding:10px 12px}
+.guide b{display:block;font-size:.82rem;margin-bottom:2px}
+.guide.signal{background:var(--alert-soft)} .guide.signal b{color:var(--alert)}
+.guide.tip{background:var(--reto-soft)} .guide.tip b{color:var(--reto)}
+details.guides{margin-top:auto}
+details.guides summary{cursor:pointer;font-weight:800;font-size:.9rem;color:var(--muted);padding:4px 0}
+details.guides[open] summary{margin-bottom:8px}
+details.guides .guide + .guide{margin-top:8px}
+
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.btn{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 18px;font-weight:800}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.status{text-align:center;color:var(--muted);font-weight:700;margin-top:10px;min-height:1.5em}
+
+/* Secciones */
+section.block{margin-top:48px}
+section.block > h2{font-size:clamp(1.7rem,4vw,2.3rem);margin-bottom:6px}
+section.block > p.lead{color:var(--muted);margin:0 0 18px;max-width:64ch}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;counter-reset:r}
+.rule{background:var(--surface);border-radius:18px;padding:16px 18px;border:2px solid var(--line)}
+.rule h3{font-size:1.2rem;margin-bottom:4px}
+.rule p{margin:0;color:var(--muted);font-size:.95rem}
+.rule.gold{border-color:var(--kid);background:var(--kid-soft)}
+.rule.gold p{color:var(--ink)}
+
+.alerts{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.alerts .col{background:var(--surface);border-radius:20px;padding:18px 20px;border:2px solid var(--line)}
+.alerts .col.red{border-color:var(--alert)}
+.alerts h3{font-size:1.3rem;margin-bottom:8px}
+.alerts ul{margin:0;padding-left:1.1rem}
+.alerts li{margin:.3rem 0;font-size:.95rem}
+.lines{margin-top:14px;display:grid;gap:8px}
+.line-item{background:var(--alert-soft);border-radius:12px;padding:8px 12px;font-size:.92rem}
+.line-item b{color:var(--alert)}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.filters button{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-weight:700;font-size:.9rem}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.mini{background:var(--surface);border-radius:16px;border:2px solid var(--line);border-top:7px solid var(--deck);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.mini .q{font-weight:700;line-height:1.35}
+.mini .meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);font-weight:700}
+footer{margin-top:50px;color:var(--muted);font-size:.88rem;text-align:center}
+
+@media (max-width:820px){
+  .table{grid-template-columns:1fr 1fr;padding:18px}
+  .stage{grid-column:1 / -1;order:3}
+  .deck-btn{width:118px;height:160px}
+  .alerts{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .card{transition:none}.deck.turn .deck-btn{animation:none}.deck-btn{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brand">
+    <h1><span class="p">Modo</span> <span class="k">Familia</span></h1>
+    <p>Cartas para conectar entre padres e hijos de 8 a 13 años: pantallas, juegos, redes, amigos, emociones y cuidado. Sin sermones, sin castigos, con muchas risas.</p>
+  </div>
+  <div class="counter" aria-live="polite">
+    <span class="pill" id="pillP">🃏 Comodines adulto: 3</span>
+    <span class="pill" id="pillK">🃏 Comodines niño/a: 3</span>
+  </div>
+</header>
+
+<div class="table">
+  <div class="deck parent" id="deckP">
+    <span class="turn-tag">Te toca</span>
+    <button class="deck-btn" id="drawP" aria-label="Sacar carta del mazo de padres">
+      <span class="layer"></span><span class="layer"></span>
+      <span class="layer front"><span class="emoji">🧑‍🧒</span><span class="lbl">Padres</span><span class="sub">preguntan al hijo/a</span></span>
+    </button>
+    <span class="left" id="leftP">50 cartas</span>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="face back">
+        <div>
+          <h3>Saca una carta</h3>
+          <p>Empieza el adulto: toma una carta del mazo azul y hazle la pregunta a tu hijo/a. Luego es su turno con el mazo amarillo.</p>
+        </div>
+      </div>
+      <div class="face front" id="front"></div>
+    </div>
+  </div>
+
+  <div class="deck kid" id="deckK">
+    <span class="turn-tag">Te toca</span>
+    <button class="deck-btn" id="drawK" aria-label="Sacar carta del mazo de hijos">
+      <span class="layer"></span><span class="layer"></span>
+      <span class="layer front"><span class="emoji">🎮</span><span class="lbl">Hijos</span><span class="sub">preguntan al adulto</span></span>
+    </button>
+    <span class="left" id="leftK">50 cartas</span>
+  </div>
+</div>
+
+<div class="actions">
+  <button class="btn" id="joker" disabled>Usar comodín y pasar</button>
+  <button class="btn primary" id="next" disabled>Listo, cambio de turno</button>
+  <button class="btn" id="reset">Barajar de nuevo</button>
+</div>
+<p class="status" id="status" aria-live="polite"></p>
+
+<section class="block" id="reglas">
+  <h2>Cómo se juega</h2>
+  <p class="lead">Busquen 20 o 30 minutos tranquilos, sin televisión de fondo. Funciona en la mesa del comedor, en el carro o antes de dormir.</p>
+  <div class="rules">
+    <div class="rule gold"><h3>Zona segura</h3><p>Lo que se cuenta jugando no se castiga. Si sale algo delicado, se agradece y se resuelve después, con calma y juntos.</p></div>
+    <div class="rule"><h3>Turnos</h3><p>El adulto saca del mazo azul y pregunta. Después el niño/a saca del mazo amarillo y pregunta. Los adultos también responden de verdad.</p></div>
+    <div class="rule"><h3>Comodines</h3><p>Cada jugador tiene 3 comodines para pasar una carta sin explicar por qué. Respetar el “paso” también enseña confianza.</p></div>
+    <div class="rule"><h3>Escuchar primero</h3><p>Nada de “¿por qué hiciste eso?”. Mejor “cuéntame más” o “¿cómo te sentiste?”. Corregir viene después, si hace falta.</p></div>
+    <div class="rule"><h3>Retos</h3><p>Las cartas verdes son retos para hacer en el momento o en la semana. Se vale reírse mucho.</p></div>
+    <div class="rule"><h3>Guía para el adulto</h3><p>Las cartas del mazo de padres traen señales para notar y una idea de cómo responder. Léelas en silencio, no en voz alta.</p></div>
+  </div>
+</section>
+
+<section class="block" id="alertas">
+  <h2>Si algo te prende una alarma</h2>
+  <p class="lead">Una respuesta aislada no es motivo de pánico. Lo que importa son los cambios y los patrones que se repiten.</p>
+  <div class="alerts">
+    <div class="col">
+      <h3>Señales para observar</h3>
+      <ul>
+        <li>Cambios fuertes de ánimo después de usar el celular o la consola.</li>
+        <li>Esconde la pantalla, borra chats o historial, o se pone nervioso si te acercas.</li>
+        <li>Un “amigo” nuevo de internet que le regala Robux, skins o diamantes, o le pide secretos.</li>
+        <li>Le piden pasar a otra app (WhatsApp, Discord, Telegram) o activar la cámara.</li>
+        <li>Duerme mal, no quiere ir al colegio, se aísla o deja lo que antes disfrutaba.</li>
+        <li>Compras o cobros que nadie explica en la tarjeta o en la tienda de apps.</li>
+      </ul>
+    </div>
+    <div class="col red">
+      <h3>Qué hacer</h3>
+      <ul>
+        <li>Respira. Tu calma le dice que hizo bien en contarte.</li>
+        <li>No borres nada: toma capturas de pantalla con fecha y usuario.</li>
+        <li>No respondas al agresor ni lo confrontes. Bloquea y reporta en la plataforma.</li>
+        <li>Si es ciberacoso entre compañeros, informa al colegio por escrito.</li>
+        <li>Si un adulto pidió fotos, citas o secretos, denuncia de inmediato.</li>
+      </ul>
+      <div class="lines">
+        <div class="line-item"><b>Te Protejo</b> (teprotejo.org) para reportar contenido de abuso y acoso a menores en Colombia.</div>
+        <div class="line-item"><b>Línea 141 del ICBF</b> para orientación y denuncia sobre niños, niñas y adolescentes.</div>
+        <div class="line-item"><b>CAI Virtual de la Policía</b> para delitos informáticos, y <b>123</b> en emergencias.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="todas">
+  <h2>Todas las cartas</h2>
+  <p class="lead">Para revisarlas antes de jugar o elegir un tema en particular.</p>
+  <div class="filters" id="deckFilter" role="group" aria-label="Filtrar por mazo">
+    <button data-deck="all" aria-pressed="true">Ambos mazos</button>
+    <button data-deck="P" aria-pressed="false">Padres</button>
+    <button data-deck="K" aria-pressed="false">Hijos</button>
+  </div>
+  <div class="filters" id="catFilter" role="group" aria-label="Filtrar por tema"></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<footer>Una iniciativa de Tecnofamilias para proteger a las familias en el mundo digital.</footer>
+</div>
+
+<script>
+const CATS = {
+  risas:{n:"Risas",e:"😂"}, gaming:{n:"Gaming",e:"🎮"}, redes:{n:"Redes",e:"📱"},
+  pantallas:{n:"Pantallas",e:"⏳"}, ciber:{n:"Ciberseguridad",e:"🔐"}, emociones:{n:"Emociones",e:"💛"},
+  amigos:{n:"Amigos",e:"🤝"}, cuidado:{n:"Autocuidado",e:"🛡️"}, dinero:{n:"Dinero digital",e:"💰"},
+  vi:{n:"Lo que vi",e:"👀"}, reto:{n:"Reto",e:"⚡"}
+};
+
+/* Mazo de padres: el adulto pregunta al hijo/a. s = señal para observar, t = cómo responder */
+const P = [
+ {c:"risas",q:"Si fueras un personaje de videojuego, ¿quién serías y cuál sería tu superpoder?",t:"Ríete y juega con la respuesta. Las cartas fáciles construyen la confianza para las difíciles."},
+ {c:"risas",q:"¿Cuál es el meme o video más random que te hizo reír esta semana? Muéstramelo o explícamelo.",s:"Memes que se burlan de alguien de su curso o de un grupo de personas.",t:"Si el humor es hiriente, pregunta con curiosidad: “¿y cómo crees que se siente esa persona?”, sin sermón."},
+ {c:"risas",q:"¿Qué palabra o cosa que yo hago te da más cringe?",t:"Acepta la crítica con humor. Le estás mostrando cómo se recibe una opinión sin enojarse."},
+ {c:"risas",q:"Explícame el brainrot o el meme del momento como si yo fuera un noob total.",t:"Déjalo ser el experto. Que te enseñe le da seguridad y te abre la puerta a su mundo."},
+ {c:"gaming",q:"¿Cuál es tu juego favorito ahora y qué es lo que más te gusta de él? ¿Me enseñas a jugarlo?",s:"Que no quiera que veas el juego o cambie rápido de pantalla cuando llegas.",t:"Jugar 20 minutos con él o ella vale más que mil reglas. Ahí ves con quién habla y cómo."},
+ {c:"gaming",q:"¿Cómo te sientes después de jugar: con energía, cansado, de mal genio o feliz?",s:"Irritabilidad fuerte, rabia al perder o mucha dificultad para parar.",t:"Valida: “es normal frustrarse”. Luego acuerden juntos una señal de cierre, como avisar 10 minutos antes."},
+ {c:"gaming",q:"¿Juegas con gente que no conoces en persona? ¿Cómo se habla en el chat del juego?",s:"Un jugador “amigo” que regala Robux o skins, pide pasar a otra app o pide guardar secretos.",t:"No prohíbas de golpe. Acuerden que te avisará si alguien hace eso, y que no habrá castigo por contarlo."},
+ {c:"gaming",q:"¿Alguien en un juego te ha dicho algo feo, te ha hecho trampa o te sacó de la partida a propósito?",s:"Insultos repetidos, burlas en grupo o que lo excluyan siempre los mismos.",t:"Enséñale a silenciar, bloquear y reportar. Dile que alejarse de alguien tóxico también es ganar."},
+ {c:"gaming",q:"Si pudieras crear tu propio juego en Roblox o Minecraft, ¿de qué se trataría?",t:"Su respuesta muestra qué le emociona. Si le interesa crear, puedes proponer cursos de programación para niños."},
+ {c:"redes",q:"¿Qué apps usan tus amigos que tú todavía no tienes? ¿Cómo te sientes con eso?",s:"Sensación fuerte de exclusión o cuentas creadas a escondidas.",t:"Explica que TikTok e Instagram piden 13 años o más por seguridad, sin burlarte de sus ganas. Pacten cuándo y cómo."},
+ {c:"redes",q:"Si subieras un video hoy, ¿de qué sería y quién crees que lo vería?",t:"Conversa sobre la audiencia: lo público lo puede ver cualquier persona, guardar y compartir para siempre."},
+ {c:"redes",q:"¿Te has sentido mal porque algo tuyo o de un amigo no tuvo likes o vistas?",s:"Ansiedad por la validación, borrar publicaciones por pocos likes, compararse mucho.",t:"Recuérdale que los likes miden el algoritmo, no su valor. Cuéntale algo que admiras de él o ella."},
+ {c:"redes",q:"¿Sabes qué hacer si alguien que no conoces te escribe por DM o por el chat?",s:"Que diga que responde para “no ser grosero”.",t:"Practiquen juntos bloquear y reportar. Ser educado no significa contestarle a un desconocido."},
+ {c:"redes",q:"¿Qué influencer, youtuber o streamer te gusta? ¿Qué es lo que más te gusta de él o ella?",t:"No critiques a su ídolo. Pregunta qué valores ve en esa persona y comparte qué piensas tú."},
+ {c:"pantallas",q:"Si tuvieras que pasar un día entero sin celular ni consola, ¿qué harías?",t:"Toma nota de sus ideas: son el plan para el próximo domingo sin pantallas."},
+ {c:"pantallas",q:"¿En qué momento del día te cuesta más soltar la pantalla?",s:"Uso en la noche, dormir con el celular cerca o despertarse a revisarlo.",t:"Acuerden juntos los horarios, no los impongas. Las reglas valen también para los adultos."},
+ {c:"pantallas",q:"¿Te ha pasado que ves “solo un video” y de pronto pasó una hora? ¿Por qué crees que pasa?",t:"Explica que el scroll infinito y la reproducción automática están diseñados para engancharnos. No es culpa suya."},
+ {c:"pantallas",q:"¿Qué regla de pantallas de la casa te parece injusta y cuál te parece bien?",t:"Escucha completo, sin interrumpir. Disciplina positiva es firmeza y amabilidad al mismo tiempo: pueden negociar."},
+ {c:"pantallas",q:"¿Sientes que yo uso mucho el celular cuando estamos juntos?",t:"Escucha sin defenderte. Tu ejemplo pesa más que cualquier regla que pongas."},
+ {c:"ciber",q:"Si te llega un mensaje que dice “Ganaste Robux o diamantes gratis, entra aquí”, ¿qué harías?",s:"Que haya entrado a generadores de Robux o haya dado su usuario y contraseña.",t:"Regla de oro: nada es gratis. Esos links roban cuentas. Si ya cayó, cambien juntos la contraseña sin regaños."},
+ {c:"ciber",q:"¿Te sabes tu contraseña? ¿Alguien más la conoce aparte de nosotros?",s:"Contraseñas compartidas con amigos, primos o alguien del juego.",t:"Las contraseñas se comparten solo con papá o mamá. Prestar la cuenta es como prestar la llave de la casa."},
+ {c:"ciber",q:"¿Qué datos tuyos crees que nunca deberías poner en internet?",t:"Repasen: dirección, colegio, uniforme en fotos, ubicación en vivo, horarios y teléfono."},
+ {c:"ciber",q:"¿Alguna vez una app te pidió la ubicación, la cámara o el micrófono? ¿Qué hiciste?",t:"Revisen juntos los permisos del celular. Hacerlo en equipo le enseña a cuidarse solo."},
+ {c:"ciber",q:"¿Cómo sabrías si alguien en internet no es quien dice ser?",s:"Que crea que alguien es un niño “porque su avatar y su foto lo son”.",t:"Explica que cualquier adulto puede usar la foto o la voz de un niño, incluso con IA. La confianza se gana en persona."},
+ {c:"emociones",q:"¿Qué te tiene preocupado o estresado últimamente, aunque sea algo pequeñito?",s:"Dolores de cabeza o estómago frecuentes, mal sueño o aislamiento.",t:"Nunca respondas “eso no es nada”. Para él o ella es importante. Pregunta: “¿qué te ayudaría?”."},
+ {c:"emociones",q:"¿Has visto algo en internet que te dio miedo o no te dejó dormir?",s:"Pesadillas, miedo a estar solo, imágenes violentas o retos virales que asustan.",t:"Agradece que lo cuente. Explica que muchas cosas son montajes o IA, y revisen juntos el control parental."},
+ {c:"emociones",q:"Cuando estás triste o enojado, ¿qué te ayuda? ¿Y qué hago yo que no te ayuda?",t:"Escucha la segunda parte con humildad. Pueden crear juntos un “rincón de calma”."},
+ {c:"emociones",q:"¿Alguna vez te has comparado con alguien que ves en redes y te sentiste menos?",s:"Comentarios negativos sobre su cuerpo, cara o ropa.",t:"Cuéntale que los filtros y las ediciones son normales en redes. Lo que se ve no es la vida completa."},
+ {c:"amigos",q:"¿Quién es tu mejor amigo o amiga ahora y qué es lo que más te gusta de esa persona?",t:"Conocer a sus amigos por nombre te ayuda a notar si algo cambia en sus relaciones."},
+ {c:"amigos",q:"¿En el chat del curso o en algún grupo molestan o se burlan de alguien?",s:"Stickers o memes con la cara de un compañero, apodos, audios burlones.",t:"Explica la diferencia entre ser sapo y ser valiente: contar para proteger a alguien es de valientes."},
+ {c:"amigos",q:"¿Te han dejado por fuera de un grupo, una partida o un chat? ¿Cómo te sentiste?",s:"Exclusión repetida o que lo saquen siempre de los grupos.",t:"Valida el dolor de quedarse fuera. Pregunta con quién sí se siente bien y fortalece esos lazos."},
+ {c:"amigos",q:"¿Te han propuesto hacer un reto o challenge que no querías hacer?",s:"Retos virales peligrosos, de aguantar la respiración, comer cosas o grabarse haciendo algo arriesgado.",t:"Celebra cuando dice no. Decir “paso” también es tener aura."},
+ {c:"amigos",q:"Si un amigo te contara que lo están molestando por internet, ¿qué le dirías?",t:"Su respuesta te muestra qué haría si le pasa a él o ella. Refuerza: guardar pruebas, no responder, contarle a un adulto."},
+ {c:"cuidado",q:"¿Qué partes de tu cuerpo son privadas y quién puede verlas o tocarlas?",t:"Usa los nombres correctos, sin vergüenza. Nadie debe pedir verlas, tocarlas ni pedir fotos de ellas, ni en persona ni en internet."},
+ {c:"cuidado",q:"¿Cuál es la diferencia entre un secreto bueno, como una sorpresa, y un secreto malo?",s:"Alguien, adulto o “amigo”, que le pide guardar secretos de ti.",t:"Dilo claro: en esta familia no hay secretos que te hagan sentir mal o incómodo. Esos siempre se cuentan."},
+ {c:"cuidado",q:"Si alguien te pidiera una foto o un video tuyo que te haga sentir incómodo, aunque sea un amigo, ¿qué harías?",s:"Que crea que se meterá en problemas si cuenta, o que ya haya pasado.",t:"Repite: “nunca tendrás problemas por contarme, aunque ya lo hayas enviado”. La culpa es de quien pide."},
+ {c:"cuidado",q:"¿Quiénes son tus tres adultos de confianza a los que les contarías algo difícil?",t:"Si no te incluye, no te ofendas. Lo importante es que tenga una red. Pueden armarla juntos."},
+ {c:"cuidado",q:"¿Alguien te ha hecho sentir incómodo por algo que dijo de tu cuerpo, aquí o en internet?",s:"Comentarios sobre su cuerpo de adultos o de chicos mayores, mensajes de “eres muy maduro para tu edad”.",t:"Escucha con calma, sin preguntar demasiado de golpe. Si hay algo serio, revisa la sección de alertas."},
+ {c:"dinero",q:"Si te regalaran 50.000 pesos para tus juegos, ¿en qué los gastarías y por qué?",t:"Úsalo para hablar de que la plata digital también es plata real y cuesta trabajo ganarla."},
+ {c:"dinero",q:"¿Qué son las cajas sorpresa, las ruletas o los pases de batalla? ¿Te dan ganas de comprarlos?",s:"Insistencia por comprar, enojo si no puede o gastos repetidos.",t:"Explica que las cajas sorpresa funcionan como apuestas: pagas sin saber qué te toca. Eso engancha a cualquiera."},
+ {c:"dinero",q:"¿Alguna vez compraste algo en un juego sin permiso o se te fue la mano?",s:"Cobros desconocidos en la tarjeta o la tienda de apps.",t:"Si confiesa, primero celebra la honestidad. Después, juntos, buscan cómo reparar: así aprende sin miedo."},
+ {c:"dinero",q:"¿Alguien te ha ofrecido cambiar o vender una cuenta, una skin o un brainrot por dinero real?",s:"Intercambios por fuera del juego, pagos por Nequi o tarjetas, pedirle datos de la cuenta.",t:"Esos tratos son la estafa más común en gaming. Acuerden: cero tratos fuera del juego sin que tú estés."},
+ {c:"vi",q:"¿Qué video, juego o serie te impactó mucho últimamente, para bien o para mal?",t:"Pregunta qué sintió, no solo qué vio. Así entiendes cómo le afecta lo que consume."},
+ {c:"vi",q:"¿Has visto algo en internet que sabías que no era para tu edad? Puedes contarme, no te vas a meter en problemas.",s:"Contenido sexual, violento o de autolesión, o búsquedas que repite.",t:"Respira, agradece y pregunta cómo llegó ahí, sin interrogatorio. Luego ajusten juntos los filtros."},
+ {c:"vi",q:"¿Qué es lo más raro que un amigo te ha contado que vio en internet?",t:"A veces hablan de “un amigo” para contar lo propio. Escucha igual, sin juzgar."},
+ {c:"reto",q:"Muéstrame la configuración de privacidad de tu juego o app favorita y la revisamos juntos. Al terminar, eliges el postre.",t:"Revisa: cuenta privada, chat solo con amigos, sin ubicación. Que él o ella haga los cambios."},
+ {c:"reto",q:"Enséñame un baile o trend de TikTok y lo hacemos los dos, aunque yo lo haga fatal.",t:"El ridículo compartido une. Verte intentarlo le enseña que equivocarse está bien."},
+ {c:"reto",q:"Creemos juntos una contraseña súper segura con tres palabras random, un número y un símbolo. No la digas en voz alta.",t:"Ejemplo de estructura: Gato+Arepa+Luna+27!. Larga y fácil de recordar es mejor que corta y rara."},
+ {c:"reto",q:"Reto de 24 horas: todos los celulares de la familia duermen en la estación de carga, fuera de los cuartos.",t:"Escojan juntos el lugar de carga. Si el adulto falla, paga una prenda que el niño elija."},
+ {c:"reto",q:"Rétame a una partida de tu juego favorito. Si ganas, eliges la comida del sábado.",t:"Pierde con dignidad si pierdes. Es una lección en vivo de manejo de la frustración."}
+];
+
+/* Mazo de hijos: el niño/a pregunta al adulto. t = nota para el adulto que responde */
+const K = [
+ {c:"risas",q:"¿Cuál era tu juego o caricatura favorita cuando tenías mi edad?"},
+ {c:"risas",q:"¿Cuál es la cosa más vergonzosa que te pasó en el colegio?",t:"Contar tus errores le muestra que equivocarse es humano."},
+ {c:"risas",q:"Si fueras un meme, ¿cuál serías?"},
+ {c:"risas",q:"¿Qué app o juego de ahora te parece más difícil de entender?"},
+ {c:"risas",q:"¿Cuál fue tu primer celular y qué podías hacer con él?"},
+ {c:"gaming",q:"¿Por qué a veces te preocupa cuando juego mucho?",t:"Habla de lo que sientes, no de lo que hace mal: “me preocupa que duermas poco”."},
+ {c:"gaming",q:"¿Jugarías una partida conmigo? ¿Cuál de mis juegos te da más curiosidad?"},
+ {c:"gaming",q:"¿Tú alguna vez te enojaste perdiendo un juego? ¿Qué hacías?"},
+ {c:"gaming",q:"¿Qué juego te parece bien para mi edad y cuál no? ¿Por qué?",t:"Explica las clasificaciones por edad (como PEGI o ESRB) y tus razones, no solo un “porque no”."},
+ {c:"redes",q:"¿A qué edad me dejarías tener redes sociales y qué tendría que demostrar?",t:"Dale una meta clara y alcanzable. Así la regla se vuelve un acuerdo."},
+ {c:"redes",q:"¿Alguna vez publicaste algo de lo que te arrepentiste?"},
+ {c:"redes",q:"¿Subes fotos mías a tus redes? ¿Me preguntarías antes de hacerlo?",t:"Pídele permiso de verdad desde hoy. Así aprende que su imagen es suya."},
+ {c:"redes",q:"¿Qué es lo que más ves en tu celular?"},
+ {c:"redes",q:"¿Alguien te ha escrito algo feo en redes o en un chat? ¿Qué hiciste?"},
+ {c:"pantallas",q:"¿Cuánto tiempo crees que pasas en el celular al día? Revisémoslo juntos.",t:"Abre el tiempo de pantalla de tu celular y muéstralo. La honestidad es recíproca."},
+ {c:"pantallas",q:"¿Por qué yo tengo que dejar el celular en la noche si los adultos también lo usan?",t:"Explica el sueño y el cerebro en crecimiento, y comprométete tú también con algo."},
+ {c:"pantallas",q:"¿Qué hacías en tu tiempo libre cuando no había internet?"},
+ {c:"pantallas",q:"¿Qué regla de pantallas podríamos cumplir todos en la familia, incluido tú?"},
+ {c:"ciber",q:"¿Alguna vez te han estafado o casi te estafan por internet?",t:"Contarlo le muestra que a cualquiera le puede pasar y que pedir ayuda no es de tontos."},
+ {c:"ciber",q:"¿Por qué no debo hablar con desconocidos en los juegos si parecen niños?",t:"Explica que en internet nadie puede comprobar la edad de otro. Un avatar no es una persona."},
+ {c:"ciber",q:"¿Para qué sirve el control parental que me pones? ¿Me espías?",t:"Sé transparente sobre qué ves y qué no. Es para cuidar, no para espiar, y se irá ajustando con su edad."},
+ {c:"ciber",q:"¿Te has creído una noticia falsa o un video hecho con IA?"},
+ {c:"ciber",q:"¿Qué harías si yo te digo que alguien me pidió mis datos o mi contraseña?",t:"Responde exactamente como te gustaría reaccionar en la vida real: con calma y ayuda."},
+ {c:"emociones",q:"¿Qué cosas te ponen ansioso o estresado a ti?"},
+ {c:"emociones",q:"¿Qué haces cuando estás triste y no quieres que nadie lo note?"},
+ {c:"emociones",q:"¿Qué es lo que más te gusta de mí?",t:"Sé específico. “Me encanta cómo ayudas a tu hermana” vale más que “todo”."},
+ {c:"emociones",q:"¿Alguna vez te sentiste solo o que no encajabas?"},
+ {c:"emociones",q:"Cuando te enojas conmigo, ¿qué te gustaría que yo hiciera?",t:"Esta pregunta es oro. Guarda su respuesta para el próximo conflicto."},
+ {c:"amigos",q:"¿Quién era tu mejor amigo a mi edad y todavía se hablan?"},
+ {c:"amigos",q:"¿Alguna vez te hicieron bullying o tú molestaste a alguien?",t:"Si fuiste quien molestaba, cuéntalo y di qué aprendiste. Eso enseña reparación."},
+ {c:"amigos",q:"¿Cómo sabes si alguien es un amigo de verdad?"},
+ {c:"amigos",q:"¿Qué harías si te cuento que están molestando a alguien de mi curso?"},
+ {c:"amigos",q:"¿Te gusta que te cuente de mis amigos y mis chats? ¿Por qué?"},
+ {c:"cuidado",q:"¿Cómo aprendiste tú a cuidar tu cuerpo y tu privacidad?"},
+ {c:"cuidado",q:"Si te cuento algo muy difícil, ¿te enojarías conmigo?",t:"Responde: “Puede que me preocupe, pero nunca dejaré de ayudarte”. Y cúmplelo."},
+ {c:"cuidado",q:"¿Qué es el respeto en una relación, como de novios o de amigos?",t:"Habla de consentimiento con palabras simples: nadie te presiona, nadie te pide pruebas, todos pueden decir no."},
+ {c:"cuidado",q:"¿Por qué me dices que no le mande fotos mías a nadie?",t:"Explica que una foto enviada ya no es tuya: se puede guardar, editar y compartir."},
+ {c:"cuidado",q:"¿Tenías un crush cuando tenías mi edad? ¿Cómo era?",t:"Hablar de crushes con naturalidad hace que te cuente los suyos."},
+ {c:"dinero",q:"¿En qué gastabas tu plata cuando eras pequeño?"},
+ {c:"dinero",q:"¿Por qué no me compras Robux o el pase de batalla cada vez que te pido?",t:"Explica tus razones y ofrece una opción: ahorrar, ganarlo con una meta o elegir una compra al mes."},
+ {c:"dinero",q:"¿Me ayudarías a ahorrar para algo que quiero, aunque sea de un juego?"},
+ {c:"dinero",q:"¿Cuál ha sido tu peor compra?"},
+ {c:"vi",q:"¿Qué película o serie te dio miedo o te impactó cuando eras niño?"},
+ {c:"vi",q:"¿Has visto algo en internet que te hizo sentir mal o te asustó?"},
+ {c:"vi",q:"¿Qué ves tú en internet que no me dejarías ver a mí? ¿Por qué?",t:"Responde con honestidad: hay contenido hecho para adultos que puede confundir o asustar a un niño."},
+ {c:"reto",q:"Entrégame tu celular por una hora y juguemos algo sin pantallas que yo elija."},
+ {c:"reto",q:"Adivina qué significan tres de estas palabras: aura, GG, NPC, random, tryhard, cringe. Si fallas, haces un baile."},
+ {c:"reto",q:"Juega 10 minutos mi juego favorito y yo te califico de noob a pro."},
+ {c:"reto",q:"Muéstrame cuánto tiempo de pantalla llevas hoy en tu celular."},
+ {c:"reto",q:"Dime tres cosas que admiras de mí, mirándome a los ojos."}
+];
+
+const DECKS = {P:{name:"Padres",who:"Pregunta el adulto",data:P,color:"var(--parent)"},K:{name:"Hijos",who:"Pregunta el hijo/a",data:K,color:"var(--kid)"}};
+let piles={}, turn="P", jokers={P:3,K:3}, current=null;
+
+const $=id=>document.getElementById(id);
+function shuffle(a){a=a.map((x,i)=>i);for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function chipBg(c){return c==="reto"?"var(--reto-soft)":c==="cuidado"||c==="emociones"?"var(--alert-soft)":"var(--bg)"}
+
+function init(){
+  piles={P:shuffle(P),K:shuffle(K)}; turn="P"; jokers={P:3,K:3}; current=null;
+  $("card").classList.remove("flipped"); $("status").textContent="";
+  render();
+}
+function render(){
+  $("leftP").textContent=piles.P.length+" cartas"; $("leftK").textContent=piles.K.length+" cartas";
+  $("pillP").textContent="🃏 Comodines adulto: "+jokers.P; $("pillK").textContent="🃏 Comodines niño/a: "+jokers.K;
+  $("deckP").classList.toggle("turn",turn==="P"&&!current); $("deckK").classList.toggle("turn",turn==="K"&&!current);
+  $("drawP").disabled=!!current||turn!=="P"||!piles.P.length;
+  $("drawK").disabled=!!current||turn!=="K"||!piles.K.length;
+  $("next").disabled=!current; $("joker").disabled=!current||jokers[current.d]===0;
+}
+function draw(d){
+  if(current||!piles[d].length) return;
+  const idx=piles[d].pop(), card=DECKS[d].data[idx], cat=CATS[card.c], deck=DECKS[d];
+  current={d,idx};
+  const f=$("front");
+  const col=card.c==="reto"?"var(--reto)":deck.color;
+  f.style.setProperty("--deck",col);
+  let g="";
+  if(card.s||card.t){
+    g='<details class="guides"'+(d==="P"?"":" open")+'><summary>'+(d==="P"?"Guía para el adulto (léela en silencio)":"Nota para el adulto que responde")+'</summary>';
+    if(card.s) g+='<div class="guide signal"><b>Señal para observar</b>'+card.s+'</div>';
+    if(card.t) g+='<div class="guide tip"><b>Cómo responder</b>'+card.t+'</div>';
+    g+='</details>';
+  }
+  f.innerHTML='<div class="band"><span class="who">'+(card.c==="reto"?"¡Reto! ":"")+deck.who+'</span><span class="num">'+deck.name+' #'+(idx+1)+'</span></div>'+
+    '<div class="body"><span class="chip" style="--chip-bg:'+chipBg(card.c)+'">'+cat.e+' '+cat.n+'</span><p class="question">'+card.q+'</p>'+g+'</div>';
+  $("card").classList.remove("flipped"); void $("card").offsetWidth; $("card").classList.add("flipped");
+  $("status").textContent=d==="P"?"El adulto lee la pregunta en voz alta.":"El hijo/a lee la pregunta en voz alta.";
+  render();
+}
+function nextTurn(){
+  if(!current) return;
+  current=null; turn=turn==="P"?"K":"P";
+  if(!piles[turn].length && piles[turn==="P"?"K":"P"].length) turn=turn==="P"?"K":"P";
+  $("card").classList.remove("flipped");
+  $("status").textContent=!piles.P.length&&!piles.K.length?"¡Terminaron las 100 cartas! Elijan cuál fue su favorita.":(turn==="P"?"Turno del adulto.":"Turno del hijo/a.");
+  render();
+}
+function useJoker(){
+  if(!current||jokers[current.d]===0) return;
+  jokers[current.d]--; $("status").textContent="Comodín usado. Se respeta el “paso”, sin preguntas.";
+  const s=$("status").textContent; nextTurn(); $("status").textContent=s+" "+(turn==="P"?"Turno del adulto.":"Turno del hijo/a.");
+}
+$("drawP").onclick=()=>draw("P"); $("drawK").onclick=()=>draw("K");
+$("next").onclick=nextTurn; $("joker").onclick=useJoker;
+$("reset").onclick=()=>{ if(confirm("¿Barajar ambos mazos y empezar de nuevo?")) init(); };
+
+/* Lista completa */
+let fDeck="all", fCat="all";
+function buildCatFilter(){
+  const box=$("catFilter");
+  box.innerHTML='<button data-cat="all" aria-pressed="true">Todos los temas</button>'+Object.entries(CATS).map(([k,v])=>'<button data-cat="'+k+'" aria-pressed="false">'+v.e+' '+v.n+'</button>').join("");
+  box.onclick=e=>{const b=e.target.closest("button");if(!b)return;fCat=b.dataset.cat;box.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid()};
+  $("deckFilter").onclick=e=>{const b=e.target.closest("button");if(!b)return;fDeck=b.dataset.deck;$("deckFilter").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid()};
+}
+function renderGrid(){
+  const out=[];
+  ["P","K"].forEach(d=>{ if(fDeck!=="all"&&fDeck!==d) return;
+    DECKS[d].data.forEach((c,i)=>{ if(fCat!=="all"&&c.c!==fCat) return;
+      const col=c.c==="reto"?"var(--reto)":DECKS[d].color;
+      out.push('<div class="mini" style="--deck:'+col+'"><span class="q">'+c.q+'</span><span class="meta"><span>'+CATS[c.c].e+' '+CATS[c.c].n+'</span><span>'+DECKS[d].name+' #'+(i+1)+'</span></span></div>');
+    });
+  });
+  $("grid").innerHTML=out.join("")||'<p>No hay cartas con ese filtro. Prueba con otro tema.</p>';
+}
+buildCatFilter(); renderGrid(); init();
+</script>
+</body>
+</html>

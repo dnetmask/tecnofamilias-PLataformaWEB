@@ -359,3 +359,55 @@ export async function markOrderPaidAction(formData: FormData) {
   if (!ok) fail("/admin/pagos", "La orden ya no estaba pendiente");
   done("/admin/pagos", "Orden marcada como pagada y acceso entregado");
 }
+
+/* ---------- Juegos ---------- */
+
+const gameSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().trim().min(2).max(140),
+  slug: z.string().trim().max(80).optional(),
+  description: z.string().trim().max(600).default(""),
+  ageLabel: z.string().trim().max(40).default(""),
+  emoji: z.string().trim().max(8).default("🎲"),
+  color: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Color hexadecimal, ej. #3DAEE4"),
+  order: z.coerce.number().int().default(0),
+  published: checkbox,
+});
+
+const MAX_GAME_BYTES = 1_500_000;
+
+export async function saveGameAction(formData: FormData) {
+  await requireAdmin();
+  const id = formData.get("id") || "";
+  const path = `/admin/juegos/${id || "nuevo"}`;
+  const file = formData.get("file");
+  formData.delete("file");
+  const { id: _id, slug, ...data } = parse(gameSchema, formData, path);
+
+  let html: string | undefined;
+  if (file instanceof File && file.size > 0) {
+    if (file.size > MAX_GAME_BYTES) fail(path, "El archivo supera 1,5 MB");
+    html = await file.text();
+    if (!/<html[\s>]/i.test(html)) fail(path, "El archivo debe ser una página HTML completa");
+  }
+  if (!id && !html) fail(path, "Sube el archivo HTML del juego");
+
+  const finalSlug = slugify(slug || data.title);
+  try {
+    const game = id
+      ? await db.game.update({ where: { id: String(id) }, data: { ...data, slug: finalSlug, ...(html ? { html } : {}) } })
+      : await db.game.create({ data: { ...data, slug: finalSlug, html: html! } });
+    revalidatePath("/juegos");
+    done(`/admin/juegos/${game.id}`, html && id ? "Juego actualizado con el nuevo archivo" : "Juego guardado");
+  } catch (err) {
+    if (isUniqueError(err)) fail(path, "Ya existe un juego con ese slug");
+    throw err;
+  }
+}
+
+export async function deleteGameAction(formData: FormData) {
+  await requireAdmin();
+  await db.game.delete({ where: { id: String(formData.get("id")) } });
+  revalidatePath("/juegos");
+  done("/admin/juegos", "Juego eliminado");
+}

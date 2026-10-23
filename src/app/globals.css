@@ -205,3 +205,6 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 
 .layout-aside { display: grid; gap: 24px; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); align-items: start; }
 @media (max-width: 860px) { .layout-aside { grid-template-columns: 1fr; } }
+
+.game-frame { width: 100%; height: 85vh; border: 0; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); display: block; }
+.game-frame:fullscreen { height: 100% !important; border-radius: 0; }

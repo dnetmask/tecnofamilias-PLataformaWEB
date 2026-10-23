@@ -278,3 +278,20 @@ model ForumReport {
   resolved   Boolean      @default(false)
   createdAt  DateTime     @default(now())
 }
+
+/// Juego interactivo autocontenido (un archivo HTML). Se sirve aislado en un
+/// iframe con sandbox, solo para suscriptores.
+model Game {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String   @default("")
+  ageLabel    String   @default("")
+  emoji       String   @default("🎲")
+  color       String   @default("#3DAEE4")
+  html        String
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

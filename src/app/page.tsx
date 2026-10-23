@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PlanCards } from "@/components/PlanCards";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { AGE_STAGES } from "@/lib/format";
 
@@ -28,6 +29,13 @@ const PILLARS = [
     text: "Acuerdos claros para Roblox, TikTok, WhatsApp y más. Los firman tú y tus hijos desde el celular.",
   },
   {
+    href: "/juegos",
+    icon: "🃏",
+    color: "var(--blue-dark)",
+    title: "Juegos en familia",
+    text: "Juegos como Modo Familia para conversar de pantallas, redes y emociones entre risas y retos.",
+  },
+  {
     href: "/comunidad",
     icon: "💬",
     color: "var(--navy-soft)",
@@ -37,7 +45,9 @@ const PILLARS = [
 ];
 
 export default async function Home() {
-  const plans = await db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } });
+  const user = await getCurrentUser();
+  // Con sesión iniciada la sección de planes ya no se muestra.
+  const plans = user ? [] : await db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } });
   return (
     <>
       <section className="hero">
@@ -52,8 +62,17 @@ export default async function Home() {
               los contacta. Todo en una sola plataforma.
             </p>
             <div className="row" style={{ marginTop: 24 }}>
-              <Link href="/planes" className="btn btn-yellow">Ver planes</Link>
-              <Link href="/clases" className="btn btn-light">Explorar clases</Link>
+              {user ? (
+                <>
+                  <Link href="/clases" className="btn btn-yellow">Ir a mis clases</Link>
+                  <Link href="/juegos" className="btn btn-light">Jugar en familia</Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/planes" className="btn btn-yellow">Ver planes</Link>
+                  <Link href="/clases" className="btn btn-light">Explorar clases</Link>
+                </>
+              )}
             </div>
           </div>
         </div>

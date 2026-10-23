@@ -6,6 +6,7 @@ const INCLUDES = [
   "Base completa de clases pregrabadas",
   "Videos y podcasts recomendados por etapa",
   "Pactos digitales ilimitados para firmar con tus hijos",
+  "Juegos para jugar y conversar en familia",
   "Comunidad de apoyo entre familias",
   "Opción de sumar cursos complementarios con pago adicional",
 ];

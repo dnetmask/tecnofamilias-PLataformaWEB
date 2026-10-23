@@ -11,8 +11,8 @@ const LINKS = [
   { href: "/clases", label: "Clases" },
   { href: "/recursos", label: "Videos y podcasts" },
   { href: "/pactos", label: "Pactos" },
+  { href: "/juegos", label: "Juegos" },
   { href: "/comunidad", label: "Comunidad" },
-  { href: "/planes", label: "Planes" },
 ];
 
 export function Header({ user }: Props) {
@@ -40,6 +40,12 @@ export function Header({ user }: Props) {
               {l.label}
             </Link>
           ))}
+          {/* Con sesión iniciada no se muestra Planes; quien no tiene plan ve "Suscribirme". */}
+          {!user && (
+            <Link href="/planes" className={isActive("/planes") ? "active" : undefined}>
+              Planes
+            </Link>
+          )}
           {user?.role === "ADMIN" && (
             <Link href="/admin" className={isActive("/admin") ? "active" : undefined}>
               Admin
