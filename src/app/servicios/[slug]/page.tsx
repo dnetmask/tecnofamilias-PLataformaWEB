@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CurrencyNote } from "@/components/CurrencyNote";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
+import { ServiceDetails } from "@/components/ServiceDetails";
 import { getCurrentUser } from "@/lib/auth";
 import { formatCop } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
@@ -34,7 +35,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           </div>
           <h1 style={{ fontSize: "2rem" }}>{service.name}</h1>
           <p style={{ fontSize: "1.1rem" }}>{service.description}</p>
-          {service.details && <p className="muted" style={{ whiteSpace: "pre-wrap" }}>{service.details}</p>}
+          {service.details && <ServiceDetails text={service.details} />}
 
           {!service.priceUsd && (
             <div className="card">

@@ -47,7 +47,7 @@ export default async function AdminServicePage({ params, searchParams }: { param
           <div className="field"><label>Slug (URL)</label><input className="input" name="slug" defaultValue={s?.slug} placeholder="Se genera del nombre" /></div>
         </div>
         <div className="field"><label>Descripción corta</label><textarea className="textarea" name="description" defaultValue={s?.description} rows={3} /></div>
-        <div className="field"><label>Detalles (página del servicio)</label><textarea className="textarea" name="details" defaultValue={s?.details} rows={4} /></div>
+        <div className="field"><label>Detalles (página del servicio): separa bloques con una línea en blanco, usa "## " para subtítulos y "- " para listas</label><textarea className="textarea" name="details" defaultValue={s?.details} rows={12} /></div>
         <label className="check"><input type="checkbox" name="featured" defaultChecked={s?.featured ?? false} /> Destacado (tarjeta oscura)</label>
         <label className="check"><input type="checkbox" name="active" defaultChecked={s?.active ?? true} /> Visible</label>
         <div><SubmitButton>Guardar servicio</SubmitButton></div>

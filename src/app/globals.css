@@ -349,3 +349,8 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .about-story h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); font-weight: 900; margin: 6px 0 0; }
 .about-story p { margin: 0; font-size: 1.05rem; }
 @media (max-width: 800px) { .about-story { grid-template-columns: 1fr; gap: 16px; } }
+
+/* Lista de lo que incluye un servicio */
+.service-details { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.service-details li { position: relative; padding-left: 28px; }
+.service-details li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--red); font-weight: 800; }
