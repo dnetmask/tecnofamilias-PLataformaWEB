@@ -33,7 +33,7 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
           </div>
         )}
         <PlanCards plans={plans} />
-        <div className="center"><CurrencyNote currency={pricing.currency} /></div>
+        <div className="center" style={{ maxWidth: 640, margin: "0 auto" }}><CurrencyNote currency={pricing.currency} /></div>
         <div className="card card-tint">
           <h3>¿Qué son los cursos complementarios?</h3>
           <p className="muted" style={{ margin: 0 }}>

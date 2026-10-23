@@ -71,7 +71,7 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
                   </div>
                   <div className="row" style={{ marginBottom: 8 }}>
                     <span className={`badge ${l.access === "ADDON" ? "badge-yellow" : "badge-blue"}`}>
-                      {l.access === "ADDON" ? `Complemento · ${pricing.price(l.priceCop)}` : ACCESS_LABELS[l.access]}
+                      {l.access === "ADDON" ? `Complemento · ${pricing.price(l.priceUsd)}` : ACCESS_LABELS[l.access]}
                     </span>
                     <span className="badge badge-gray">{stageShort(l.ageStage)}{l.ageStage !== "ALL" ? " años" : ""}</span>
                     {l.durationMin > 0 && <span className="small muted">{l.durationMin} min</span>}

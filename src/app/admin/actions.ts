@@ -172,7 +172,7 @@ const lessonSchema = z
     description: z.string().trim().max(10000).default(""),
     ageStage,
     access: z.enum(["INCLUDED", "ADDON"]),
-    priceCop: z.coerce.number().int().min(0).max(100_000_000).default(0),
+    priceUsd: z.coerce.number().int().min(0).max(100_000).default(0),
     videoUrl: optionalUrl,
     thumbnailUrl: optionalUrl,
     durationMin: z.coerce.number().int().min(0).max(1000).default(0),
@@ -180,7 +180,7 @@ const lessonSchema = z
     order: z.coerce.number().int().default(0),
     published: checkbox,
   })
-  .refine((d) => d.access !== "ADDON" || d.priceCop >= 1000, { message: "Los complementos necesitan un precio", path: ["priceCop"] });
+  .refine((d) => d.access !== "ADDON" || d.priceUsd >= 1, { message: "Los complementos necesitan un precio en USD", path: ["priceUsd"] });
 
 export async function saveLessonAction(formData: FormData) {
   await requireAdmin();
@@ -331,7 +331,7 @@ const planSchema = z.object({
   id: z.string().optional(),
   name: z.string().trim().min(2).max(80),
   description: z.string().trim().max(300).default(""),
-  priceCop: z.coerce.number().int().min(1000),
+  priceUsd: z.coerce.number().int().min(1),
   interval: z.enum(["MONTH", "YEAR"]),
   order: z.coerce.number().int().default(0),
   active: checkbox,
@@ -370,9 +370,9 @@ const serviceSchema = z.object({
   slug: z.string().trim().max(80).optional(),
   description: z.string().trim().max(600).default(""),
   details: z.string().trim().max(3000).default(""),
-  priceCop: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(1000).nullable()),
-  priceFromCop: z.coerce.number().int().min(0),
-  priceToCop: z.coerce.number().int().min(0),
+  priceUsd: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(1).nullable()),
+  priceFromUsd: z.coerce.number().int().min(0),
+  priceToUsd: z.coerce.number().int().min(0),
   unit: z.string().trim().max(60).default(""),
   order: z.coerce.number().int().default(0),
   featured: checkbox,
@@ -383,13 +383,13 @@ export async function saveServiceAction(formData: FormData) {
   await requireAdmin();
   const path = `/admin/servicios/${formData.get("id") || "nuevo"}`;
   const { id, slug, ...data } = parse(serviceSchema, formData, path);
-  if (data.priceCop) {
+  if (data.priceUsd) {
     // Con precio en línea el rango mostrado es ese mismo precio.
-    data.priceFromCop = data.priceCop;
-    data.priceToCop = data.priceCop;
+    data.priceFromUsd = data.priceUsd;
+    data.priceToUsd = data.priceUsd;
   }
-  if (data.priceToCop < data.priceFromCop) fail(path, "El precio “hasta” debe ser mayor o igual al “desde”");
-  if (data.priceFromCop === 0) fail(path, "Escribe el rango de precio de referencia");
+  if (data.priceToUsd < data.priceFromUsd) fail(path, "El precio “hasta” debe ser mayor o igual al “desde”");
+  if (data.priceFromUsd === 0) fail(path, "Escribe el rango de precio de referencia en USD");
   const finalSlug = slugify(slug || data.name);
   try {
     const service = id
@@ -421,18 +421,20 @@ export async function updateServiceRequestAction(formData: FormData) {
 /* ---------- Monedas ---------- */
 
 const ratesSchema = z.object({
-  USD: z.coerce.number().positive("Tasa no válida"),
+  mode: z.enum(["auto", "manual"]),
+  COP: z.coerce.number().positive("Tasa no válida"),
   MXN: z.coerce.number().positive("Tasa no válida"),
   PEN: z.coerce.number().positive("Tasa no válida"),
 });
 
 export async function saveRatesAction(formData: FormData) {
   await requireAdmin();
-  const rates = parse(ratesSchema, formData, "/admin/monedas");
+  const { mode, ...manual } = parse(ratesSchema, formData, "/admin/monedas");
+  const value = { mode, manual };
   await db.setting.upsert({
     where: { key: RATES_KEY },
-    create: { key: RATES_KEY, value: rates },
-    update: { value: rates },
+    create: { key: RATES_KEY, value },
+    update: { value },
   });
   revalidatePath("/", "layout");
   done("/admin/monedas", "Tasas de cambio actualizadas");

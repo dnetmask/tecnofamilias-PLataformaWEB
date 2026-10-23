@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Plan } from "@prisma/client";
+import { formatCop } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 
 const INCLUDES = [
@@ -25,9 +26,10 @@ export async function PlanCards({ plans }: { plans: Plan[] }) {
               {!single && featured && <span className="badge badge-blue">Mejor precio</span>}
             </div>
             <div>
-              <span className="price">{pricing.price(plan.priceCop)}</span>
+              <span className="price">{pricing.price(plan.priceUsd)}</span>
               <span className="muted"> / {plan.interval === "YEAR" ? "año" : "mes"}</span>
-              {pricing.currency !== "COP" && <div className="small muted">Se cobra {pricing.cop(plan.priceCop)}</div>}
+              {pricing.currency !== "USD" && <div className="small muted">Precio base USD {plan.priceUsd}</div>}
+              <div className="small muted">Se cobra hoy {formatCop(pricing.charge(plan.priceUsd))}</div>
             </div>
             {plan.description && <p className="muted small" style={{ margin: 0 }}>{plan.description}</p>}
             <ul className="small">

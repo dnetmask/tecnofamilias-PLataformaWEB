@@ -105,7 +105,8 @@ model Plan {
   slug        String       @unique
   name        String
   description String       @default("")
-  priceCop    Int
+  /// Precio base en dólares; se convierte a COP al pagar.
+  priceUsd    Int
   interval    PlanInterval
   active      Boolean      @default(true)
   order       Int          @default(0)
@@ -137,7 +138,8 @@ model Lesson {
   description  String       @default("")
   ageStage     AgeStage     @default(ALL)
   access       LessonAccess @default(INCLUDED)
-  priceCop     Int          @default(0)
+  /// Precio del complemento en dólares.
+  priceUsd     Int          @default(0)
   videoUrl     String       @default("")
   thumbnailUrl String       @default("")
   durationMin  Int          @default(0)
@@ -175,7 +177,11 @@ model Order {
   serviceId   String?
   service     Service?    @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   description String
+  /// Monto cobrado en COP (lo que se envía a Mercado Pago).
   amountCop   Int
+  /// Precio base en dólares y tasa usada para convertirlo (COP por USD).
+  amountUsd   Int?
+  fxRate      Float?
   status      OrderStatus @default(PENDING)
   provider    String
   providerRef String?
@@ -328,11 +334,11 @@ model Service {
   name        String
   description String          @default("")
   details     String          @default("")
-  /// Precio para la compra en línea; null = solo cotización.
-  priceCop    Int?
-  /// Rango de referencia en COP; se muestra convertido a la moneda elegida.
-  priceFromCop Int
-  priceToCop   Int
+  /// Precio en dólares para la compra en línea; null = solo cotización.
+  priceUsd     Int?
+  /// Rango de referencia en dólares; se muestra convertido a la moneda elegida.
+  priceFromUsd Int
+  priceToUsd   Int
   unit        String          @default("")
   featured    Boolean         @default(false)
   active      Boolean         @default(true)

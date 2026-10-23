@@ -1,10 +1,11 @@
 import { CURRENCIES, type Currency } from "@/lib/currency";
 
+/** Aclara que el precio base es en dólares y que el cobro se hace en COP. */
 export function CurrencyNote({ currency }: { currency: Currency }) {
-  if (currency === "COP") return null;
   return (
     <p className="small muted" style={{ margin: 0 }}>
-      Valores de referencia en {CURRENCIES[currency].name.toLowerCase()}. El cobro se realiza en pesos colombianos (COP) y tu banco hace la conversión.
+      Precios base en dólares{currency !== "USD" ? `, convertidos a ${CURRENCIES[currency].name.toLowerCase()} con la tasa del día` : ""}.
+      Mercado Pago cobra el equivalente en pesos colombianos (COP); si tu tarjeta es de otro país, tu banco hace la conversión final.
     </p>
   );
 }

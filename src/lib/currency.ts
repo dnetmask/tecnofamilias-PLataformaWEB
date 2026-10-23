@@ -1,6 +1,6 @@
 export const CURRENCIES = {
-  COP: { name: "Pesos colombianos", flag: "🇨🇴", country: "CO" },
   USD: { name: "Dólares estadounidenses", flag: "🇺🇸", country: "" },
+  COP: { name: "Pesos colombianos", flag: "🇨🇴", country: "CO" },
   MXN: { name: "Pesos mexicanos", flag: "🇲🇽", country: "MX" },
   PEN: { name: "Soles peruanos", flag: "🇵🇪", country: "PE" },
 } as const;
@@ -9,9 +9,12 @@ export type Currency = keyof typeof CURRENCIES;
 export const CURRENCY_CODES = Object.keys(CURRENCIES) as Currency[];
 export const CURRENCY_COOKIE = "tf_currency";
 
-/** Pesos colombianos por unidad de cada moneda. Se editan en /admin/monedas. */
-export type Rates = Record<Exclude<Currency, "COP">, number>;
-export const DEFAULT_RATES: Rates = { USD: 4000, MXN: 215, PEN: 1100 };
+/** Unidades de cada moneda por 1 USD (los precios base están en dólares). */
+export type Rates = Record<Exclude<Currency, "USD">, number>;
+export const DEFAULT_RATES: Rates = { COP: 4000, MXN: 18.5, PEN: 3.75 };
+
+/** Moneda en la que cobra Mercado Pago (cuenta de Colombia). */
+export const CHARGE_CURRENCY = "COP" as const;
 
 export function isCurrency(value: unknown): value is Currency {
   return typeof value === "string" && value in CURRENCIES;
@@ -19,19 +22,19 @@ export function isCurrency(value: unknown): value is Currency {
 
 /** Moneda por defecto según el país del visitante (cabecera de Vercel). */
 export function currencyForCountry(country: string | null | undefined): Currency {
-  if (!country) return "COP";
+  if (!country) return "USD";
   const match = CURRENCY_CODES.find((c) => CURRENCIES[c].country === country.toUpperCase());
   return match ?? "USD";
 }
 
-function convert(cop: number, currency: Currency, rates: Rates) {
-  return currency === "COP" ? cop : cop / rates[currency];
+function convert(usd: number, currency: Currency, rates: Rates) {
+  return currency === "USD" ? usd : usd * rates[currency];
 }
 
-/** Redondeo "bonito" para precios fijos: 49,7 → 50; 4.651 → 4.650. */
+/** Redondeo "bonito" para mostrar precios fijos convertidos. */
 function niceRound(x: number) {
   const step = x < 100 ? 1 : x < 1000 ? 5 : x < 10000 ? 10 : x < 100000 ? 100 : 1000;
-  return Math.max(step === 1 ? 1 : step, Math.round(x / step) * step);
+  return Math.max(1, Math.round(x / step) * step);
 }
 
 /** Dos cifras significativas, para rangos de referencia. */
@@ -50,25 +53,25 @@ function money(amount: number, currency: Currency) {
   }).format(amount);
 }
 
-function millions(cop: number) {
-  const m = cop / 1_000_000;
-  return new Intl.NumberFormat("es-CO", { maximumFractionDigits: 1 }).format(m);
+const num = (n: number, max = 0) => new Intl.NumberFormat("es-CO", { maximumFractionDigits: max }).format(n);
+
+/** Precio fijo en la moneda elegida, p. ej. "USD 60" o "MXN 1.110". */
+export function formatPrice(usd: number, currency: Currency, rates: Rates) {
+  if (currency === "USD") return money(usd, "USD");
+  return money(niceRound(convert(usd, currency, rates)), currency);
 }
 
-/** Precio fijo convertido, p. ej. "USD 50" o "COP 200.000". */
-export function formatPrice(cop: number, currency: Currency, rates: Rates) {
-  if (currency === "COP") return money(cop, "COP");
-  return money(niceRound(convert(cop, currency, rates)), currency);
+/** Rango de referencia, p. ej. "USD 750–1.250" o "COP 3–5 M". */
+export function formatRange(fromUsd: number, toUsd: number, currency: Currency, rates: Rates) {
+  if (fromUsd === toUsd) return formatPrice(fromUsd, currency, rates);
+  if (currency === "USD") return `${money(fromUsd, "USD")}–${num(toUsd)}`;
+  const a = convert(fromUsd, currency, rates);
+  const b = convert(toUsd, currency, rates);
+  if (currency === "COP" && a >= 1_000_000) return `COP ${num(roundSig(a) / 1e6, 1)}–${num(roundSig(b) / 1e6, 1)} M`;
+  return `${money(roundSig(a), currency)}–${num(roundSig(b))}`;
 }
 
-/** Rango de referencia, p. ej. "COP 3–5 M" o "USD 750–1.300". */
-export function formatRange(fromCop: number, toCop: number, currency: Currency, rates: Rates) {
-  if (fromCop === toCop) return formatPrice(fromCop, currency, rates);
-  if (currency === "COP") {
-    if (fromCop >= 1_000_000) return `COP ${millions(fromCop)}–${millions(toCop)} M`;
-    return `${money(fromCop, "COP")}–${new Intl.NumberFormat("es-CO").format(toCop)}`;
-  }
-  const a = roundSig(convert(fromCop, currency, rates));
-  const b = roundSig(convert(toCop, currency, rates));
-  return `${money(a, currency)}–${new Intl.NumberFormat("es-CO").format(b)}`;
+/** Monto exacto a cobrar en COP para un precio en dólares (redondeado a 100). */
+export function chargeCop(usd: number, rates: Rates) {
+  return Math.max(100, Math.round((usd * rates.COP) / 100) * 100);
 }

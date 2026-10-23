@@ -3,14 +3,14 @@ import { db } from "@/lib/db";
 import { savePlanAction } from "../actions";
 import { Notice, type NoticeParams } from "../Notice";
 
-function PlanForm({ plan }: { plan?: { id: string; name: string; description: string; priceCop: number; interval: string; order: number; active: boolean } }) {
+function PlanForm({ plan }: { plan?: { id: string; name: string; description: string; priceUsd: number; interval: string; order: number; active: boolean } }) {
   return (
     <form action={savePlanAction} className="card form">
       {plan && <input type="hidden" name="id" value={plan.id} />}
       <h3>{plan ? plan.name : "Nuevo plan"}</h3>
       <div className="grid grid-2" style={{ gap: 14 }}>
         <div className="field"><label>Nombre</label><input className="input" name="name" defaultValue={plan?.name} required /></div>
-        <div className="field"><label>Precio (COP)</label><input className="input" name="priceCop" type="number" min={1000} step={100} defaultValue={plan?.priceCop} required /></div>
+        <div className="field"><label>Precio (USD)</label><input className="input" name="priceUsd" type="number" min={1} step={1} defaultValue={plan?.priceUsd} required /></div>
         <div className="field">
           <label>Período</label>
           <select className="select" name="interval" defaultValue={plan?.interval ?? "MONTH"}>

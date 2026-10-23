@@ -38,8 +38,8 @@ export default async function AdminLessonPage({ params, searchParams }: { params
             </select>
           </div>
           <div className="field">
-            <label>Precio del complemento (COP)</label>
-            <input className="input" name="priceCop" type="number" min={0} step={1000} defaultValue={lesson?.priceCop ?? 0} />
+            <label>Precio del complemento (USD)</label>
+            <input className="input" name="priceUsd" type="number" min={0} step={1} defaultValue={lesson?.priceUsd ?? 0} />
           </div>
           <div className="field"><label>Duración (min)</label><input className="input" name="durationMin" type="number" min={0} defaultValue={lesson?.durationMin ?? 0} /></div>
           <div className="field"><label>Instructor/a</label><input className="input" name="instructor" defaultValue={lesson?.instructor} /></div>

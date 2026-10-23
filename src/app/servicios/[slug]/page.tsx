@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CurrencyNote } from "@/components/CurrencyNote";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { getCurrentUser } from "@/lib/auth";
+import { formatCop } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 import { db } from "@/lib/db";
 import { AUDIENCES } from "@/lib/services";
@@ -35,7 +36,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <p style={{ fontSize: "1.1rem" }}>{service.description}</p>
           {service.details && <p className="muted" style={{ whiteSpace: "pre-wrap" }}>{service.details}</p>}
 
-          {!service.priceCop && (
+          {!service.priceUsd && (
             <div className="card">
               <h3>Solicitar cotización</h3>
               <p className="muted small">Te enviaremos una propuesta ajustada a tu institución.</p>
@@ -50,13 +51,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
         <aside className={`card stack${service.featured ? " service-dark" : ""}`}>
           <div className="service-price" style={{ alignItems: "flex-start", textAlign: "left" }}>
-            <div className="price-label">{pricing.range(service.priceFromCop, service.priceToCop)}</div>
+            <div className="price-label">{pricing.range(service.priceFromUsd, service.priceToUsd)}</div>
             <div className="small">{service.unit}</div>
           </div>
           <CurrencySwitcher current={pricing.currency} dark={service.featured} />
-          {service.priceCop && pricing.currency !== "COP" && <div className="small">Se cobra {pricing.cop(service.priceCop)}</div>}
-          {!service.priceCop && <CurrencyNote currency={pricing.currency} />}
-          {service.priceCop ? (
+          {service.priceUsd ? <div className="small">Se cobra hoy {formatCop(pricing.charge(service.priceUsd))}</div> : null}
+          <CurrencyNote currency={pricing.currency} />
+          {service.priceUsd ? (
             user ? (
               <Link className="btn btn-red" href={`/checkout?servicio=${service.slug}`}>Comprar</Link>
             ) : (

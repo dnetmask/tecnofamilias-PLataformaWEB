@@ -24,7 +24,10 @@ Plataforma **exclusivamente por suscripción** para familias. La suscripción in
 
 ## Monedas
 
-Los precios se guardan en **COP** y se muestran en **COP, USD, MXN o PEN**. La moneda se elige con el selector (planes, servicios, clases complementarias, checkout y pie de página) y, por defecto, según el país del visitante (cabecera `x-vercel-ip-country`: CO→COP, MX→MXN, PE→PEN, otros→USD). Las tasas se editan en `/admin/monedas`. **El cobro siempre se hace en COP** (Mercado Pago Colombia) y se le aclara al usuario.
+- **Precio base en dólares** para todo: plan anual USD 60, asesoría USD 300, complementos USD 30 y rangos de servicios en USD.
+- Se muestran convertidos a **COP, MXN o PEN** según la moneda que elija el visitante (selector) o la de su país (cabecera `x-vercel-ip-country`: CO→COP, MX→MXN, PE→PEN, otros→USD).
+- **Tasa del día automática** desde [ExchangeRate-API](https://www.exchangerate-api.com) (acceso abierto, cacheada 6 h). Si no responde, o si se elige modo manual en `/admin/monedas`, se usan las tasas manuales.
+- **Cobro:** Mercado Pago Colombia solo cobra en COP y no convierte precios en dólares, así que al pagar se convierte el precio en USD a COP con la tasa del día. Cada orden guarda `amountUsd`, `fxRate` y el `amountCop` cobrado. Si más adelante se habilita *Cross Border* con Mercado Pago, el cobro sigue en moneda local y la liquidación llega en USD.
 
 ## Cómo funciona la suscripción
 

@@ -45,7 +45,7 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                 <td>{formatDateTime(o.createdAt)}</td>
                 <td><Link href={`/admin/usuarios/${o.user.id}`}>{o.user.name}</Link><div className="small muted">{o.user.email}</div></td>
                 <td>{o.description}</td>
-                <td>{formatCop(o.amountCop)}</td>
+                <td>{formatCop(o.amountCop)}{o.amountUsd != null && <div className="small muted">USD {o.amountUsd} · 1 USD = {formatCop(o.fxRate ?? 0)}</div>}</td>
                 <td><span className={`badge ${LABELS[o.status][1]}`}>{LABELS[o.status][0]}</span></td>
                 <td className="small muted">{o.provider}{o.providerRef ? ` · ${o.providerRef}` : ""}</td>
                 <td>

@@ -5,7 +5,7 @@ import { canWatchLesson, getActiveSubscription, hasMemberAccess } from "@/lib/ac
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
-import { formatDate } from "@/lib/format";
+import { formatCop, formatDate } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 import { paymentsMode } from "@/lib/payments";
 import { createOrderAction } from "./actions";
@@ -33,7 +33,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
     if (!plan || !plan.active) redirect("/planes");
     const sub = await getActiveSubscription(user.id);
     title = plan.name;
-    amount = plan.priceCop;
+    amount = plan.priceUsd;
     detail = sub
       ? `Ya tienes una suscripción activa hasta el ${formatDate(sub.currentPeriodEnd)}. Este pago la extiende un ${plan.interval === "YEAR" ? "año" : "mes"} más.`
       : `Acceso a todo el contenido incluido durante un ${plan.interval === "YEAR" ? "año" : "mes"}.`;
@@ -43,13 +43,13 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
     if (!(await hasMemberAccess(user))) redirect("/planes?requiere=suscripcion");
     if (await canWatchLesson(user, lesson)) redirect(`/clases/${lesson.slug}`);
     title = lesson.title;
-    amount = lesson.priceCop;
+    amount = lesson.priceUsd;
     detail = "Curso complementario: pago único, disponible mientras tu suscripción esté activa.";
   } else if (servicio) {
     const service = await db.service.findUnique({ where: { slug: servicio } });
-    if (!service || !service.active || !service.priceCop) redirect("/servicios");
+    if (!service || !service.active || !service.priceUsd) redirect("/servicios");
     title = service.name;
-    amount = service.priceCop;
+    amount = service.priceUsd;
     detail = `${service.unit}. Después del pago te contactamos para agendar.`;
   } else {
     redirect("/planes");
@@ -62,10 +62,12 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
         <div className="card card-tint">
           <h3>{title}</h3>
           <p className="muted small">{detail}</p>
-          <div className="price">{pricing.cop(amount)}</div>
-          {pricing.currency !== "COP" && (
-            <div className="small muted">≈ {pricing.price(amount)} · el cobro se hace en pesos colombianos y tu banco hace la conversión</div>
-          )}
+          <div className="price">USD {amount}</div>
+          {pricing.currency !== "USD" && <div className="small muted">≈ {pricing.price(amount)}</div>}
+          <div style={{ marginTop: 10, fontWeight: 700 }}>Total a pagar hoy: {formatCop(pricing.charge(amount))}</div>
+          <div className="small muted">
+            Tasa del día: 1 USD = {formatCop(pricing.rates.COP)}. Mercado Pago cobra en pesos colombianos; si tu tarjeta es de otro país, tu banco hace la conversión final.
+          </div>
         </div>
         <CurrencySwitcher current={pricing.currency} />
         {paymentsMode() === "demo" && (

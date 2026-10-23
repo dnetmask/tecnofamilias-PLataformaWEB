@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
-import { ACCESS_LABELS, formatCop, stageShort } from "@/lib/format";
+import { ACCESS_LABELS, stageShort } from "@/lib/format";
 import { Notice, type NoticeParams } from "../Notice";
 
 export default async function AdminLessonsPage({ searchParams }: { searchParams: NoticeParams }) {
@@ -25,7 +25,7 @@ export default async function AdminLessonsPage({ searchParams }: { searchParams:
                 <td>{l.order}</td>
                 <td><Link href={`/admin/clases/${l.id}`}>{l.title}</Link></td>
                 <td>{stageShort(l.ageStage)}</td>
-                <td>{l.access === "ADDON" ? `Complemento · ${formatCop(l.priceCop)}` : ACCESS_LABELS[l.access]}</td>
+                <td>{l.access === "ADDON" ? `Complemento · USD ${l.priceUsd}` : ACCESS_LABELS[l.access]}</td>
                 <td>{l._count.purchases}</td>
                 <td>{l.published ? <span className="badge badge-green">Publicada</span> : <span className="badge badge-gray">Borrador</span>}</td>
               </tr>

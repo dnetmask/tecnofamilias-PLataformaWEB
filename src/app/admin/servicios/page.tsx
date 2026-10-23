@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { DEFAULT_RATES, formatRange } from "@/lib/currency";
-import { formatCop } from "@/lib/format";
 import { AUDIENCES } from "@/lib/services";
 import { Notice, type NoticeParams } from "../Notice";
 
@@ -31,8 +30,8 @@ export default async function AdminServicesPage({ searchParams }: { searchParams
                 <td>{s.order}</td>
                 <td><Link href={`/admin/servicios/${s.id}`}>{s.name}</Link></td>
                 <td>{AUDIENCES[s.audience].label}</td>
-                <td>{formatRange(s.priceFromCop, s.priceToCop, "COP", DEFAULT_RATES)} <span className="small muted">{s.unit}</span></td>
-                <td>{s.priceCop ? `En línea · ${formatCop(s.priceCop)}` : "Cotización"}</td>
+                <td>{formatRange(s.priceFromUsd, s.priceToUsd, "USD", DEFAULT_RATES)} <span className="small muted">{s.unit}</span></td>
+                <td>{s.priceUsd ? `En línea · USD ${s.priceUsd}` : "Cotización"}</td>
                 <td>{s._count.requests}</td>
                 <td>{s.active ? <span className="badge badge-green">Visible</span> : <span className="badge badge-gray">Oculto</span>}</td>
               </tr>

@@ -32,10 +32,10 @@ export async function ServicesCatalog() {
                     <p className="small" style={{ margin: 0 }}>{s.description}</p>
                   </div>
                   <div className="service-price">
-                    <div className="price-label">{pricing.range(s.priceFromCop, s.priceToCop)}</div>
+                    <div className="price-label">{pricing.range(s.priceFromUsd, s.priceToUsd)}</div>
                     <div className="small">{s.unit}</div>
-                    <span className={`btn btn-sm ${s.priceCop ? "btn-red" : s.featured ? "btn-yellow" : ""}`} style={{ marginTop: 10 }}>
-                      {s.priceCop ? "Comprar" : "Solicitar cotización"}
+                    <span className={`btn btn-sm ${s.priceUsd ? "btn-red" : s.featured ? "btn-yellow" : ""}`} style={{ marginTop: 10 }}>
+                      {s.priceUsd ? "Comprar" : "Solicitar cotización"}
                     </span>
                   </div>
                 </Link>

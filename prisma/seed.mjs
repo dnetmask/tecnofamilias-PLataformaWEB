@@ -9,10 +9,10 @@ import bcrypt from "bcryptjs";
 const db = new PrismaClient();
 
 const PLANS = [
-  { slug: "anual", name: "Anual", priceCop: 200000, interval: "YEAR", order: 1, description: "Acceso completo durante 12 meses." },
+  { slug: "anual", name: "Anual", priceUsd: 60, interval: "YEAR", order: 1, description: "Acceso completo durante 12 meses." },
 ];
 
-// Precios y textos de referencia: ajustarlos desde /admin antes de lanzar.
+// Precios (en USD) y textos de referencia: ajustarlos desde /admin antes de lanzar.
 const LESSONS = [
   {
     slug: "bienvenida-plan-familiar-digital",
@@ -65,7 +65,7 @@ const LESSONS = [
     summary: "Señales de alerta, cómo hablarlo con tus hijos y los pasos para denunciar y preservar evidencia.",
     ageStage: "ALL",
     access: "ADDON",
-    priceCop: 120000,
+    priceUsd: 30,
     durationMin: 60,
     order: 6,
   },
@@ -75,7 +75,7 @@ const LESSONS = [
     summary: "Conversaciones difíciles sin pelear: sexting, apuestas en línea, cajas de botín y ciberacoso.",
     ageStage: "AGE_14_17",
     access: "ADDON",
-    priceCop: 120000,
+    priceUsd: 30,
     durationMin: 75,
     order: 7,
   },
