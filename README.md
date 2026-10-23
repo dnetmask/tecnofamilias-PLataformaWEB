@@ -1,6 +1,6 @@
 # Tecnofamilias · Plataforma web
 
-Plataforma por suscripción para familias: clases pregrabadas (incluidas y de pago puntual), videos y podcasts recomendados, pactos digitales para firmar con los hijos y una comunidad de apoyo tipo foro. Incluye registro de usuarios y panel de administración.
+Plataforma **exclusivamente por suscripción** para familias. La suscripción incluye la base de clases pregrabadas, videos y podcasts recomendados, pactos digitales para firmar con los hijos y la comunidad de apoyo tipo foro. Algunos cursos especializados son **complementos**: los suscriptores los suman con un pago adicional. No hay nivel gratuito. Incluye registro de usuarios y panel de administración.
 
 **Stack:** Next.js 15 (App Router, Server Actions) · PostgreSQL + Prisma 6 · sesiones JWT en cookie httpOnly · Mercado Pago (COP) · despliegue en Vercel.
 
@@ -8,20 +8,20 @@ Plataforma por suscripción para familias: clases pregrabadas (incluidas y de pa
 
 | Módulo | Ruta | Quién accede |
 |---|---|---|
-| Inicio y planes | `/`, `/planes` | Público |
-| Registro / ingreso | `/registro`, `/ingresar` | Público |
-| Clases pregrabadas | `/clases` | Catálogo público. Video: **Gratis** → registrados · **Incluida** → suscriptores · **Pago puntual** → quien la compre (acceso permanente) |
-| Videos y podcasts | `/recursos` | 3 visibles sin suscripción; lista completa con suscripción. YouTube, Vimeo y Spotify se ven embebidos |
-| Pactos por aplicación | `/pactos` | Plantillas por app (Roblox, TikTok, WhatsApp…). Cuenta gratis: 1 pacto; suscriptores: ilimitados. Firma con el dedo del adulto y luego del menor (en el mismo dispositivo o por enlace privado), impresión/PDF |
-| Comunidad | `/comunidad` | Leer: usuarios registrados. Publicar: suscriptores. Reportes y moderación |
+| Inicio y planes | `/`, `/planes` | Público (vitrina comercial) |
+| Registro / ingreso | `/registro`, `/ingresar` | Público. Tras registrarse, el usuario va a elegir plan |
+| Clases pregrabadas | `/clases` | Catálogo visible como vitrina. Video: **Incluida** → suscriptores · **Complemento** → suscriptores que lo compraron (disponible mientras la suscripción esté activa) |
+| Videos y podcasts | `/recursos` | Suscriptores (sin suscripción solo se ven los títulos bloqueados). YouTube, Vimeo y Spotify se ven embebidos |
+| Pactos por aplicación | `/pactos` | Suscriptores crean pactos ilimitados desde plantillas por app (Roblox, TikTok, WhatsApp…). Firma con el dedo del adulto y luego del menor (en el mismo dispositivo o por enlace privado), impresión/PDF. Si la suscripción vence, los pactos existentes se pueden seguir viendo, imprimiendo o eliminando |
+| Comunidad | `/comunidad` | Solo suscriptores (leer y publicar). Reportes y moderación |
 | Mi cuenta | `/cuenta` | Suscripción, clases compradas, historial de pagos, datos y contraseña |
 | Administración | `/admin` | Solo rol ADMIN |
 
-**Panel de administración:** resumen (usuarios, suscriptores, ingresos), usuarios (crear, editar rol, activar/desactivar, otorgar meses de cortesía o clases, restablecer contraseña, eliminar), clases, videos/podcasts, plantillas de pactos, comunidad (categorías, reportes, ocultar contenido), planes y precios, pagos (marcar manualmente como pagada una transferencia).
+**Panel de administración:** resumen (usuarios, suscriptores, ingresos), usuarios (crear, editar rol, activar/desactivar, otorgar meses de cortesía o complementos, restablecer contraseña, eliminar), clases, videos/podcasts, plantillas de pactos, comunidad (categorías, reportes, ocultar contenido), planes y precios, pagos (marcar manualmente como pagada una transferencia).
 
 ## Cómo funciona la suscripción
 
-Es **prepagada**: cada pago aprobado del plan mensual o anual extiende la fecha de vencimiento. El usuario renueva desde `/planes`. Las clases de pago puntual se compran aparte y quedan para siempre.
+Es **prepagada**: cada pago aprobado del plan mensual o anual extiende la fecha de vencimiento. El usuario renueva desde `/planes`. Los complementos se compran una vez (solo con suscripción activa) y se pueden ver mientras la suscripción siga activa.
 
 Pagos con **Mercado Pago Checkout Pro** (tarjeta, PSE, Nequi, efectivo). El acceso se entrega cuando llega el webhook `/api/webhooks/mercadopago` (o cuando el usuario vuelve a `/checkout/resultado`); en ambos casos el pago se vuelve a consultar en la API de Mercado Pago y se valida monto y moneda antes de activar nada.
 

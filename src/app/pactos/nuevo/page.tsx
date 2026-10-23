@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireUser } from "@/lib/auth";
+import { requireSubscriber } from "@/lib/access";
 import { db } from "@/lib/db";
 import { createPactAction } from "../actions";
 import { PactForm } from "../PactForm";
@@ -9,7 +9,7 @@ export const metadata = { title: "Nuevo pacto" };
 
 export default async function NewPactPage({ searchParams }: { searchParams: Promise<{ plantilla?: string }> }) {
   const { plantilla } = await searchParams;
-  const user = await requireUser(plantilla ? `/pactos/nuevo?plantilla=${plantilla}` : "/pactos/nuevo");
+  const user = await requireSubscriber(plantilla ? `/pactos/nuevo?plantilla=${plantilla}` : "/pactos/nuevo");
   const template = plantilla ? await db.pactTemplate.findUnique({ where: { slug: plantilla } }) : null;
 
   return (

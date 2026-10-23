@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/Avatar";
-import { requireUser } from "@/lib/auth";
+import { requireSubscriber } from "@/lib/access";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/format";
 
@@ -16,7 +16,7 @@ export default async function CategoryPage({
   searchParams: Promise<{ pagina?: string }>;
 }) {
   const { slug } = await params;
-  const user = await requireUser(`/comunidad/${slug}`);
+  const user = await requireSubscriber(`/comunidad/${slug}`);
   const page = Math.max(1, Number((await searchParams).pagina) || 1);
   const category = await db.forumCategory.findUnique({ where: { slug } });
   if (!category) notFound();

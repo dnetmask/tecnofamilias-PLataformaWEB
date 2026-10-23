@@ -170,7 +170,7 @@ const lessonSchema = z
     summary: z.string().trim().min(3).max(300),
     description: z.string().trim().max(10000).default(""),
     ageStage,
-    access: z.enum(["FREE", "INCLUDED", "PAID"]),
+    access: z.enum(["INCLUDED", "ADDON"]),
     priceCop: z.coerce.number().int().min(0).max(100_000_000).default(0),
     videoUrl: optionalUrl,
     thumbnailUrl: optionalUrl,
@@ -179,7 +179,7 @@ const lessonSchema = z
     order: z.coerce.number().int().default(0),
     published: checkbox,
   })
-  .refine((d) => d.access !== "PAID" || d.priceCop >= 1000, { message: "Las clases de pago necesitan un precio", path: ["priceCop"] });
+  .refine((d) => d.access !== "ADDON" || d.priceCop >= 1000, { message: "Los complementos necesitan un precio", path: ["priceCop"] });
 
 export async function saveLessonAction(formData: FormData) {
   await requireAdmin();

@@ -33,13 +33,12 @@ export default async function AdminLessonPage({ params, searchParams }: { params
           <div className="field">
             <label>Acceso</label>
             <select className="select" name="access" defaultValue={lesson?.access ?? "INCLUDED"}>
-              <option value="FREE">Gratis (usuarios registrados)</option>
               <option value="INCLUDED">Incluida en la suscripción</option>
-              <option value="PAID">Pago puntual</option>
+              <option value="ADDON">Complemento (pago adicional para suscriptores)</option>
             </select>
           </div>
           <div className="field">
-            <label>Precio (COP, solo pago puntual)</label>
+            <label>Precio del complemento (COP)</label>
             <input className="input" name="priceCop" type="number" min={0} step={1000} defaultValue={lesson?.priceCop ?? 0} />
           </div>
           <div className="field"><label>Duración (min)</label><input className="input" name="durationMin" type="number" min={0} defaultValue={lesson?.durationMin ?? 0} /></div>

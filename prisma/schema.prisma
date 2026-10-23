@@ -22,10 +22,10 @@ enum AgeStage {
   AGE_14_17
 }
 
+/// Todo el contenido requiere suscripción; los complementos además se compran aparte.
 enum LessonAccess {
-  FREE      // visible para cualquier usuario registrado
   INCLUDED  // incluida en la suscripción
-  PAID      // pago puntual (también para suscriptores)
+  ADDON     // complemento: suscripción activa + pago adicional único
 }
 
 enum PlanInterval {

@@ -29,7 +29,7 @@ export default async function UserDetailPage({ params, searchParams }: { params:
     },
   });
   if (!user) notFound();
-  const paidLessons = await db.lesson.findMany({ where: { access: "PAID" }, orderBy: { title: "asc" } });
+  const paidLessons = await db.lesson.findMany({ where: { access: "ADDON" }, orderBy: { title: "asc" } });
   const owned = new Set(user.purchases.map((p) => p.lessonId));
   const sub = user.subscription;
   const subActive = sub?.status === "ACTIVE" && sub.currentPeriodEnd > new Date();
@@ -85,8 +85,8 @@ export default async function UserDetailPage({ params, searchParams }: { params:
         </div>
 
         <div className="card stack">
-          <h3>Clases de pago</h3>
-          {paidLessons.length === 0 && <p className="muted small">No hay clases de pago creadas.</p>}
+          <h3>Cursos complementarios</h3>
+          {paidLessons.length === 0 && <p className="muted small">No hay complementos creados.</p>}
           {paidLessons.map((l) => (
             <div key={l.id} className="row between">
               <span className="small">{l.title}</span>

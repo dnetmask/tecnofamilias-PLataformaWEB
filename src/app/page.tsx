@@ -11,7 +11,7 @@ const PILLARS = [
     icon: "▶",
     color: "var(--blue)",
     title: "Clases pregrabadas",
-    text: "Masterclass por edad para configurar dispositivos y actuar ante grooming, sexting o ciberacoso. Algunas incluidas, otras de pago puntual.",
+    text: "Masterclass por edad para configurar dispositivos y actuar ante grooming, sexting o ciberacoso. Toda la base incluida en tu suscripción.",
   },
   {
     href: "/recursos",
@@ -100,7 +100,7 @@ export default async function Home() {
         <section className="section">
           <div className="container">
             <h2 className="center">Planes de suscripción</h2>
-            <p className="muted center" style={{ marginBottom: 32 }}>Cancela cuando quieras. Las clases de pago puntual se compran aparte.</p>
+            <p className="muted center" style={{ marginBottom: 32 }}>Todo el contenido base está incluido. Algunos cursos especializados se suman como complemento.</p>
             <PlanCards plans={plans} />
           </div>
         </section>

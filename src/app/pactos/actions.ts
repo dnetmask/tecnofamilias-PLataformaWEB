@@ -5,18 +5,17 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { FormState } from "@/components/FormMessage";
-import { FREE_PACT_LIMIT, isSubscriber } from "@/lib/access";
+import { hasMemberAccess } from "@/lib/access";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 const newShareToken = () => randomBytes(24).toString("base64url");
 
-async function canCreatePact(user: { id: string; role: string }) {
-  if (user.role === "ADMIN" || (await isSubscriber(user.id))) return true;
-  return (await db.pact.count({ where: { userId: user.id } })) < FREE_PACT_LIMIT;
-}
+// Crear pactos requiere suscripción; los ya creados se pueden seguir viendo,
+// firmando, imprimiendo o eliminando aunque la suscripción venza.
+const canCreatePact = hasMemberAccess;
 
-const LIMIT_MESSAGE = "Con la cuenta gratuita puedes crear un pacto. Suscríbete para crear pactos ilimitados.";
+const LIMIT_MESSAGE = "Necesitas una suscripción activa para crear pactos.";
 
 const pactSchema = z.object({
   templateId: z.string().optional(),

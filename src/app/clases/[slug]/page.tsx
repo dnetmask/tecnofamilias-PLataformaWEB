@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { VideoPlayer } from "@/components/VideoPlayer";
-import { canWatchLesson } from "@/lib/access";
+import { hasMemberAccess, hasPurchased } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ACCESS_LABELS, formatCop, stageLabel } from "@/lib/format";
@@ -18,7 +18,11 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const user = await getCurrentUser();
   const lesson = await db.lesson.findUnique({ where: { slug } });
   if (!lesson || (!lesson.published && user?.role !== "ADMIN")) notFound();
-  const canWatch = await canWatchLesson(user, lesson);
+
+  const member = await hasMemberAccess(user);
+  const owned = user && lesson.access === "ADDON" ? user.role === "ADMIN" || (await hasPurchased(user.id, lesson.id)) : false;
+  const canWatch = member && (lesson.access === "INCLUDED" || owned);
+  const isAddon = lesson.access === "ADDON";
   const next = `/clases/${lesson.slug}`;
 
   return (
@@ -33,19 +37,13 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
             <div className="locked">
               <div>
                 <div style={{ fontSize: "2.4rem" }}>🔒</div>
-                <h3>
-                  {lesson.access === "PAID"
-                    ? "Clase de pago puntual"
-                    : lesson.access === "INCLUDED"
-                      ? "Clase incluida en la suscripción"
-                      : "Crea tu cuenta gratis para verla"}
-                </h3>
+                <h3>{!member ? "Contenido para suscriptores" : "Curso complementario"}</h3>
                 <p style={{ color: "#cfdbec" }}>
-                  {lesson.access === "PAID"
-                    ? "Cómprala una vez y queda en tu cuenta para siempre."
-                    : lesson.access === "INCLUDED"
-                      ? "Suscríbete para ver esta y todas las clases incluidas."
-                      : "Solo necesitas registrarte."}
+                  {!member
+                    ? isAddon
+                      ? "Este curso es un complemento de la suscripción: primero suscríbete y luego súmalo con un pago adicional."
+                      : "Suscríbete para ver esta clase y toda la base de contenido."
+                    : "Súmalo a tu suscripción con un pago único."}
                 </p>
               </div>
             </div>
@@ -61,27 +59,29 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         </div>
 
         <aside className="card stack">
-          <span className={`badge ${lesson.access === "PAID" ? "badge-yellow" : lesson.access === "FREE" ? "badge-green" : "badge-blue"}`}>
+          <span className={`badge ${isAddon ? "badge-yellow" : "badge-blue"}`} style={{ alignSelf: "flex-start" }}>
             {ACCESS_LABELS[lesson.access]}
           </span>
           {canWatch ? (
             <p style={{ margin: 0, color: "var(--ok)", fontWeight: 700 }}>✓ Tienes acceso a esta clase</p>
           ) : !user ? (
             <>
-              <p className="muted" style={{ margin: 0 }}>Ingresa o crea una cuenta para continuar.</p>
-              <Link className="btn" href={`/registro?next=${encodeURIComponent(next)}`}>Crear cuenta</Link>
+              <p className="muted" style={{ margin: 0 }}>Crea tu cuenta y elige un plan para empezar.</p>
+              <Link className="btn" href={`/registro?next=${encodeURIComponent("/planes")}`}>Crear cuenta</Link>
               <Link className="btn btn-ghost" href={`/ingresar?next=${encodeURIComponent(next)}`}>Ya tengo cuenta</Link>
             </>
-          ) : lesson.access === "PAID" ? (
+          ) : !member ? (
             <>
-              <div className="price">{formatCop(lesson.priceCop)}</div>
-              <p className="muted small" style={{ margin: 0 }}>Pago único. Acceso permanente.</p>
-              <Link className="btn btn-red" href={`/checkout?clase=${lesson.slug}`}>Comprar clase</Link>
+              <p className="muted" style={{ margin: 0 }}>
+                {isAddon ? `Requiere suscripción activa más un pago adicional de ${formatCop(lesson.priceCop)}.` : "Incluida en todos los planes."}
+              </p>
+              <Link className="btn" href="/planes">Ver planes</Link>
             </>
           ) : (
             <>
-              <p className="muted" style={{ margin: 0 }}>Incluida en todos los planes.</p>
-              <Link className="btn" href="/planes">Ver planes</Link>
+              <div className="price">{formatCop(lesson.priceCop)}</div>
+              <p className="muted small" style={{ margin: 0 }}>Pago único. Queda en tu cuenta mientras tu suscripción esté activa.</p>
+              <Link className="btn btn-red" href={`/checkout?clase=${lesson.slug}`}>Agregar a mi suscripción</Link>
             </>
           )}
         </aside>

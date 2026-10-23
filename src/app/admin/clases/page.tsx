@@ -25,7 +25,7 @@ export default async function AdminLessonsPage({ searchParams }: { searchParams:
                 <td>{l.order}</td>
                 <td><Link href={`/admin/clases/${l.id}`}>{l.title}</Link></td>
                 <td>{stageShort(l.ageStage)}</td>
-                <td>{l.access === "PAID" ? formatCop(l.priceCop) : ACCESS_LABELS[l.access]}</td>
+                <td>{l.access === "ADDON" ? `Complemento · ${formatCop(l.priceCop)}` : ACCESS_LABELS[l.access]}</td>
                 <td>{l._count.purchases}</td>
                 <td>{l.published ? <span className="badge badge-green">Publicada</span> : <span className="badge badge-gray">Borrador</span>}</td>
               </tr>

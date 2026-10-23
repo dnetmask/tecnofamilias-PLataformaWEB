@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Avatar } from "@/components/Avatar";
-import { requireUser } from "@/lib/auth";
+import { requireSubscriber } from "@/lib/access";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/format";
 
@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Comunidad" };
 
 export default async function CommunityPage() {
-  await requireUser("/comunidad");
+  await requireSubscriber("/comunidad");
   const [categories, recent] = await Promise.all([
     db.forumCategory.findMany({
       orderBy: { order: "asc" },

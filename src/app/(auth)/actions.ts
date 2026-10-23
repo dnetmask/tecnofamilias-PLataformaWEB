@@ -6,6 +6,7 @@ import type { FormState } from "@/components/FormMessage";
 import { endSession, hashPassword, startSession, verifyPassword } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { safeNext } from "@/lib/url";
+import { isSubscriber } from "@/lib/access";
 
 
 const registerSchema = z.object({
@@ -27,7 +28,7 @@ export async function registerAction(_: FormState, formData: FormData): Promise<
     data: { name, email, passwordHash: await hashPassword(password), acceptedTermsAt: new Date() },
   });
   await startSession(user);
-  redirect(safeNext(formData.get("next")));
+  redirect(safeNext(formData.get("next"), "/planes"));
 }
 
 const loginSchema = z.object({
@@ -45,7 +46,8 @@ export async function loginAction(_: FormState, formData: FormData): Promise<For
   }
   if (!user.active) return { error: "Tu cuenta está desactivada. Escríbenos para reactivarla." };
   await startSession(user);
-  redirect(user.role === "ADMIN" && !formData.get("next") ? "/admin" : safeNext(formData.get("next")));
+  const fallback = user.role === "ADMIN" ? "/admin" : (await isSubscriber(user.id)) ? "/clases" : "/planes";
+  redirect(safeNext(formData.get("next"), fallback));
 }
 
 export async function logoutAction() {

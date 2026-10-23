@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FREE_PACT_LIMIT, isSubscriber } from "@/lib/access";
+import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/format";
@@ -18,9 +18,8 @@ export default async function PactsPage() {
   const [templates, pacts, subscribed] = await Promise.all([
     db.pactTemplate.findMany({ where: { published: true }, orderBy: [{ order: "asc" }, { appName: "asc" }] }),
     user ? db.pact.findMany({ where: { userId: user.id }, orderBy: { updatedAt: "desc" } }) : [],
-    user ? (user.role === "ADMIN" ? true : isSubscriber(user.id)) : false,
+    hasMemberAccess(user),
   ]);
-  const reachedLimit = !!user && !subscribed && pacts.length >= FREE_PACT_LIMIT;
 
   return (
     <>
@@ -49,20 +48,20 @@ export default async function PactsPage() {
           </section>
         )}
 
-        {reachedLimit && (
+        {!subscribed && (
           <div className="alert alert-info">
-            Con la cuenta gratuita puedes tener {FREE_PACT_LIMIT} pacto. <Link href="/planes">Suscríbete</Link> para crear pactos ilimitados.
+            Los pactos están incluidos en la suscripción. <Link href="/planes">Ver planes</Link>
           </div>
         )}
 
         <section className="stack">
           <div className="row between">
             <h2 style={{ margin: 0 }}>Elige una plantilla</h2>
-            {!reachedLimit && <Link href="/pactos/nuevo" className="btn btn-ghost btn-sm">Crear pacto en blanco</Link>}
+            {subscribed && <Link href="/pactos/nuevo" className="btn btn-ghost btn-sm">Crear pacto en blanco</Link>}
           </div>
           <div className="grid grid-3">
             {templates.map((t) => (
-              <Link key={t.id} href={user ? `/pactos/nuevo?plantilla=${t.slug}` : `/registro?next=${encodeURIComponent(`/pactos/nuevo?plantilla=${t.slug}`)}`} className="card card-link stack">
+              <Link key={t.id} href={subscribed ? `/pactos/nuevo?plantilla=${t.slug}` : user ? "/planes" : "/registro"} className="card card-link stack">
                 <div className="row">
                   <span className="icon-dot" style={{ background: t.color }}>{t.appName.slice(0, 1)}</span>
                   <div>

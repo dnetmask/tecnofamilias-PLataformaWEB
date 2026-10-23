@@ -13,8 +13,8 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
   const stage = AGE_STAGES.find((s) => s.value === etapa)?.value as AgeStage | undefined;
   const where: Prisma.LessonWhereInput = { published: true };
   if (stage) where.ageStage = { in: [stage, "ALL"] };
-  if (tipo === "incluidas") where.access = { in: ["FREE", "INCLUDED"] };
-  if (tipo === "pago") where.access = "PAID";
+  if (tipo === "incluidas") where.access = "INCLUDED";
+  if (tipo === "complementos") where.access = "ADDON";
 
   const user = await getCurrentUser();
   const [lessons, sub, purchases] = await Promise.all([
@@ -37,7 +37,7 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
       <div className="page-head">
         <div className="container">
           <h1>Clases pregrabadas</h1>
-          <p>Míralas a tu ritmo. Las incluidas vienen con tu suscripción; las de pago puntual se compran una vez.</p>
+          <p>Toda la base viene con tu suscripción. Los cursos complementarios se suman con un pago adicional.</p>
         </div>
       </div>
       <div className="container section stack">
@@ -52,7 +52,7 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
         <div className="chips">
           <Link href={href({ etapa: stage })} className={`chip${!tipo ? " active" : ""}`}>Todas</Link>
           <Link href={href({ etapa: stage, tipo: "incluidas" })} className={`chip${tipo === "incluidas" ? " active" : ""}`}>Incluidas</Link>
-          <Link href={href({ etapa: stage, tipo: "pago" })} className={`chip${tipo === "pago" ? " active" : ""}`}>Pago puntual</Link>
+          <Link href={href({ etapa: stage, tipo: "complementos" })} className={`chip${tipo === "complementos" ? " active" : ""}`}>Complementos</Link>
         </div>
 
         {lessons.length === 0 ? (
@@ -61,18 +61,15 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
           <div className="grid grid-3">
             {lessons.map((l) => {
               const unlocked =
-                user?.role === "ADMIN" ||
-                l.access === "FREE" ||
-                (l.access === "INCLUDED" && !!sub) ||
-                owned.has(l.id);
+                user?.role === "ADMIN" || (!!sub && (l.access === "INCLUDED" || owned.has(l.id)));
               return (
                 <Link key={l.id} href={`/clases/${l.slug}`} className="card card-link">
                   <div className="lesson-thumb">
                     {l.thumbnailUrl ? <img src={l.thumbnailUrl} alt="" /> : <span>▶</span>}
                   </div>
                   <div className="row" style={{ marginBottom: 8 }}>
-                    <span className={`badge ${l.access === "PAID" ? "badge-yellow" : l.access === "FREE" ? "badge-green" : "badge-blue"}`}>
-                      {l.access === "PAID" ? formatCop(l.priceCop) : ACCESS_LABELS[l.access]}
+                    <span className={`badge ${l.access === "ADDON" ? "badge-yellow" : "badge-blue"}`}>
+                      {l.access === "ADDON" ? `Complemento · ${formatCop(l.priceCop)}` : ACCESS_LABELS[l.access]}
                     </span>
                     <span className="badge badge-gray">{stageShort(l.ageStage)}{l.ageStage !== "ALL" ? " años" : ""}</span>
                     {l.durationMin > 0 && <span className="small muted">{l.durationMin} min</span>}

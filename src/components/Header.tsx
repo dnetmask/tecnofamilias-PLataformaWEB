@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { logoutAction } from "@/app/(auth)/actions";
 
-type Props = { user: { name: string; role: "USER" | "ADMIN" } | null };
+type Props = { user: { name: string; role: "USER" | "ADMIN"; member: boolean } | null };
 
 const LINKS = [
   { href: "/clases", label: "Clases" },
@@ -47,6 +47,11 @@ export function Header({ user }: Props) {
           )}
           {user ? (
             <>
+              {!user.member && (
+                <Link href="/planes" className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>
+                  Suscribirme
+                </Link>
+              )}
               <Link href="/cuenta" className={isActive("/cuenta") ? "active" : undefined}>
                 Mi cuenta
               </Link>

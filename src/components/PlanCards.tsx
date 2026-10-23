@@ -3,11 +3,11 @@ import type { Plan } from "@prisma/client";
 import { formatCop } from "@/lib/format";
 
 const INCLUDES = [
-  "Todas las clases pregrabadas incluidas",
+  "Base completa de clases pregrabadas",
   "Videos y podcasts recomendados por etapa",
   "Pactos digitales ilimitados para firmar con tus hijos",
   "Comunidad de apoyo entre familias",
-  "Descuentos en clases de pago puntual y asesorías",
+  "Opción de sumar cursos complementarios con pago adicional",
 ];
 
 export function PlanCards({ plans }: { plans: Plan[] }) {

@@ -1,6 +1,6 @@
 import type { AgeStage, Prisma, ResourceKind } from "@prisma/client";
 import Link from "next/link";
-import { isSubscriber } from "@/lib/access";
+import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { AGE_STAGES, RESOURCE_LABELS, stageShort } from "@/lib/format";
@@ -8,9 +8,6 @@ import { resolvePodcastEmbed, resolveVideo } from "@/lib/video";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Videos y podcasts recomendados" };
-
-/** Cuántos recursos ven completos quienes no tienen suscripción. */
-const PREVIEW = 3;
 
 export default async function ResourcesPage({ searchParams }: { searchParams: Promise<{ tipo?: string; etapa?: string }> }) {
   const { tipo, etapa } = await searchParams;
@@ -24,7 +21,7 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
   const user = await getCurrentUser();
   const [resources, subscribed] = await Promise.all([
     db.resource.findMany({ where, orderBy: [{ order: "asc" }, { createdAt: "desc" }] }),
-    user ? (user.role === "ADMIN" ? true : isSubscriber(user.id)) : false,
+    hasMemberAccess(user),
   ]);
 
   const href = (p: { tipo?: string; etapa?: string }) => {
@@ -55,15 +52,15 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
           ))}
         </div>
 
-        {!subscribed && resources.length > PREVIEW && (
+        {!subscribed && (
           <div className="alert alert-info">
-            Estás viendo {PREVIEW} de {resources.length} recomendaciones. <Link href="/planes">Suscríbete</Link> para ver la lista completa.
+            Los videos y podcasts recomendados están incluidos en la suscripción. <Link href="/planes">Ver planes</Link>
           </div>
         )}
 
         <div className="grid grid-2">
-          {resources.map((r, i) => {
-            const locked = !subscribed && i >= PREVIEW;
+          {resources.map((r) => {
+            const locked = !subscribed;
             const video = r.kind === "VIDEO" && !locked ? resolveVideo(r.url) : null;
             const podcast = r.kind === "PODCAST" && !locked ? resolvePodcastEmbed(r.url) : null;
             return (

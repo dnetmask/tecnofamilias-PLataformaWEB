@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/Avatar";
-import { isSubscriber } from "@/lib/access";
-import { requireUser } from "@/lib/auth";
+import { requireSubscriber } from "@/lib/access";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/format";
 import { deleteOwnPostAction, moderatePostAction, moderateThreadAction, reportAction } from "../../actions";
@@ -19,7 +18,7 @@ export default async function ThreadPage({
 }) {
   const { id } = await params;
   const { reportado } = await searchParams;
-  const user = await requireUser(`/comunidad/hilo/${id}`);
+  const user = await requireSubscriber(`/comunidad/hilo/${id}`);
   const isAdmin = user.role === "ADMIN";
   const thread = await db.forumThread.findUnique({
     where: { id },
@@ -34,7 +33,6 @@ export default async function ThreadPage({
     },
   });
   if (!thread || (thread.hidden && !isAdmin)) notFound();
-  const canPost = isAdmin || (await isSubscriber(user.id));
 
   const ModButton = ({ op, label }: { op: string; label: string }) => (
     <form action={moderateThreadAction}>
@@ -114,13 +112,8 @@ export default async function ThreadPage({
       <div className="card">
         {thread.locked && !isAdmin ? (
           <p className="muted" style={{ margin: 0 }}>🔒 Esta conversación está cerrada.</p>
-        ) : canPost ? (
-          <ReplyForm threadId={thread.id} />
         ) : (
-          <div className="row between">
-            <span className="muted">Suscríbete para responder y abrir conversaciones.</span>
-            <Link className="btn btn-sm" href="/planes">Ver planes</Link>
-          </div>
+          <ReplyForm threadId={thread.id} />
         )}
       </div>
     </div>

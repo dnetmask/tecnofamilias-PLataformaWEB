@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { canWatchLesson } from "@/lib/access";
+import { canWatchLesson, hasMemberAccess } from "@/lib/access";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { fulfillOrder, paymentsMode, startCheckout } from "@/lib/payments";
@@ -27,14 +27,16 @@ export async function createOrderAction(formData: FormData) {
     });
   } else if (typeof lessonSlug === "string" && lessonSlug) {
     const lesson = await db.lesson.findUnique({ where: { slug: lessonSlug } });
-    if (!lesson || !lesson.published || lesson.access !== "PAID") redirect("/clases");
+    if (!lesson || !lesson.published || lesson.access !== "ADDON") redirect("/clases");
+    // Los complementos se suman a una suscripción activa.
+    if (!(await hasMemberAccess(user))) redirect("/planes?requiere=suscripcion");
     if (await canWatchLesson(user, lesson)) redirect(`/clases/${lesson.slug}`);
     order = await db.order.create({
       data: {
         userId: user.id,
         kind: "LESSON",
         lessonId: lesson.id,
-        description: `Clase: ${lesson.title}`,
+        description: `Complemento: ${lesson.title}`,
         amountCop: lesson.priceCop,
         provider: paymentsMode(),
       },

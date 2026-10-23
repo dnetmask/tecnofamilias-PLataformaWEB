@@ -39,9 +39,8 @@ export function stageShort(stage: AgeStage) {
 }
 
 export const ACCESS_LABELS: Record<LessonAccess, string> = {
-  FREE: "Gratis",
   INCLUDED: "Incluida en la suscripción",
-  PAID: "Pago puntual",
+  ADDON: "Complemento",
 };
 
 export const RESOURCE_LABELS: Record<ResourceKind, string> = {

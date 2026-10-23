@@ -52,9 +52,9 @@ export default async function AccountPage() {
         </div>
 
         <div className="card stack">
-          <h3>Clases compradas</h3>
+          <h3>Cursos complementarios</h3>
           {purchases.length === 0 ? (
-            <p className="muted" style={{ margin: 0 }}>Aún no has comprado clases de pago puntual.</p>
+            <p className="muted" style={{ margin: 0 }}>Aún no has sumado cursos complementarios.</p>
           ) : (
             <ul style={{ margin: 0, paddingLeft: 18 }}>
               {purchases.map((p) => (

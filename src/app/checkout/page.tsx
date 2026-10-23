@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
-import { getActiveSubscription } from "@/lib/access";
+import { canWatchLesson, getActiveSubscription, hasMemberAccess } from "@/lib/access";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatCop, formatDate } from "@/lib/format";
@@ -30,10 +30,12 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
       : `Acceso a todo el contenido incluido durante un ${plan.interval === "YEAR" ? "año" : "mes"}.`;
   } else if (clase) {
     const lesson = await db.lesson.findUnique({ where: { slug: clase } });
-    if (!lesson || !lesson.published || lesson.access !== "PAID") redirect("/clases");
+    if (!lesson || !lesson.published || lesson.access !== "ADDON") redirect("/clases");
+    if (!(await hasMemberAccess(user))) redirect("/planes?requiere=suscripcion");
+    if (await canWatchLesson(user, lesson)) redirect(`/clases/${lesson.slug}`);
     title = lesson.title;
     amount = lesson.priceCop;
-    detail = "Clase de pago puntual con acceso permanente.";
+    detail = "Curso complementario: pago único, disponible mientras tu suscripción esté activa.";
   } else {
     redirect("/planes");
   }

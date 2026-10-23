@@ -4,13 +4,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { FormState } from "@/components/FormMessage";
-import { isSubscriber } from "@/lib/access";
+import { hasMemberAccess } from "@/lib/access";
 import { requireAdmin, requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 async function requirePoster() {
   const user = await requireUser("/comunidad");
-  if (user.role !== "ADMIN" && !(await isSubscriber(user.id))) {
+  if (!(await hasMemberAccess(user))) {
     return { user, error: "Para publicar en la comunidad necesitas una suscripción activa." };
   }
   // Freno básico contra spam: una publicación cada 15 segundos.
