@@ -12,7 +12,7 @@ const SHORTCUTS = [
   { href: "/pactos", icon: "✍", label: "Pactos", color: "var(--yellow)" },
   { href: "/herramientas", icon: "🧰", label: "Caja de herramientas", color: "var(--navy-soft)" },
   { href: "/comunidad", icon: "💬", label: "Comunidad", color: "var(--blue-dark)" },
-  { href: "/servicios", icon: "🤝", label: "Otros servicios", color: "var(--ok)" },
+  { href: "/planes", icon: "🤝", label: "Planes", color: "var(--ok)" },
 ];
 
 function SectionHead({ title, href, cta }: { title: string; href: string; cta: string }) {

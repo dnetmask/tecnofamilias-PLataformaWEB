@@ -22,11 +22,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const [service, user, pricing] = await Promise.all([db.service.findUnique({ where: { slug } }), getCurrentUser(), getPricing()]);
   if (!service || (!service.active && user?.role !== "ADMIN")) notFound();
   const meta = AUDIENCES[service.audience];
-  const back = user ? "/servicios" : "/planes#servicios";
 
   return (
     <div className="container section">
-      <p className="small"><Link href={back}>← Otros servicios</Link></p>
+      <p className="small"><Link href="/planes#servicios">← Planes</Link></p>
       <div className="layout-aside">
         <div className="stack" style={{ minWidth: 0 }}>
           <div className="row">

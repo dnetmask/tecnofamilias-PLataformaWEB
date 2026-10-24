@@ -414,7 +414,7 @@ export async function saveServiceAction(formData: FormData) {
     const service = id
       ? await db.service.update({ where: { id }, data: { ...data, slug: finalSlug } })
       : await db.service.create({ data: { ...data, slug: finalSlug } });
-    revalidatePath("/servicios");
+    revalidatePath("/planes");
     revalidatePath("/planes");
     done(`/admin/servicios/${service.id}`, "Servicio guardado");
   } catch (err) {

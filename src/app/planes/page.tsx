@@ -3,7 +3,6 @@ import { PlanCards } from "@/components/PlanCards";
 import { ServicesCatalog } from "@/components/ServicesCatalog";
 import { CurrencyNote } from "@/components/CurrencyNote";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
-import { getCurrentUser } from "@/lib/auth";
 import { getPricing } from "@/lib/pricing";
 import { db } from "@/lib/db";
 
@@ -12,9 +11,8 @@ export const metadata = { title: "Planes" };
 
 export default async function PlansPage({ searchParams }: { searchParams: Promise<{ requiere?: string }> }) {
   const { requiere } = await searchParams;
-  const [plans, user, pricing] = await Promise.all([
+  const [plans, pricing] = await Promise.all([
     db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
-    getCurrentUser(),
     getPricing(),
   ]);
   return (
@@ -43,15 +41,13 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
           </p>
         </div>
       </div>
-      {!user && (
-        <div className="container section" id="servicios" style={{ borderTop: "1px solid var(--line)" }}>
-          <h2>Otros servicios</h2>
-          <p className="muted" style={{ marginBottom: 28 }}>
-            Además de la suscripción: asesoría personalizada para tu familia y programas para colegios, empresas y entidades públicas.
-          </p>
-          <ServicesCatalog />
-        </div>
-      )}
+      <div className="container section" id="servicios" style={{ borderTop: "1px solid var(--line)" }}>
+        <h2>Otros servicios</h2>
+        <p className="muted" style={{ marginBottom: 28 }}>
+          Además de la suscripción: asesoría personalizada para tu familia y programas para colegios, empresas y entidades públicas.
+        </p>
+        <ServicesCatalog />
+      </div>
     </>
   );
 }

@@ -7,7 +7,11 @@ const nextConfig = {
   },
   async redirects() {
     // Videos y podcasts pasó a llamarse Caja de herramientas.
-    return [{ source: "/recursos", destination: "/herramientas", permanent: true }];
+    return [
+      { source: "/recursos", destination: "/herramientas", permanent: true },
+      // Otros servicios ahora vive dentro de Planes.
+      { source: "/servicios", destination: "/planes#servicios", permanent: false },
+    ];
   },
   async headers() {
     return [

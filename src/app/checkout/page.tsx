@@ -52,7 +52,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
     detail = "Curso complementario: pago único, disponible mientras tu suscripción esté activa.";
   } else if (servicio) {
     const service = await db.service.findUnique({ where: { slug: servicio } });
-    if (!service || !service.active || !service.priceUsd) redirect("/servicios");
+    if (!service || !service.active || !service.priceUsd) redirect("/planes#servicios");
     title = service.name;
     amount = service.priceUsd;
     cop = service.priceCop;

@@ -56,7 +56,7 @@ export async function createOrderAction(formData: FormData) {
   } else if (typeof serviceSlug === "string" && serviceSlug) {
     // Servicios con precio fijo (p. ej. asesoría): no requieren suscripción.
     const service = await db.service.findUnique({ where: { slug: serviceSlug } });
-    if (!service || !service.active || !service.priceUsd) redirect("/servicios");
+    if (!service || !service.active || !service.priceUsd) redirect("/planes#servicios");
     order = await db.order.create({
       data: {
         userId: user.id,

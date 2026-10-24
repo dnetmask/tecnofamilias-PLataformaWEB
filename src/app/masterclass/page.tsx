@@ -372,7 +372,7 @@ export default async function MasterclassPage() {
             <p className="small muted center" style={{ margin: 0 }}>Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo).</p>
           </div>
           <p className="center small" style={{ color: "#dce6f2", margin: 0 }}>
-            ¿Colegio, empresa o entidad pública? <Link href="/servicios" style={{ color: "#fff", fontWeight: 800 }}>Pide una propuesta institucional</Link>
+            ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ color: "#fff", fontWeight: 800 }}>Pide una propuesta institucional</Link>
           </p>
         </div>
       </section>

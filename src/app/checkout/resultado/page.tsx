@@ -77,7 +77,7 @@ export default async function ResultPage({
             <div style={{ fontSize: "3rem" }}>⚠️</div>
             <h1 style={{ fontSize: "1.6rem" }}>El pago no se completó</h1>
             <p className="muted">No se realizó ningún cobro. Puedes intentarlo de nuevo.</p>
-            <Link className="btn" href={order.kind === "SERVICE" ? "/servicios" : order.kind === "LESSON" && order.lesson ? `/clases/${order.lesson.slug}` : order.kind === "RESOURCE" && order.resource ? `/herramientas/${order.resource.slug}` : "/planes"}>Volver a intentar</Link>
+            <Link className="btn" href={order.kind === "SERVICE" ? "/planes#servicios" : order.kind === "LESSON" && order.lesson ? `/clases/${order.lesson.slug}` : order.kind === "RESOURCE" && order.resource ? `/herramientas/${order.resource.slug}` : "/planes"}>Volver a intentar</Link>
           </>
         )}
       </div>
