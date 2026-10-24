@@ -214,7 +214,9 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .service-card { display: flex; gap: 16px; justify-content: space-between; align-items: flex-start; background: var(--tint); border-color: transparent; box-shadow: none; }
 .service-card h3 { font-size: 1.25rem; }
 .service-card p { color: var(--muted); }
-.service-price { text-align: right; flex: none; display: flex; flex-direction: column; align-items: flex-end; }
+.service-card > :first-child { flex: 1 1 auto; }
+/* El precio no se parte, pero la unidad sí: así una unidad larga no le quita espacio a la descripción. */
+.service-price { text-align: right; flex: none; max-width: 42%; display: flex; flex-direction: column; align-items: flex-end; }
 .service-price .price-label { font-size: 1.5rem; font-weight: 800; color: var(--blue-dark); line-height: 1.1; white-space: nowrap; }
 .service-price .small { color: var(--subtle); }
 .service-dark { background: var(--navy); color: #cfdbec; }
@@ -226,7 +228,7 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .service-dark .service-price .small { color: #cfdbec; }
 @media (max-width: 520px) {
   .service-card { flex-direction: column; }
-  .service-price { text-align: left; align-items: flex-start; }
+  .service-price { text-align: left; align-items: flex-start; max-width: none; }
 }
 .services-grid { grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); }
 .game-frame-screen { height: calc(100dvh - 150px); min-height: 560px; }
