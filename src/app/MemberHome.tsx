@@ -2,14 +2,15 @@ import Link from "next/link";
 import { hasMemberAccess } from "@/lib/access";
 import type { CurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { RESOURCE_LABELS, stageShort } from "@/lib/format";
+import { stageShort } from "@/lib/format";
+import { TOOL_KINDS } from "@/lib/tools";
 import { MasterclassPromo } from "@/components/MasterclassPromo";
 
 const SHORTCUTS = [
   { href: "/clases", icon: "▶", label: "Clases", color: "var(--blue)" },
   { href: "/juegos", icon: "🎲", label: "Juegos", color: "var(--red)" },
   { href: "/pactos", icon: "✍", label: "Pactos", color: "var(--yellow)" },
-  { href: "/recursos", icon: "🎧", label: "Videos y podcasts", color: "var(--navy-soft)" },
+  { href: "/herramientas", icon: "🧰", label: "Caja de herramientas", color: "var(--navy-soft)" },
   { href: "/comunidad", icon: "💬", label: "Comunidad", color: "var(--blue-dark)" },
   { href: "/servicios", icon: "🤝", label: "Otros servicios", color: "var(--ok)" },
 ];
@@ -48,7 +49,7 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
           select: { id: true, title: true, category: { select: { name: true } }, _count: { select: { posts: { where: { hidden: false } } } } },
         })
       : [],
-    db.resource.findMany({ where: { published: true }, orderBy: [{ order: "asc" }, { createdAt: "desc" }], take: 3, select: { id: true, title: true, kind: true, author: true } }),
+    db.resource.findMany({ where: { published: true }, orderBy: [{ uses: "desc" }, { order: "asc" }, { createdAt: "desc" }], take: 3, select: { id: true, slug: true, title: true, kind: true, author: true } }),
   ]);
   const lock = (href: string) => (member ? href : "/planes");
 
@@ -150,14 +151,14 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
 
         {resources.length > 0 && (
           <section>
-            <SectionHead title="Para ver y escuchar" href="/recursos" cta="Videos y podcasts" />
+            <SectionHead title="Las herramientas más usadas" href="/herramientas" cta="Caja de herramientas" />
             <div className="grid grid-3">
               {resources.map((r) => (
-                <Link key={r.id} href="/recursos" className="card card-link row" style={{ flexWrap: "nowrap" }}>
-                  <span className="icon-dot" style={{ background: r.kind === "VIDEO" ? "var(--blue)" : "var(--red)" }}>{r.kind === "VIDEO" ? "🎬" : "🎧"}</span>
+                <Link key={r.id} href={`/herramientas/${r.slug}`} className="card card-link row" style={{ flexWrap: "nowrap" }}>
+                  <span className="icon-dot" style={{ background: TOOL_KINDS[r.kind].color }}>{TOOL_KINDS[r.kind].icon}</span>
                   <div style={{ minWidth: 0 }}>
                     <strong style={{ color: "var(--navy)", display: "block", lineHeight: 1.2 }}>{r.title}</strong>
-                    <span className="small muted">{RESOURCE_LABELS[r.kind]}{r.author ? ` · ${r.author}` : ""}</span>
+                    <span className="small muted">{TOOL_KINDS[r.kind].label}{r.author ? ` · ${r.author}` : ""}</span>
                   </div>
                 </Link>
               ))}

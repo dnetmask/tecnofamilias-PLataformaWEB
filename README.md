@@ -1,6 +1,6 @@
 # Tecnofamilias · Plataforma web
 
-Plataforma **exclusivamente por suscripción** para familias. La suscripción incluye la base de clases pregrabadas, videos y podcasts recomendados, pactos digitales para firmar con los hijos, juegos en familia y la comunidad de apoyo tipo foro. Algunos cursos especializados son **complementos**: los suscriptores los suman con un pago adicional. No hay nivel gratuito. Incluye registro de usuarios y panel de administración.
+Plataforma **exclusivamente por suscripción** para familias. La suscripción incluye la base de clases pregrabadas, la Caja de herramientas, pactos digitales para firmar con los hijos, juegos en familia y la comunidad de apoyo tipo foro. Algunos cursos especializados son **complementos**: los suscriptores los suman con un pago adicional. No hay nivel gratuito. Incluye registro de usuarios y panel de administración.
 
 **Stack:** Next.js 15 (App Router, Server Actions) · PostgreSQL + Prisma 6 · sesiones JWT en cookie httpOnly · Mercado Pago (COP) · despliegue en Vercel.
 
@@ -12,7 +12,7 @@ Plataforma **exclusivamente por suscripción** para familias. La suscripción in
 | Planes | `/planes` | Un solo plan: **Anual** (el mensual quedó desactivado). Con sesión iniciada sale del menú; quien no tiene plan ve “Suscribirme” |
 | Registro / ingreso | `/registro`, `/ingresar` | Público. Tras registrarse, el usuario va a elegir plan |
 | Clases pregrabadas | `/clases` | Catálogo visible como vitrina. Video: **Incluida** → suscriptores · **Complemento** → suscriptores que lo compraron (disponible mientras la suscripción esté activa) |
-| Videos y podcasts | `/recursos` | Suscriptores (sin suscripción solo se ven los títulos bloqueados). YouTube, Vimeo y Spotify se ven embebidos |
+| Caja de herramientas | `/herramientas` (antes `/recursos`, que redirige) | Videos, podcasts, libros, ebooks, documentos, software y hardware. Cada herramienta es de libre acceso, incluida en la suscripción, de pago adicional dentro de la plataforma (página propia y pago en `/checkout?herramienta=<slug>`) o se compra por fuera. Los usuarios marcan favoritos (★) y arriba se muestran las 4 más usadas (familias distintas que la abrieron, vieron o descargaron). YouTube, Vimeo y Spotify se ven embebidos |
 | Pactos por aplicación | `/pactos` | Suscriptores crean pactos ilimitados desde plantillas por app (Roblox, TikTok, WhatsApp…). Firma con el dedo del adulto y luego del menor (en el mismo dispositivo o por enlace privado), impresión/PDF. Si la suscripción vence, los pactos existentes se pueden seguir viendo, imprimiendo o eliminando |
 | Juegos en familia | `/juegos` | Suscriptores. Cada juego es un HTML autocontenido (*Modo Familia*, *La aventura de Tecnito*, *Colorea con Tecnito* y *Farmea aura*). Los juegos se agregan desde el código: archivo en `prisma/games/` y una migración que lo inserta en la tabla `Game` que se sirve en `/juegos/<slug>/jugar` solo a suscriptores, dentro de un iframe con sandbox (sin acceso a la sesión ni a la página) |
 | Otros servicios | `/servicios` | En el menú con sesión iniciada; sin sesión aparece dentro de `/planes`. Asesoría personalizada (compra en línea, no requiere suscripción) y programas para colegios, empresas y cajas, alcaldías y gobernaciones (solicitud de cotización). Las solicitudes y las asesorías pagadas llegan a `/admin/solicitudes` |
@@ -20,7 +20,7 @@ Plataforma **exclusivamente por suscripción** para familias. La suscripción in
 | Mi cuenta | `/cuenta` | Suscripción, clases compradas, historial de pagos, datos y contraseña |
 | Administración | `/admin` | Solo rol ADMIN |
 
-**Panel de administración:** resumen (usuarios, suscriptores, ingresos), usuarios (crear, editar rol, activar/desactivar, otorgar meses de cortesía o complementos, restablecer contraseña, eliminar), clases, videos/podcasts, plantillas de pactos, comunidad, monedas (tasas de cambio) (categorías, reportes, ocultar contenido), planes y precios, pagos (marcar manualmente como pagada una transferencia).
+**Panel de administración:** resumen (usuarios, suscriptores, ingresos), usuarios (crear, editar rol, activar/desactivar, otorgar meses de cortesía o complementos, restablecer contraseña, eliminar), clases, caja de herramientas (acceso, precio, usos, favoritos y ventas), plantillas de pactos, comunidad, monedas (tasas de cambio) (categorías, reportes, ocultar contenido), planes y precios, pagos (marcar manualmente como pagada una transferencia).
 
 ## Masterclass
 

@@ -17,11 +17,11 @@ const PILLARS = [
     text: "Masterclass por edad para configurar dispositivos y actuar ante grooming, sexting o ciberacoso. Toda la base incluida en tu suscripción.",
   },
   {
-    href: "/recursos",
-    icon: "🎧",
+    href: "/herramientas",
+    icon: "🧰",
     color: "var(--yellow)",
-    title: "Videos y podcasts",
-    text: "Una selección curada de contenidos para ver y escuchar en familia, organizada por etapa.",
+    title: "Caja de herramientas",
+    text: "Videos, podcasts, libros, guías, documentos, apps y equipos que revisamos y recomendamos, organizados por etapa.",
   },
   {
     href: "/pactos",

@@ -24,8 +24,8 @@ enum AgeStage {
 
 /// Todo el contenido requiere suscripción; los complementos además se compran aparte.
 enum LessonAccess {
-  INCLUDED  // incluida en la suscripción
-  ADDON     // complemento: suscripción activa + pago adicional único
+  INCLUDED // incluida en la suscripción
+  ADDON // complemento: suscripción activa + pago adicional único
 }
 
 enum PlanInterval {
@@ -43,6 +43,7 @@ enum OrderKind {
   SUBSCRIPTION
   LESSON
   SERVICE
+  RESOURCE
 }
 
 /// Público al que va dirigido un servicio adicional.
@@ -54,11 +55,11 @@ enum ServiceAudience {
 }
 
 enum ServiceRequestStatus {
-  NEW        // cotización solicitada, sin atender
-  PAID       // servicio pagado en línea, falta agendar
-  CONTACTED  // el equipo ya contactó al cliente
-  WON        // contratado / agendado
-  LOST       // no se concretó
+  NEW // cotización solicitada, sin atender
+  PAID // servicio pagado en línea, falta agendar
+  CONTACTED // el equipo ya contactó al cliente
+  WON // contratado / agendado
+  LOST // no se concretó
 }
 
 enum OrderStatus {
@@ -71,6 +72,19 @@ enum OrderStatus {
 enum ResourceKind {
   VIDEO
   PODCAST
+  BOOK
+  EBOOK
+  DOCUMENT
+  SOFTWARE
+  HARDWARE
+}
+
+/// Cómo se accede a una herramienta de la Caja de herramientas.
+enum ResourceAccess {
+  FREE // libre acceso, sin cuenta
+  SUBSCRIPTION // incluida en la suscripción
+  PAID // pago adicional a la suscripción, dentro de la plataforma
+  EXTERNAL // se compra por fuera (tienda del fabricante, librería, etc.)
 }
 
 enum PactStatus {
@@ -80,24 +94,27 @@ enum PactStatus {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String
-  passwordHash String
-  role         Role     @default(USER)
-  active       Boolean  @default(true)
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String
+  passwordHash    String
+  role            Role      @default(USER)
+  active          Boolean   @default(true)
   acceptedTermsAt DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  subscription Subscription?
-  purchases    Purchase[]
-  orders       Order[]
-  serviceRequests ServiceRequest[]
-  pacts        Pact[]
-  threads      ForumThread[]
-  posts        ForumPost[]
-  reports      ForumReport[]
+  subscription      Subscription?
+  purchases         Purchase[]
+  orders            Order[]
+  serviceRequests   ServiceRequest[]
+  resourcePurchases ResourcePurchase[]
+  resourceFavorites ResourceFavorite[]
+  resourceUses      ResourceUse[]
+  pacts             Pact[]
+  threads           ForumThread[]
+  posts             ForumPost[]
+  reports           ForumReport[]
 }
 
 model Plan {
@@ -178,6 +195,8 @@ model Order {
   lesson      Lesson?     @relation(fields: [lessonId], references: [id], onDelete: SetNull)
   serviceId   String?
   service     Service?    @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  resourceId  String?
+  resource    Resource?   @relation(fields: [resourceId], references: [id], onDelete: SetNull)
   description String
   /// Monto cobrado en COP (lo que se envía a Mercado Pago).
   amountCop   Int
@@ -193,17 +212,68 @@ model Order {
   @@index([userId])
 }
 
+/// Herramienta de la Caja de herramientas (video, podcast, libro, ebook,
+/// documento, software o hardware).
 model Resource {
-  id          String       @id @default(cuid())
+  id          String         @id @default(cuid())
+  slug        String         @unique
   kind        ResourceKind
   title       String
-  author      String       @default("")
-  description String       @default("")
+  author      String         @default("")
+  description String         @default("")
   url         String
-  ageStage    AgeStage     @default(ALL)
-  published   Boolean      @default(true)
-  order       Int          @default(0)
-  createdAt   DateTime     @default(now())
+  imageUrl    String         @default("")
+  ageStage    AgeStage       @default(ALL)
+  access      ResourceAccess @default(SUBSCRIPTION)
+  /// PAID: precio de la compra en línea. EXTERNAL: precio de referencia (0 = no se muestra).
+  priceUsd    Int            @default(0)
+  /// Precio fijo en COP (opcional); si existe reemplaza la conversión del dólar.
+  priceCop    Int?
+  /// Familias distintas que la han usado (abierto, visto o descargado).
+  uses        Int            @default(0)
+  published   Boolean        @default(true)
+  order       Int            @default(0)
+  createdAt   DateTime       @default(now())
+
+  orders    Order[]
+  purchases ResourcePurchase[]
+  favorites ResourceFavorite[]
+  useLog    ResourceUse[]
+
+  @@index([uses])
+}
+
+model ResourcePurchase {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  orderId    String?  @unique
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, resourceId])
+}
+
+model ResourceFavorite {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([userId, resourceId])
+}
+
+/// Primera vez que cada usuario usa una herramienta (alimenta Resource.uses).
+model ResourceUse {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([userId, resourceId])
 }
 
 model PactTemplate {
@@ -330,12 +400,12 @@ model Game {
 /// Servicios adicionales a la suscripción (asesoría, colegios, empresas,
 /// sector público). Con precio fijo se compran en línea; si no, se cotizan.
 model Service {
-  id          String          @id @default(cuid())
-  slug        String          @unique
-  audience    ServiceAudience
-  name        String
-  description String          @default("")
-  details     String          @default("")
+  id           String          @id @default(cuid())
+  slug         String          @unique
+  audience     ServiceAudience
+  name         String
+  description  String          @default("")
+  details      String          @default("")
   /// Precio en dólares para la compra en línea; null = solo cotización.
   priceUsd     Int?
   /// Precio fijo en COP (opcional) para la compra en línea; si existe reemplaza la conversión.
@@ -343,11 +413,11 @@ model Service {
   /// Rango de referencia en dólares; se muestra convertido a la moneda elegida.
   priceFromUsd Int
   priceToUsd   Int
-  unit        String          @default("")
-  featured    Boolean         @default(false)
-  active      Boolean         @default(true)
-  order       Int             @default(0)
-  createdAt   DateTime        @default(now())
+  unit         String          @default("")
+  featured     Boolean         @default(false)
+  active       Boolean         @default(true)
+  order        Int             @default(0)
+  createdAt    DateTime        @default(now())
 
   orders   Order[]
   requests ServiceRequest[]

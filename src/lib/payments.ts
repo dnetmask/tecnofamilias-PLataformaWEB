@@ -150,6 +150,13 @@ export async function fulfillOrder(orderId: string, providerRef?: string) {
         },
       });
     }
+    if (order.kind === "RESOURCE" && order.resourceId) {
+      await tx.resourcePurchase.upsert({
+        where: { userId_resourceId: { userId: order.userId, resourceId: order.resourceId } },
+        create: { userId: order.userId, resourceId: order.resourceId, orderId: order.id },
+        update: {},
+      });
+    }
     if (order.kind === "LESSON" && order.lessonId) {
       await tx.purchase.upsert({
         where: { userId_lessonId: { userId: order.userId, lessonId: order.lessonId } },

@@ -5,6 +5,10 @@ const nextConfig = {
     // Las firmas de los pactos se envían como imagen en base64.
     serverActions: { bodySizeLimit: "2mb" },
   },
+  async redirects() {
+    // Videos y podcasts pasó a llamarse Caja de herramientas.
+    return [{ source: "/recursos", destination: "/herramientas", permanent: true }];
+  },
   async headers() {
     return [
       {

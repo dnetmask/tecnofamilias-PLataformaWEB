@@ -5,7 +5,7 @@ import { getPricing } from "@/lib/pricing";
 
 const INCLUDES = [
   "Base completa de clases pregrabadas",
-  "Videos y podcasts recomendados por etapa",
+  "Caja de herramientas: videos, podcasts, guías y más, por etapa",
   "Pactos digitales ilimitados para firmar con tus hijos",
   "Juegos para jugar y conversar en familia",
   "Comunidad de apoyo entre familias",

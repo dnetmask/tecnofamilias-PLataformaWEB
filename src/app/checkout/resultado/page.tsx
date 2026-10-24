@@ -16,7 +16,7 @@ export default async function ResultPage({
 }) {
   const { orden, payment_id } = await searchParams;
   const user = await requireUser();
-  let order = orden ? await db.order.findUnique({ where: { id: orden }, include: { lesson: true, service: true } }) : null;
+  let order = orden ? await db.order.findUnique({ where: { id: orden }, include: { lesson: true, service: true, resource: true } }) : null;
   if (!order || order.userId !== user.id) notFound();
 
   // Si el usuario vuelve antes que el webhook, se consulta el pago directamente.
@@ -29,7 +29,7 @@ export default async function ResultPage({
         } else if (payment.status === "rejected" || payment.status === "cancelled") {
           await failOrder(order.id);
         }
-        order = await db.order.findUniqueOrThrow({ where: { id: order.id }, include: { lesson: true, service: true } });
+        order = await db.order.findUniqueOrThrow({ where: { id: order.id }, include: { lesson: true, service: true, resource: true } });
       }
     } catch (err) {
       console.error(err);
@@ -54,6 +54,8 @@ export default async function ResultPage({
                 <p>Te contactaremos por correo o WhatsApp en las próximas 24 horas hábiles para agendar.</p>
                 <Link className="btn" href="/cuenta">Ir a mi cuenta</Link>
               </>
+            ) : order.kind === "RESOURCE" && order.resource ? (
+              <Link className="btn" href={`/herramientas/${order.resource.slug}`}>Abrir la herramienta</Link>
             ) : order.kind === "LESSON" && order.lesson ? (
               <Link className="btn" href={`/clases/${order.lesson.slug}`}>Ver la clase</Link>
             ) : (
@@ -75,7 +77,7 @@ export default async function ResultPage({
             <div style={{ fontSize: "3rem" }}>⚠️</div>
             <h1 style={{ fontSize: "1.6rem" }}>El pago no se completó</h1>
             <p className="muted">No se realizó ningún cobro. Puedes intentarlo de nuevo.</p>
-            <Link className="btn" href={order.kind === "SERVICE" ? "/servicios" : order.kind === "LESSON" && order.lesson ? `/clases/${order.lesson.slug}` : "/planes"}>Volver a intentar</Link>
+            <Link className="btn" href={order.kind === "SERVICE" ? "/servicios" : order.kind === "LESSON" && order.lesson ? `/clases/${order.lesson.slug}` : order.kind === "RESOURCE" && order.resource ? `/herramientas/${order.resource.slug}` : "/planes"}>Volver a intentar</Link>
           </>
         )}
       </div>

@@ -81,9 +81,10 @@ const LESSONS = [
   },
 ];
 
-// Ejemplos: reemplazar por videos y episodios concretos desde /admin/recursos.
+// Ejemplos: reemplazar por herramientas concretas desde /admin/recursos.
 const RESOURCES = [
   {
+    slug: "ejemplo-en-tic-confio",
     kind: "VIDEO",
     title: "Ejemplo · En TIC Confío+ (MinTIC)",
     author: "Ministerio TIC de Colombia",
@@ -93,6 +94,7 @@ const RESOURCES = [
     order: 1,
   },
   {
+    slug: "ejemplo-podcast-para-familias",
     kind: "PODCAST",
     title: "Ejemplo · Podcast para familias",
     author: "Por definir",

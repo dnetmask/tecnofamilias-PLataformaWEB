@@ -1,4 +1,4 @@
-import type { AgeStage, LessonAccess, ResourceKind } from "@prisma/client";
+import type { AgeStage, LessonAccess } from "@prisma/client";
 
 /** Montos realmente cobrados o administrativos (siempre en COP). */
 export function formatCop(value: number) {
@@ -43,11 +43,6 @@ export function stageShort(stage: AgeStage) {
 export const ACCESS_LABELS: Record<LessonAccess, string> = {
   INCLUDED: "Incluida en la suscripción",
   ADDON: "Complemento",
-};
-
-export const RESOURCE_LABELS: Record<ResourceKind, string> = {
-  VIDEO: "Video",
-  PODCAST: "Podcast",
 };
 
 export function slugify(text: string) {

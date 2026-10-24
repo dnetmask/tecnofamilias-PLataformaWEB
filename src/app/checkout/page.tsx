@@ -1,27 +1,30 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
-import { canWatchLesson, getActiveSubscription, hasMemberAccess } from "@/lib/access";
+import { canWatchLesson, getActiveSubscription, getToolViewer, hasMemberAccess } from "@/lib/access";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { formatCop, formatDate } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 import { paymentsMode } from "@/lib/payments";
+import { canUseTool } from "@/lib/tools";
 import { createOrderAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Pago" };
 
-export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ plan?: string; clase?: string; servicio?: string }> }) {
-  const { plan: planSlug, clase, servicio } = await searchParams;
+export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ plan?: string; clase?: string; servicio?: string; herramienta?: string }> }) {
+  const { plan: planSlug, clase, servicio, herramienta } = await searchParams;
   const next = planSlug
     ? `/checkout?plan=${planSlug}`
     : clase
       ? `/checkout?clase=${clase}`
       : servicio
         ? `/checkout?servicio=${servicio}`
-        : "/planes";
+        : herramienta
+          ? `/checkout?herramienta=${herramienta}`
+          : "/planes";
   const user = await requireUser(next);
   const pricing = await getPricing();
 
@@ -54,6 +57,15 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
     amount = service.priceUsd;
     cop = service.priceCop;
     detail = `${service.unit}. Después del pago te contactamos para agendar.`;
+  } else if (herramienta) {
+    const tool = await db.resource.findUnique({ where: { slug: herramienta } });
+    if (!tool || !tool.published || tool.access !== "PAID") redirect("/herramientas");
+    if (!(await hasMemberAccess(user))) redirect("/planes?requiere=suscripcion");
+    if (canUseTool(await getToolViewer(user), tool)) redirect(`/herramientas/${tool.slug}`);
+    title = tool.title;
+    amount = tool.priceUsd;
+    cop = tool.priceCop;
+    detail = "Herramienta de la Caja de herramientas: pago único, adicional a la suscripción y disponible mientras esté activa.";
   } else {
     redirect("/planes");
   }
@@ -80,10 +92,11 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
           {planSlug && <input type="hidden" name="plan" value={planSlug} />}
           {clase && <input type="hidden" name="clase" value={clase} />}
           {servicio && <input type="hidden" name="servicio" value={servicio} />}
+          {herramienta && <input type="hidden" name="herramienta" value={herramienta} />}
           <SubmitButton pendingText="Redirigiendo al pago…">Ir a pagar</SubmitButton>
         </form>
         <p className="small muted center">
-          Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo). <Link href={servicio ? `/servicios/${servicio}` : clase ? `/clases/${clase}` : "/planes"}>Volver</Link>
+          Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo). <Link href={servicio ? `/servicios/${servicio}` : clase ? `/clases/${clase}` : herramienta ? `/herramientas/${herramienta}` : "/planes"}>Volver</Link>
         </p>
       </div>
     </div>

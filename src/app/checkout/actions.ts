@@ -1,17 +1,19 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { canWatchLesson, hasMemberAccess } from "@/lib/access";
+import { canWatchLesson, getToolViewer, hasMemberAccess } from "@/lib/access";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { chargeCop } from "@/lib/currency";
 import { fulfillOrder, paymentsMode, startCheckout } from "@/lib/payments";
 import { getRatesInfo } from "@/lib/pricing";
+import { canUseTool } from "@/lib/tools";
 
 export async function createOrderAction(formData: FormData) {
   const planSlug = formData.get("plan");
   const lessonSlug = formData.get("clase");
   const serviceSlug = formData.get("servicio");
+  const toolSlug = formData.get("herramienta");
   const user = await requireUser("/planes");
   // El precio base está en dólares: se convierte a COP con la tasa del día (o se usa el precio fijo en COP)
   // y se guarda la tasa efectiva.
@@ -62,6 +64,22 @@ export async function createOrderAction(formData: FormData) {
         serviceId: service.id,
         description: `Servicio: ${service.name}`,
         ...amounts(service.priceUsd, service.priceCop),
+        provider: paymentsMode(),
+      },
+    });
+  } else if (typeof toolSlug === "string" && toolSlug) {
+    // Herramientas pagas: pago adicional a una suscripción activa.
+    const tool = await db.resource.findUnique({ where: { slug: toolSlug } });
+    if (!tool || !tool.published || tool.access !== "PAID") redirect("/herramientas");
+    if (!(await hasMemberAccess(user))) redirect("/planes?requiere=suscripcion");
+    if (canUseTool(await getToolViewer(user), tool)) redirect(`/herramientas/${tool.slug}`);
+    order = await db.order.create({
+      data: {
+        userId: user.id,
+        kind: "RESOURCE",
+        resourceId: tool.id,
+        description: `Herramienta: ${tool.title}`,
+        ...amounts(tool.priceUsd, tool.priceCop),
         provider: paymentsMode(),
       },
     });

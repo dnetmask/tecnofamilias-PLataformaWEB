@@ -207,35 +207,49 @@ export async function deleteLessonAction(formData: FormData) {
   done("/admin/clases", "Clase eliminada");
 }
 
-/* ---------- Videos y podcasts ---------- */
+/* ---------- Caja de herramientas ---------- */
 
-const resourceSchema = z.object({
-  id: z.string().optional(),
-  kind: z.enum(["VIDEO", "PODCAST"]),
-  title: z.string().trim().min(2).max(160),
-  author: z.string().trim().max(120).default(""),
-  description: z.string().trim().max(2000).default(""),
-  url: z.string().trim().url("URL no válida").startsWith("https://", "Debe usar https"),
-  ageStage,
-  order: z.coerce.number().int().default(0),
-  published: checkbox,
-});
+const resourceSchema = z
+  .object({
+    id: z.string().optional(),
+    slug: z.string().trim().default(""),
+    kind: z.enum(["VIDEO", "PODCAST", "BOOK", "EBOOK", "DOCUMENT", "SOFTWARE", "HARDWARE"]),
+    access: z.enum(["FREE", "SUBSCRIPTION", "PAID", "EXTERNAL"]),
+    title: z.string().trim().min(2).max(160),
+    author: z.string().trim().max(120).default(""),
+    description: z.string().trim().max(2000).default(""),
+    url: z.string().trim().url("URL no válida").startsWith("https://", "Debe usar https"),
+    imageUrl: optionalUrl.default(""),
+    priceUsd: z.coerce.number().int().min(0).max(100000).default(0),
+    priceCop: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(0).max(100000000).nullable()),
+    ageStage,
+    order: z.coerce.number().int().default(0),
+    published: checkbox,
+  })
+  .refine((d) => d.access !== "PAID" || d.priceUsd > 0, { path: ["priceUsd"], message: "una herramienta paga necesita precio en dólares" });
 
 export async function saveResourceAction(formData: FormData) {
   await requireAdmin();
   const path = `/admin/recursos/${formData.get("id") || "nuevo"}`;
-  const { id, ...data } = parse(resourceSchema, formData, path);
-  const resource = id
-    ? await db.resource.update({ where: { id }, data })
-    : await db.resource.create({ data });
-  revalidatePath("/recursos");
-  done(`/admin/recursos/${resource.id}`, "Recurso guardado");
+  const { id, slug: rawSlug, ...data } = parse(resourceSchema, formData, path);
+  const slug = slugify(rawSlug || data.title) || "herramienta";
+  let resource;
+  try {
+    resource = id
+      ? await db.resource.update({ where: { id }, data: { ...data, slug } })
+      : await db.resource.create({ data: { ...data, slug } });
+  } catch (err) {
+    if (isUniqueError(err)) fail(path, "Ya existe una herramienta con esa dirección (slug); cámbiala");
+    throw err;
+  }
+  revalidatePath("/herramientas");
+  done(`/admin/recursos/${resource.id}`, "Herramienta guardada");
 }
 
 export async function deleteResourceAction(formData: FormData) {
   await requireAdmin();
   await db.resource.delete({ where: { id: String(formData.get("id")) } });
-  done("/admin/recursos", "Recurso eliminado");
+  done("/admin/recursos", "Herramienta eliminada");
 }
 
 /* ---------- Plantillas de pactos ---------- */

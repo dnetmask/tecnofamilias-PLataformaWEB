@@ -8,7 +8,7 @@ const NAV = [
   ["/admin", "Resumen"],
   ["/admin/usuarios", "Usuarios"],
   ["/admin/clases", "Clases"],
-  ["/admin/recursos", "Videos y podcasts"],
+  ["/admin/recursos", "Caja de herramientas"],
   ["/admin/pactos", "Plantillas de pactos"],
   ["/admin/comunidad", "Comunidad"],
   ["/admin/servicios", "Otros servicios"],

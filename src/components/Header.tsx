@@ -10,7 +10,7 @@ type Props = { user: { name: string; role: "USER" | "ADMIN"; member: boolean } |
 const LINKS = [
   { href: "/", label: "Inicio" },
   { href: "/clases", label: "Clases" },
-  { href: "/recursos", label: "Videos y podcasts" },
+  { href: "/herramientas", label: "Caja de herramientas" },
   { href: "/pactos", label: "Pactos" },
   { href: "/juegos", label: "Juegos" },
   { href: "/comunidad", label: "Comunidad" },

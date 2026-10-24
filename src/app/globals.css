@@ -41,6 +41,7 @@ p { margin: 0 0 1em; }
 
 .container { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
 .section { padding: 48px 0; }
+.container.section { padding: 48px 16px; }
 .stack > * + * { margin-top: 16px; }
 .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .between { justify-content: space-between; }
@@ -356,3 +357,11 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .service-details { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .service-details li { position: relative; padding-left: 28px; }
 .service-details li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--red); font-weight: 800; }
+
+/* Caja de herramientas */
+.tool-card { height: 100%; }
+.tool-thumb { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; flex: none; }
+.tool-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.fav-btn { background: none; border: 0; padding: 2px 4px; font-size: 1.5rem; line-height: 1; color: var(--subtle); cursor: pointer; }
+.fav-btn:hover { color: var(--yellow-dark); text-decoration: none; }
+.fav-btn.on { color: var(--yellow); }

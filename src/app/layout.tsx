@@ -11,7 +11,7 @@ const nunito = Nunito({ subsets: ["latin"], variable: "--font-sans", display: "s
 export const metadata: Metadata = {
   title: { default: "Tecnofamilias · Plataforma", template: "%s · Tecnofamilias" },
   description:
-    "Clases pregrabadas, pactos digitales con tus hijos, videos y podcasts recomendados y una comunidad de familias que se apoyan.",
+    "Clases pregrabadas, pactos digitales con tus hijos, una caja de herramientas recomendadas y una comunidad de familias que se apoyan.",
 };
 
 export const viewport: Viewport = { themeColor: "#28395f" };
