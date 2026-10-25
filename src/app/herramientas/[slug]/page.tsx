@@ -8,6 +8,7 @@ import { getPricing } from "@/lib/pricing";
 import { canUseTool, TOOL_ACCESS, TOOL_KINDS, usesLabel } from "@/lib/tools";
 import { resolvePodcastEmbed, resolveVideo } from "@/lib/video";
 import { FavoriteButton } from "../FavoriteButton";
+import { isPlatformOpen } from "@/lib/launch";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [tool, user, pricing] = await Promise.all([db.resource.findUnique({ where: { slug } }), getCurrentUser(), getPricing()]);
+  const [tool, user, pricing, platformOpen] = await Promise.all([db.resource.findUnique({ where: { slug } }), getCurrentUser(), getPricing(), isPlatformOpen()]);
   if (!tool || (!tool.published && user?.role !== "ADMIN")) notFound();
 
   const [viewer, favorite] = await Promise.all([
@@ -102,6 +103,8 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                   <p className="small" style={{ margin: 0 }}>Esta herramienta es un complemento para suscriptores.</p>
                   <Link className="btn" href="/planes">Ver planes</Link>
                 </>
+              ) : !platformOpen ? (
+                <p className="small" style={{ margin: 0 }}>Esta herramienta es un complemento para suscriptores. La suscripción llega muy pronto.</p>
               ) : (
                 <>
                   <p className="small" style={{ margin: 0 }}>Esta herramienta es un complemento para suscriptores.</p>
@@ -112,9 +115,9 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             </>
           ) : (
             <>
-              <p style={{ margin: 0 }}>🔒 Disponible con la suscripción.</p>
-              <Link className="btn" href={user ? "/planes" : `/registro?next=${encodeURIComponent(back)}`}>{user ? "Ver planes" : "Crear cuenta"}</Link>
-              {!user && <Link className="btn btn-ghost" href={`/ingresar?next=${encodeURIComponent(back)}`}>Ya tengo cuenta</Link>}
+              <p style={{ margin: 0 }}>🔒 {platformOpen ? "Disponible con la suscripción." : "Disponible muy pronto con la suscripción."}</p>
+              {platformOpen && <Link className="btn" href={user ? "/planes" : `/registro?next=${encodeURIComponent(back)}`}>{user ? "Ver planes" : "Crear cuenta"}</Link>}
+              {platformOpen && !user && <Link className="btn btn-ghost" href={`/ingresar?next=${encodeURIComponent(back)}`}>Ya tengo cuenta</Link>}
             </>
           )}
         </aside>

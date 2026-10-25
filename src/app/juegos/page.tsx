@@ -2,12 +2,14 @@ import Link from "next/link";
 import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { isPlatformOpen } from "@/lib/launch";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Juegos en familia" };
 
 export default async function GamesPage() {
   const user = await getCurrentUser();
+  const open = await isPlatformOpen();
   const [games, member] = await Promise.all([
     db.game.findMany({
       where: { published: true },
@@ -28,7 +30,11 @@ export default async function GamesPage() {
       <div className="container section stack">
         {!member && (
           <div className="alert alert-info">
-            Los juegos están incluidos en la suscripción; los marcados como gratis los puede jugar cualquiera. <Link href={user ? "/planes" : "/registro"}>{user ? "Suscribirme" : "Crear cuenta"}</Link>
+            {open ? (
+              <>Los juegos están incluidos en la suscripción; los marcados como gratis los puede jugar cualquiera. <Link href={user ? "/planes" : "/registro"}>{user ? "Suscribirme" : "Crear cuenta"}</Link></>
+            ) : (
+              <>Los juegos marcados como gratis los puede jugar cualquiera. Los demás llegan muy pronto con la suscripción.</>
+            )}
           </div>
         )}
         {games.length === 0 && <p className="muted">Muy pronto habrá juegos disponibles.</p>}
@@ -36,7 +42,7 @@ export default async function GamesPage() {
           {games.map((g) => {
             const canPlay = member || g.free;
             return (
-            <Link key={g.id} href={canPlay ? `/juegos/${g.slug}` : user ? "/planes" : "/registro"} className="card card-link stack">
+            <Link key={g.id} href={canPlay ? `/juegos/${g.slug}` : user || !open ? "/planes" : "/registro"} className="card card-link stack">
               <div className="row">
                 <span className="icon-dot" style={{ background: g.color, width: 56, height: 56, fontSize: "1.7rem" }}>{g.emoji}</span>
                 <div>
@@ -48,7 +54,7 @@ export default async function GamesPage() {
                 </div>
               </div>
               <p className="muted small" style={{ margin: 0 }}>{g.description}</p>
-              <span className="small" style={{ color: "var(--blue-dark)", fontWeight: 700 }}>{canPlay ? "Jugar →" : "🔒 Disponible con la suscripción"}</span>
+              <span className="small" style={{ color: "var(--blue-dark)", fontWeight: 700 }}>{canPlay ? "Jugar →" : open ? "🔒 Disponible con la suscripción" : "🔒 Próximamente con la suscripción"}</span>
             </Link>
             );
           })}

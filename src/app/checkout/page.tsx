@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { formatCop, formatDate } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
+import { isPlatformOpen } from "@/lib/launch";
 import { paymentsMode } from "@/lib/payments";
 import { canUseTool } from "@/lib/tools";
 import { createOrderAction } from "./actions";
@@ -34,7 +35,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
   let cop: number | null = null;
   if (planSlug) {
     const plan = await db.plan.findUnique({ where: { slug: planSlug } });
-    if (!plan || !plan.active) redirect("/planes");
+    if (!plan || !plan.active || (!(await isPlatformOpen()) && user.role !== "ADMIN")) redirect("/planes");
     const sub = await getActiveSubscription(user.id);
     title = plan.name;
     amount = plan.priceUsd;

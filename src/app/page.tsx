@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { MemberHome } from "./MemberHome";
 import { AGE_STAGES } from "@/lib/format";
 import { MasterclassPromo } from "@/components/MasterclassPromo";
+import { isPlatformOpen } from "@/lib/launch";
 
 export const dynamic = "force-dynamic";
 
@@ -54,10 +55,11 @@ export default async function Home() {
   const user = await getCurrentUser();
   // Con sesión iniciada se muestra un inicio orientado a usar el contenido.
   if (user) return <MemberHome user={user} />;
-  const [plans, freeGame, freeTools] = await Promise.all([
+  const [plans, freeGame, freeTools, open] = await Promise.all([
     db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
     db.game.findFirst({ where: { free: true, published: true }, orderBy: { order: "asc" }, select: { slug: true, title: true, emoji: true, color: true, description: true } }),
     db.resource.count({ where: { published: true, access: { in: ["FREE", "EXTERNAL"] } } }),
+    isPlatformOpen(),
   ]);
   return (
     <>
@@ -151,8 +153,17 @@ export default async function Home() {
             ))}
           </div>
           <div className="row center-row" style={{ marginTop: 28 }}>
-            <p style={{ margin: 0, fontWeight: 700, color: "var(--navy)" }}>Las clases de cada etapa están incluidas en la suscripción.</p>
-            <Link href="/planes" className="btn btn-yellow">Suscribirme para verlas</Link>
+            {open ? (
+              <>
+                <p style={{ margin: 0, fontWeight: 700, color: "var(--navy)" }}>Las clases de cada etapa están incluidas en la suscripción.</p>
+                <Link href="/planes" className="btn btn-yellow">Suscribirme para verlas</Link>
+              </>
+            ) : (
+              <>
+                <span className="badge badge-yellow">Próximamente</span>
+                <p style={{ margin: 0, fontWeight: 700, color: "var(--navy)" }}>Las clases de cada etapa llegan muy pronto con la suscripción.</p>
+              </>
+            )}
           </div>
         </div>
       </section>

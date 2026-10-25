@@ -6,6 +6,7 @@ import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { chargeCop } from "@/lib/currency";
 import { fulfillOrder, paymentsMode, startCheckout } from "@/lib/payments";
+import { isPlatformOpen } from "@/lib/launch";
 import { getRatesInfo } from "@/lib/pricing";
 import { canUseTool } from "@/lib/tools";
 
@@ -26,7 +27,7 @@ export async function createOrderAction(formData: FormData) {
   let order;
   if (typeof planSlug === "string" && planSlug) {
     const plan = await db.plan.findUnique({ where: { slug: planSlug } });
-    if (!plan || !plan.active) redirect("/planes");
+    if (!plan || !plan.active || (!(await isPlatformOpen()) && user.role !== "ADMIN")) redirect("/planes");
     order = await db.order.create({
       data: {
         userId: user.id,

@@ -8,6 +8,7 @@ import { hashPassword, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { slugify } from "@/lib/format";
 import { extendSubscription, fulfillOrder } from "@/lib/payments";
+import { PLATFORM_KEY } from "@/lib/launch";
 import { MASTERCLASS_KEY } from "@/lib/masterclass";
 import { RATES_KEY } from "@/lib/pricing";
 
@@ -365,6 +366,14 @@ export async function savePlanAction(formData: FormData) {
   }
   revalidatePath("/planes");
   done("/admin/planes", "Plan guardado");
+}
+
+export async function savePlatformAction(formData: FormData) {
+  await requireAdmin();
+  const value = { open: formData.get("open") === "on" };
+  await db.setting.upsert({ where: { key: PLATFORM_KEY }, create: { key: PLATFORM_KEY, value }, update: { value } });
+  revalidatePath("/", "layout");
+  done("/admin/planes", value.open ? "Plataforma abierta al público" : "Plataforma en Próximamente");
 }
 
 /* ---------- Pagos ---------- */

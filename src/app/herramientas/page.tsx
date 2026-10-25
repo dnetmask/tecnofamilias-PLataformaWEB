@@ -7,6 +7,7 @@ import { AGE_STAGES } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 import { TOOL_KIND_ORDER, TOOL_KINDS } from "@/lib/tools";
 import { ToolCard } from "./ToolCard";
+import { isPlatformOpen } from "@/lib/launch";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Caja de herramientas" };
@@ -17,6 +18,7 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
   const stage = AGE_STAGES.find((s) => s.value === etapa)?.value as AgeStage | undefined;
 
   const user = await getCurrentUser();
+  const open = await isPlatformOpen();
   const onlyFavorites = favoritos === "1" && !!user;
 
   const where: Prisma.ResourceWhereInput = { published: true };
@@ -87,8 +89,14 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
 
         {!viewer.member && (
           <div className="alert alert-info">
-            Muchas herramientas están incluidas en la suscripción; las de libre acceso puedes usarlas sin cuenta.{" "}
-            <Link href={user ? "/planes" : "/registro"}>{user ? "Ver planes" : "Crear cuenta"}</Link>
+            {open ? (
+              <>
+                Muchas herramientas están incluidas en la suscripción; las de libre acceso puedes usarlas sin cuenta.{" "}
+                <Link href={user ? "/planes" : "/registro"}>{user ? "Ver planes" : "Crear cuenta"}</Link>
+              </>
+            ) : (
+              <>Las herramientas de libre acceso puedes usarlas sin cuenta. Las demás llegan muy pronto con la suscripción.</>
+            )}
           </div>
         )}
 

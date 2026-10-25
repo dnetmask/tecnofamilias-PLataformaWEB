@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { isPlatformOpen } from "@/lib/launch";
 import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import "./globals.css";
@@ -18,11 +19,11 @@ export const viewport: Viewport = { themeColor: "#28395f" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
-  const member = await hasMemberAccess(user);
+  const [member, open] = await Promise.all([hasMemberAccess(user), isPlatformOpen()]);
   return (
     <html lang="es" className={nunito.variable}>
       <body>
-        <Header user={user ? { name: user.name, role: user.role, member } : null} />
+        <Header user={user ? { name: user.name, role: user.role, member } : null} platformOpen={open} />
         <main>{children}</main>
         <Footer />
       </body>

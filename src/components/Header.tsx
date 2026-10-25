@@ -5,7 +5,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { logoutAction } from "@/app/(auth)/actions";
 
-type Props = { user: { name: string; role: "USER" | "ADMIN"; member: boolean } | null };
+type Props = {
+  user: { name: string; role: "USER" | "ADMIN"; member: boolean } | null;
+  /** false: plataforma en "Próximamente" (sin crear cuenta ni suscribirse). */
+  platformOpen: boolean;
+};
 
 // `auth`: solo se muestran con la sesión iniciada.
 const LINKS = [
@@ -18,7 +22,7 @@ const LINKS = [
   { href: "/quienes-somos", label: "Quiénes somos" },
 ];
 
-export function Header({ user }: Props) {
+export function Header({ user, platformOpen }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
@@ -54,7 +58,7 @@ export function Header({ user }: Props) {
           )}
           {user ? (
             <>
-              {!user.member && (
+              {!user.member && platformOpen && (
                 <Link href="/planes" className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>
                   Suscribirme
                 </Link>
@@ -71,9 +75,11 @@ export function Header({ user }: Props) {
           ) : (
             <>
               <Link href="/ingresar">Ingresar</Link>
-              <Link href="/registro" className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>
-                Crear cuenta
-              </Link>
+              {platformOpen && (
+                <Link href="/registro" className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>
+                  Crear cuenta
+                </Link>
+              )}
             </>
           )}
         </nav>

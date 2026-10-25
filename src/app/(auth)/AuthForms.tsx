@@ -6,7 +6,7 @@ import { FormMessage } from "@/components/FormMessage";
 import { SubmitButton } from "@/components/SubmitButton";
 import { loginAction, registerAction } from "./actions";
 
-export function LoginForm({ next }: { next?: string }) {
+export function LoginForm({ next, allowRegister = true }: { next?: string; allowRegister?: boolean }) {
   const [state, action] = useActionState(loginAction, undefined);
   return (
     <form action={action} className="form">
@@ -21,9 +21,11 @@ export function LoginForm({ next }: { next?: string }) {
         <input className="input" id="password" name="password" type="password" autoComplete="current-password" required />
       </div>
       <SubmitButton pendingText="Ingresando…">Ingresar</SubmitButton>
-      <p className="small muted center">
-        ¿No tienes cuenta? <Link href={next ? `/registro?next=${encodeURIComponent(next)}` : "/registro"}>Créala aquí</Link>
-      </p>
+      {allowRegister && (
+        <p className="small muted center">
+          ¿No tienes cuenta? <Link href={next ? `/registro?next=${encodeURIComponent(next)}` : "/registro"}>Créala aquí</Link>
+        </p>
+      )}
     </form>
   );
 }

@@ -1,7 +1,8 @@
 import { SubmitButton } from "@/components/SubmitButton";
 import { db } from "@/lib/db";
-import { savePlanAction } from "../actions";
+import { savePlanAction, savePlatformAction } from "../actions";
 import { Notice, type NoticeParams } from "../Notice";
+import { isPlatformOpen } from "@/lib/launch";
 
 function PlanForm({ plan }: { plan?: { id: string; name: string; description: string; priceUsd: number; priceCop: number | null; interval: string; order: number; active: boolean } }) {
   return (
@@ -34,11 +35,23 @@ function PlanForm({ plan }: { plan?: { id: string; name: string; description: st
 
 export default async function AdminPlansPage({ searchParams }: { searchParams: NoticeParams }) {
   const { error, ok } = await searchParams;
-  const plans = await db.plan.findMany({ orderBy: { order: "asc" } });
+  const [plans, open] = await Promise.all([db.plan.findMany({ orderBy: { order: "asc" } }), isPlatformOpen()]);
   return (
     <>
       <h1>Planes de suscripción</h1>
       <Notice error={error} ok={ok} />
+      <form action={savePlatformAction} className="card form">
+        <div className="row between">
+          <h3 style={{ margin: 0 }}>Lanzamiento de la plataforma</h3>
+          <span className={`badge ${open ? "badge-green" : "badge-yellow"}`}>{open ? "Abierta" : "Próximamente"}</span>
+        </div>
+        <p className="small muted" style={{ margin: 0 }}>
+          Mientras está en “Próximamente”, el plan se muestra sin precio ni botón de compra y no se pueden crear cuentas,
+          salvo para comprar un servicio (por ejemplo, la asesoría). Los servicios, los juegos gratis y la Caja de herramientas siguen disponibles.
+        </p>
+        <label className="check"><input type="checkbox" name="open" defaultChecked={open} /> Plataforma abierta: permitir crear cuentas y comprar la suscripción</label>
+        <div><SubmitButton className="btn btn-sm">Guardar</SubmitButton></div>
+      </form>
       <p className="small muted">
         Los cambios de precio aplican a los pagos nuevos; las suscripciones vigentes conservan su fecha de vencimiento.
       </p>

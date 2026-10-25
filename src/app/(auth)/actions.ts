@@ -7,6 +7,7 @@ import { endSession, hashPassword, startSession, verifyPassword } from "@/lib/au
 import { db } from "@/lib/db";
 import { safeNext } from "@/lib/url";
 import { isSubscriber } from "@/lib/access";
+import { isPlatformOpen, isServiceCheckout } from "@/lib/launch";
 
 
 const registerSchema = z.object({
@@ -20,6 +21,9 @@ export async function registerAction(_: FormState, formData: FormData): Promise<
   const parsed = registerSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0].message };
   const { name, email, password } = parsed.data;
+  if (!(await isPlatformOpen()) && !isServiceCheckout(formData.get("next"))) {
+    return { error: "La creación de cuentas abre muy pronto." };
+  }
 
   const exists = await db.user.findUnique({ where: { email } });
   if (exists) return { error: "Ya existe una cuenta con ese correo" };

@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { stageShort } from "@/lib/format";
 import { TOOL_KINDS } from "@/lib/tools";
 import { MasterclassPromo } from "@/components/MasterclassPromo";
+import { isPlatformOpen } from "@/lib/launch";
 
 const SHORTCUTS = [
   { href: "/clases", icon: "▶", label: "Clases", color: "var(--blue)" },
@@ -26,7 +27,7 @@ function SectionHead({ title, href, cta }: { title: string; href: string; cta: s
 
 /** Inicio para usuarios con sesión: accesos directos al contenido, poco texto. */
 export async function MemberHome({ user }: { user: CurrentUser }) {
-  const member = await hasMemberAccess(user);
+  const [member, open] = await Promise.all([hasMemberAccess(user), isPlatformOpen()]);
   const [lessons, games, pacts, pactCount, threads, resources] = await Promise.all([
     db.lesson.findMany({
       where: { published: true },
@@ -73,8 +74,10 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
       <div className="container section stack" style={{ gap: 40 }}>
         {!member && (
           <div className="card row between" style={{ background: "var(--yellow)", borderColor: "transparent" }}>
-            <strong style={{ color: "var(--navy-dark)" }}>Activa tu suscripción para desbloquear clases, juegos, pactos y la comunidad.</strong>
-            <Link href="/planes" className="btn btn-sm" style={{ background: "var(--navy)" }}>Suscribirme</Link>
+            <strong style={{ color: "var(--navy-dark)" }}>
+              {open ? "Activa tu suscripción para desbloquear clases, juegos, pactos y la comunidad." : "Muy pronto podrás suscribirte para desbloquear clases, juegos, pactos y la comunidad."}
+            </strong>
+            {open && <Link href="/planes" className="btn btn-sm" style={{ background: "var(--navy)" }}>Suscribirme</Link>}
           </div>
         )}
 
