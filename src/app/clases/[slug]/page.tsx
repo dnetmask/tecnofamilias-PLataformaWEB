@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { hasMemberAccess, hasPurchased } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
@@ -19,6 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const user = await getCurrentUser();
+  // Sin sesión no se muestra el contenido: se invita a ver los planes.
+  if (!user) redirect("/planes");
   const lesson = await db.lesson.findUnique({ where: { slug } });
   if (!lesson || (!lesson.published && user?.role !== "ADMIN")) notFound();
 

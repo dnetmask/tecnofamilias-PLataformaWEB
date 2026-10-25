@@ -8,9 +8,11 @@ import { MasterclassPromo } from "@/components/MasterclassPromo";
 
 export const dynamic = "force-dynamic";
 
+// `auth`: para visitantes sin sesión el enlace lleva a Planes.
 const PILLARS = [
   {
     href: "/clases",
+    auth: true,
     icon: "▶",
     color: "var(--blue)",
     title: "Clases pregrabadas",
@@ -25,6 +27,7 @@ const PILLARS = [
   },
   {
     href: "/pactos",
+    auth: true,
     icon: "✍",
     color: "var(--red)",
     title: "Pactos por aplicación",
@@ -39,6 +42,7 @@ const PILLARS = [
   },
   {
     href: "/comunidad",
+    auth: true,
     icon: "💬",
     color: "var(--navy-soft)",
     title: "Comunidad de apoyo",
@@ -120,7 +124,7 @@ export default async function Home() {
           </p>
           <div className="grid grid-4">
             {PILLARS.map((p) => (
-              <Link key={p.href} href={p.href} className="card card-link stack">
+              <Link key={p.href} href={p.auth ? "/planes" : p.href} className="card card-link stack">
                 <span className="icon-dot" style={{ background: p.color }}>{p.icon}</span>
                 <h3>{p.title}</h3>
                 <p className="muted small" style={{ margin: 0 }}>{p.text}</p>
@@ -136,15 +140,19 @@ export default async function Home() {
           <p className="muted">Cada vez que tu hijo cambia de etapa, aparece una plataforma o un riesgo nuevo.</p>
           <div className="grid grid-4" style={{ marginTop: 24 }}>
             {AGE_STAGES.filter((s) => s.value !== "ALL").map((s, i) => (
-              <Link key={s.value} href={`/clases?etapa=${s.value}`} className="card card-tint card-link">
+              <div key={s.value} className="card card-tint">
                 <span className="icon-dot" style={{ background: ["var(--blue)", "var(--yellow)", "var(--red)", "var(--navy)"][i], marginBottom: 12 }}>
                   {i + 1}
                 </span>
                 <h3>{s.label.split(" · ")[0]}</h3>
                 <div className="badge" style={{ marginBottom: 8 }}>{s.label.split(" · ")[1]}</div>
                 <p className="muted small" style={{ margin: 0 }}>{s.hint}</p>
-              </Link>
+              </div>
             ))}
+          </div>
+          <div className="row center-row" style={{ marginTop: 28 }}>
+            <p style={{ margin: 0, fontWeight: 700, color: "var(--navy)" }}>Las clases de cada etapa están incluidas en la suscripción.</p>
+            <Link href="/planes" className="btn btn-yellow">Suscribirme para verlas</Link>
           </div>
         </div>
       </section>

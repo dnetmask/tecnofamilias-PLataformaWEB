@@ -380,3 +380,4 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .auth-plans { border-radius: var(--radius); background: var(--tint); padding: 14px 16px; margin: 4px 0 18px; }
 .auth-plans .auth-plan { display: flex; flex-direction: column; gap: 6px; }
 .auth-plans .price { font-size: 1.6rem; }
+.center-row { justify-content: center; text-align: center; }

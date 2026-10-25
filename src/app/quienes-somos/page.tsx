@@ -19,7 +19,6 @@ const VALUES = [
 
 const OFFER = [
   { href: "/clases", title: "Plataforma web", text: "Clases pregrabadas, guías, pactos para firmar con tus hijos, juegos y una comunidad de familias." },
-  { href: "/masterclass", title: "Masterclass en vivo", text: "Riesgos reales por edad y configuración en vivo de las apps y dispositivos de tus hijos." },
   { href: "/servicios/asesoria-personalizada", title: "Asesoría personalizada", text: "Un mes de acompañamiento para tu hogar: diagnóstico, configuración y seguimiento." },
   { href: "/planes#servicios", title: "Colegios, empresas y entidades", text: "Programas para padres, docentes, estudiantes y empleados, y programas sociales con alcaldías y gobernaciones." },
 ];
@@ -60,7 +59,7 @@ export default async function AboutPage() {
               ni cómo actuar cuando algo pasa. Esa brecha es la razón de ser de Tecnofamilias.
             </p>
             <p>
-              Hoy llevamos esa experiencia a una plataforma web, a masterclass en vivo y a programas para colegios, empresas y
+              Hoy llevamos esa experiencia a una plataforma web, a asesorías personalizadas y a programas para colegios, empresas y
               entidades públicas, para llegar a más hogares de Latinoamérica.
             </p>
           </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -15,6 +16,8 @@ const STATUS = {
 
 export default async function PactsPage() {
   const user = await getCurrentUser();
+  // Sin sesión no se muestra el contenido: se invita a ver los planes.
+  if (!user) redirect("/planes");
   const [templates, pacts, subscribed] = await Promise.all([
     db.pactTemplate.findMany({ where: { published: true }, orderBy: [{ order: "asc" }, { appName: "asc" }] }),
     user ? db.pact.findMany({ where: { userId: user.id }, orderBy: { updatedAt: "desc" } }) : [],

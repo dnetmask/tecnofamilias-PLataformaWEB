@@ -1,5 +1,6 @@
 import type { AgeStage, Prisma } from "@prisma/client";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getActiveSubscription } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -18,6 +19,8 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
   if (tipo === "complementos") where.access = "ADDON";
 
   const user = await getCurrentUser();
+  // Sin sesión no se muestra el contenido: se invita a ver los planes.
+  if (!user) redirect("/planes");
   const pricing = await getPricing();
   const [lessons, sub, purchases] = await Promise.all([
     db.lesson.findMany({ where, orderBy: [{ order: "asc" }, { createdAt: "desc" }] }),

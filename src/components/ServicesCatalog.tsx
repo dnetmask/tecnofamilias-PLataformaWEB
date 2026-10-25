@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
+import { MASTERCLASS_DEFAULTS } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { AUDIENCE_ORDER, AUDIENCES } from "@/lib/services";
 
 /** Servicios adicionales agrupados por público (diapositivas 7 a 9 de la presentación). */
 export async function ServicesCatalog() {
   const [services, pricing] = await Promise.all([
-    db.service.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
+    // La masterclass se vende solo desde su landing (/masterclass), no en el catálogo.
+    db.service.findMany({ where: { active: true, slug: { not: MASTERCLASS_DEFAULTS.serviceSlug } }, orderBy: { order: "asc" } }),
     getPricing(),
   ]);
   return (
