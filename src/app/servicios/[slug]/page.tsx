@@ -8,6 +8,8 @@ import { formatCop } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 import { db } from "@/lib/db";
 import { AUDIENCES } from "@/lib/services";
+import { WHATSAPP_SERVICES, whatsappUrl } from "@/lib/whatsapp";
+import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import { QuoteForm } from "../QuoteForm";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +24,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const [service, user, pricing] = await Promise.all([db.service.findUnique({ where: { slug } }), getCurrentUser(), getPricing()]);
   if (!service || (!service.active && user?.role !== "ADMIN")) notFound();
   const meta = AUDIENCES[service.audience];
+  // Algunos servicios (p. ej. la asesoría) se atienden por ahora por WhatsApp en lugar de comprarse en línea.
+  const viaWhatsapp = WHATSAPP_SERVICES.has(service.slug);
 
   return (
     <div className="container section">
@@ -55,9 +59,16 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             <div className="small">{service.unit}</div>
           </div>
           <CurrencySwitcher current={pricing.currency} dark={service.featured} />
-          {service.priceUsd ? <div className="small">Se cobra hoy {formatCop(pricing.charge(service.priceUsd, service.priceCop))}</div> : null}
-          <CurrencyNote currency={pricing.currency} />
-          {service.priceUsd ? (
+          {service.priceUsd && !viaWhatsapp ? <div className="small">Se cobra hoy {formatCop(pricing.charge(service.priceUsd, service.priceCop))}</div> : null}
+          {!viaWhatsapp && <CurrencyNote currency={pricing.currency} />}
+          {viaWhatsapp ? (
+            <>
+              <p className="small" style={{ margin: 0 }}>Escríbenos y agendamos tu asesoría por WhatsApp.</p>
+              <a className="btn btn-wa" href={whatsappUrl(`Hola Tecnofamilias, quiero información sobre la ${service.name.toLowerCase()}.`)} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon size={20} /> Escribir por WhatsApp
+              </a>
+            </>
+          ) : service.priceUsd ? (
             user ? (
               <Link className="btn btn-red" href={`/checkout?servicio=${service.slug}`}>Comprar</Link>
             ) : (

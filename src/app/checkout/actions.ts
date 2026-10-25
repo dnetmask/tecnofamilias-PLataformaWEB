@@ -9,6 +9,7 @@ import { fulfillOrder, paymentsMode, startCheckout } from "@/lib/payments";
 import { isPlatformOpen } from "@/lib/launch";
 import { getRatesInfo } from "@/lib/pricing";
 import { canUseTool } from "@/lib/tools";
+import { WHATSAPP_SERVICES } from "@/lib/whatsapp";
 
 export async function createOrderAction(formData: FormData) {
   const planSlug = formData.get("plan");
@@ -58,6 +59,7 @@ export async function createOrderAction(formData: FormData) {
     // Servicios con precio fijo (p. ej. asesoría): no requieren suscripción.
     const service = await db.service.findUnique({ where: { slug: serviceSlug } });
     if (!service || !service.active || !service.priceUsd) redirect("/planes#servicios");
+    if (WHATSAPP_SERVICES.has(service.slug)) redirect(`/servicios/${service.slug}`);
     order = await db.order.create({
       data: {
         userId: user.id,

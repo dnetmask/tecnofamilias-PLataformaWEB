@@ -11,6 +11,7 @@ import { isPlatformOpen } from "@/lib/launch";
 import { paymentsMode } from "@/lib/payments";
 import { canUseTool } from "@/lib/tools";
 import { createOrderAction } from "./actions";
+import { WHATSAPP_SERVICES } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Pago" };
@@ -54,6 +55,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
   } else if (servicio) {
     const service = await db.service.findUnique({ where: { slug: servicio } });
     if (!service || !service.active || !service.priceUsd) redirect("/planes#servicios");
+    if (WHATSAPP_SERVICES.has(service.slug)) redirect(`/servicios/${service.slug}`);
     title = service.name;
     amount = service.priceUsd;
     cop = service.priceCop;

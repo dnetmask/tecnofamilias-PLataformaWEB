@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { MASTERCLASS_DEFAULTS } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { AUDIENCE_ORDER, AUDIENCES } from "@/lib/services";
+import { WHATSAPP_SERVICES } from "@/lib/whatsapp";
 
 /** Servicios adicionales agrupados por público (diapositivas 7 a 9 de la presentación). */
 export async function ServicesCatalog() {
@@ -36,8 +37,8 @@ export async function ServicesCatalog() {
                   <div className="service-price">
                     <div className="price-label">{pricing.range(s.priceFromUsd, s.priceToUsd, s.priceCop)}</div>
                     <div className="small">{s.unit}</div>
-                    <span className={`btn btn-sm ${s.priceUsd ? "btn-red" : s.featured ? "btn-yellow" : ""}`} style={{ marginTop: 10 }}>
-                      {s.priceUsd ? "Comprar" : "Solicitar cotización"}
+                    <span className={`btn btn-sm ${WHATSAPP_SERVICES.has(s.slug) ? "btn-wa" : s.priceUsd ? "btn-red" : s.featured ? "btn-yellow" : ""}`} style={{ marginTop: 10 }}>
+                      {WHATSAPP_SERVICES.has(s.slug) ? "Hablar por WhatsApp" : s.priceUsd ? "Comprar" : "Solicitar cotización"}
                     </span>
                   </div>
                 </Link>

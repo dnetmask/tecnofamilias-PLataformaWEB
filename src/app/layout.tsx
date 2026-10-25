@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { isPlatformOpen } from "@/lib/launch";
 import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
@@ -26,6 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Header user={user ? { name: user.name, role: user.role, member } : null} platformOpen={open} />
         <main>{children}</main>
         <Footer />
+        <WhatsAppButton />
       </body>
     </html>
   );

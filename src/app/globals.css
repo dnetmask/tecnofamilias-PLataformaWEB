@@ -381,3 +381,12 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .auth-plans .auth-plan { display: flex; flex-direction: column; gap: 6px; }
 .auth-plans .price { font-size: 1.6rem; }
 .center-row { justify-content: center; text-align: center; }
+
+/* ---------- WhatsApp ---------- */
+.btn-wa { background: #25d366; color: #fff; gap: 8px; }
+.btn-wa:hover { background: #1ebe5b; color: #fff; }
+.wa-float { position: fixed; right: 20px; bottom: 20px; z-index: 60; width: 58px; height: 58px; border-radius: 50%;
+  display: grid; place-items: center; background: #25d366; color: #fff; box-shadow: 0 10px 24px -8px rgb(0 0 0 / 45%);
+  transition: transform .15s ease; }
+.wa-float:hover { transform: scale(1.07); text-decoration: none; color: #fff; }
+@media (max-width: 860px) { .wa-float { right: 14px; bottom: 14px; width: 54px; height: 54px; } .wa-float.wa-raise { bottom: 88px; } }
