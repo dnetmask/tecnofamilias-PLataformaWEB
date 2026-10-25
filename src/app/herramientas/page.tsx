@@ -57,13 +57,6 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
         </div>
       </div>
       <div className="container section stack">
-        {top.length > 0 && (
-          <section className="stack">
-            <h2 style={{ margin: 0 }}>🔥 Las herramientas más usadas</h2>
-            <div className="grid grid-2">{top.map((t, i) => card(t, i + 1))}</div>
-          </section>
-        )}
-
         <div className="chips">
           <Link href={href({ tipo: undefined })} className={`chip${!kind ? " active" : ""}`}>Todo</Link>
           {TOOL_KIND_ORDER.map((k) => (
@@ -86,6 +79,13 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
             ★ Mis favoritos
           </Link>
         </div>
+
+        {top.length > 0 && (
+          <section className="stack">
+            <h2 style={{ margin: 0 }}>🔥 Las herramientas más usadas</h2>
+            <div className="grid grid-2">{top.map((t, i) => card(t, i + 1))}</div>
+          </section>
+        )}
 
         {!viewer.member && (
           <div className="alert alert-info">
