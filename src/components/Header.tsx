@@ -7,13 +7,14 @@ import { logoutAction } from "@/app/(auth)/actions";
 
 type Props = { user: { name: string; role: "USER" | "ADMIN"; member: boolean } | null };
 
+// `auth`: solo se muestran con la sesión iniciada.
 const LINKS = [
   { href: "/", label: "Inicio" },
-  { href: "/clases", label: "Clases" },
+  { href: "/clases", label: "Clases", auth: true },
   { href: "/herramientas", label: "Caja de herramientas" },
-  { href: "/pactos", label: "Pactos" },
+  { href: "/pactos", label: "Pactos", auth: true },
   { href: "/juegos", label: "Juegos" },
-  { href: "/comunidad", label: "Comunidad" },
+  { href: "/comunidad", label: "Comunidad", auth: true },
   { href: "/quienes-somos", label: "Quiénes somos" },
 ];
 
@@ -37,7 +38,7 @@ export function Header({ user }: Props) {
           Menú
         </button>
         <nav id="main-nav" className={`nav${open ? " open" : ""}`} onClick={() => setOpen(false)}>
-          {LINKS.map((l) => (
+          {LINKS.filter((l) => user || !l.auth).map((l) => (
             <Link key={l.href} href={l.href} className={isActive(l.href) ? "active" : undefined}>
               {l.label}
             </Link>

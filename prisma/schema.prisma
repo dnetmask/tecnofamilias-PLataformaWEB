@@ -391,6 +391,8 @@ model Game {
   /// true: el juego ocupa el alto de la pantalla y tiene su propio scroll
   /// (juegos por pantallas, con ventanas emergentes). false: el marco crece.
   fullHeight  Boolean  @default(false)
+  /// true: libre y gratis para todos, sin cuenta ni suscripción.
+  free        Boolean  @default(false)
   published   Boolean  @default(true)
   order       Int      @default(0)
   createdAt   DateTime @default(now())

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireSubscriber } from "@/lib/access";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { GameFrame } from "../GameFrame";
 
@@ -13,9 +14,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function GamePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const user = await requireSubscriber(`/juegos/${slug}`);
-  const game = await db.game.findUnique({ where: { slug }, select: { slug: true, title: true, published: true, fullHeight: true } });
-  if (!game || (!game.published && user.role !== "ADMIN")) notFound();
+  const game = await db.game.findUnique({ where: { slug }, select: { slug: true, title: true, published: true, fullHeight: true, free: true } });
+  // Los juegos gratis se abren sin cuenta; los demás requieren suscripción.
+  const user = game?.free ? await getCurrentUser() : await requireSubscriber(`/juegos/${slug}`);
+  if (!game || (!game.published && user?.role !== "ADMIN")) notFound();
 
   return (
     <div className="container section stack">

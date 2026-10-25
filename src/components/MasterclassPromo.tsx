@@ -8,7 +8,7 @@ export async function MasterclassPromo({ compact = false }: { compact?: boolean 
   const mc = await getMasterclass();
   if (!mc.showOnHome || mc.isPast || !mc.service?.active) return null;
   const pricing = await getPricing();
-  return (
+  const promo = (
     <section className={`mc-promo${compact ? " compact" : ""}`}>
       <div className="mc-promo-inner">
         <div className="mc-promo-text">
@@ -29,4 +29,5 @@ export async function MasterclassPromo({ compact = false }: { compact?: boolean 
       </div>
     </section>
   );
+  return compact ? promo : <div className="container" style={{ marginTop: 40 }}>{promo}</div>;
 }

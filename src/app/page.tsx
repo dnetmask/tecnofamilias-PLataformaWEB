@@ -72,9 +72,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <div className="container" style={{ marginTop: 40 }}>
-        <MasterclassPromo />
-      </div>
+      <MasterclassPromo />
 
       <section className="section">
         <div className="container">

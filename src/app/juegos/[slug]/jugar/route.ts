@@ -12,13 +12,12 @@ function deny(status: number, message: string) {
   );
 }
 
-/** Entrega el HTML del juego solo a suscriptores, y siempre aislado. */
+/** Entrega el HTML del juego a suscriptores (o a todos si es gratis), y siempre aislado. */
 export async function GET(_: Request, { params }: { params: Promise<{ slug: string }> }) {
   const user = await getCurrentUser();
-  if (!(await hasMemberAccess(user))) return deny(403, "Necesitas una suscripción activa para jugar.");
-
   const { slug } = await params;
   const game = await db.game.findUnique({ where: { slug } });
+  if (!game?.free && !(await hasMemberAccess(user))) return deny(403, "Necesitas una suscripción activa para jugar.");
   if (!game || (!game.published && user?.role !== "ADMIN")) return deny(404, "Juego no encontrado.");
 
   return new Response(withHeightReporter(game.html), {

@@ -37,7 +37,7 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
     db.game.findMany({
       where: { published: true },
       orderBy: [{ order: "asc" }, { createdAt: "desc" }],
-      select: { id: true, slug: true, title: true, emoji: true, color: true, ageLabel: true },
+      select: { id: true, slug: true, title: true, emoji: true, color: true, ageLabel: true, free: true },
     }),
     db.pact.findMany({ where: { userId: user.id }, orderBy: { updatedAt: "desc" }, take: 2, select: { id: true, appName: true, childName: true, status: true } }),
     db.pact.count({ where: { userId: user.id } }),
@@ -102,13 +102,13 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
           <SectionHead title="Jueguen juntos" href="/juegos" cta="Todos los juegos" />
           <div className="grid grid-3">
             {games.map((g) => (
-              <Link key={g.id} href={lock(`/juegos/${g.slug}`)} className="card card-link row" style={{ flexWrap: "nowrap" }}>
+              <Link key={g.id} href={g.free ? `/juegos/${g.slug}` : lock(`/juegos/${g.slug}`)} className="card card-link row" style={{ flexWrap: "nowrap" }}>
                 <span className="icon-dot" style={{ background: g.color, width: 56, height: 56, fontSize: "1.7rem" }}>{g.emoji}</span>
                 <div style={{ minWidth: 0 }}>
                   <strong style={{ color: "var(--navy)", display: "block", lineHeight: 1.2 }}>{g.title}</strong>
                   <span className="small muted">{g.ageLabel}</span>
                 </div>
-                <span className="btn btn-sm" style={{ marginLeft: "auto" }}>{member ? "Jugar" : "🔒"}</span>
+                <span className="btn btn-sm" style={{ marginLeft: "auto" }}>{member || g.free ? "Jugar" : "🔒"}</span>
               </Link>
             ))}
           </div>
