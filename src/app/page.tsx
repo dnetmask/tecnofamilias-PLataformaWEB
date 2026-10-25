@@ -50,7 +50,11 @@ export default async function Home() {
   const user = await getCurrentUser();
   // Con sesión iniciada se muestra un inicio orientado a usar el contenido.
   if (user) return <MemberHome user={user} />;
-  const plans = await db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } });
+  const [plans, freeGame, freeTools] = await Promise.all([
+    db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
+    db.game.findFirst({ where: { free: true, published: true }, orderBy: { order: "asc" }, select: { slug: true, title: true, emoji: true, color: true, description: true } }),
+    db.resource.count({ where: { published: true, access: { in: ["FREE", "EXTERNAL"] } } }),
+  ]);
   return (
     <>
       <section className="hero">
@@ -66,13 +70,47 @@ export default async function Home() {
             </p>
             <div className="row" style={{ marginTop: 24 }}>
               <Link href="/planes" className="btn btn-yellow">Ver planes</Link>
-              <Link href="/clases" className="btn btn-light">Explorar clases</Link>
+              {freeGame && <Link href={`/juegos/${freeGame.slug}`} className="btn btn-light">🎮 Juega gratis</Link>}
             </div>
           </div>
         </div>
       </section>
 
       <MasterclassPromo />
+
+      <section className="section free-start">
+        <div className="container">
+          <h2 className="center">Empieza gratis, sin crear cuenta</h2>
+          <p className="muted center" style={{ maxWidth: 620, margin: "0 auto 28px" }}>
+            Prueba con tu familia un juego y las herramientas que recomendamos. Cuando quieras más, la suscripción desbloquea todo.
+          </p>
+          <div className="grid grid-2 free-grid">
+            {freeGame && (
+              <Link href={`/juegos/${freeGame.slug}`} className="card card-link free-card">
+                <span className="icon-dot" style={{ background: freeGame.color, width: 64, height: 64, fontSize: "2rem" }}>{freeGame.emoji}</span>
+                <div className="stack" style={{ gap: 6, minWidth: 0 }}>
+                  <span className="badge badge-green" style={{ alignSelf: "flex-start" }}>Juego gratis</span>
+                  <h3 style={{ margin: 0 }}>{freeGame.title}</h3>
+                  <p className="muted small free-desc" style={{ margin: 0 }}>{freeGame.description}</p>
+                  <span className="btn btn-yellow btn-sm" style={{ alignSelf: "flex-start", marginTop: 6 }}>Jugar ahora</span>
+                </div>
+              </Link>
+            )}
+            <Link href="/herramientas" className="card card-link free-card">
+              <span className="icon-dot" style={{ background: "var(--yellow)", width: 64, height: 64, fontSize: "2rem" }}>🧰</span>
+              <div className="stack" style={{ gap: 6, minWidth: 0 }}>
+                <span className="badge badge-green" style={{ alignSelf: "flex-start" }}>Contenido gratuito</span>
+                <h3 style={{ margin: 0 }}>Caja de herramientas</h3>
+                <p className="muted small" style={{ margin: 0 }}>
+                  Videos, podcasts, guías, apps y equipos que revisamos y recomendamos por etapa.
+                  {freeTools > 0 ? ` ${freeTools === 1 ? "Una herramienta es" : `${freeTools} herramientas son`} de libre acceso.` : " Las de libre acceso las usas sin cuenta."}
+                </p>
+                <span className="btn btn-sm" style={{ alignSelf: "flex-start", marginTop: 6 }}>Explorar herramientas</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className="section">
         <div className="container">

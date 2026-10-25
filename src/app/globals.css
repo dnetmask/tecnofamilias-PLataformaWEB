@@ -367,3 +367,16 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .fav-btn { background: none; border: 0; padding: 2px 4px; font-size: 1.5rem; line-height: 1; color: var(--subtle); cursor: pointer; }
 .fav-btn:hover { color: var(--yellow-dark); text-decoration: none; }
 .fav-btn.on { color: var(--yellow); }
+
+/* ---------- Inicio: empieza gratis ---------- */
+.free-start { background: #fff; }
+.free-grid { max-width: 880px; margin: 0 auto; }
+.free-card { display: flex; gap: 18px; align-items: flex-start; }
+.free-desc { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.free-card .icon-dot { flex: none; }
+@media (max-width: 520px) { .free-card { flex-direction: column; } }
+
+/* ---------- Crear cuenta: planes ---------- */
+.auth-plans { border-radius: var(--radius); background: var(--tint); padding: 14px 16px; margin: 4px 0 18px; }
+.auth-plans .auth-plan { display: flex; flex-direction: column; gap: 6px; }
+.auth-plans .price { font-size: 1.6rem; }
