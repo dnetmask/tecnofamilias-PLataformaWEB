@@ -396,3 +396,9 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .faq summary { font-weight: 800; cursor: pointer; color: var(--navy); font-size: 1.05rem; }
 .faq details p { margin: 8px 0 0; color: var(--muted); }
 
+
+/* Tarjetas de servicios: título y "Ver detalles" llevan a la ficha; el botón abre WhatsApp. */
+.service-card .service-title { color: inherit; text-decoration: none; }
+.service-card .service-title:hover { text-decoration: underline; }
+.service-card .service-more { display: inline-block; margin-top: 8px; font-weight: 700; color: var(--blue-dark); }
+.service-dark .service-more { color: var(--yellow); }

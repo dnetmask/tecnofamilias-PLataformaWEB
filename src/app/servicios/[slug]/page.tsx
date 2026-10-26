@@ -8,9 +8,8 @@ import { formatCop } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 import { db } from "@/lib/db";
 import { AUDIENCES } from "@/lib/services";
-import { WHATSAPP_SERVICES, whatsappUrl } from "@/lib/whatsapp";
+import { serviceWhatsappUrl, WHATSAPP_SERVICES, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
-import { QuoteForm } from "../QuoteForm";
 import { NOINDEX, pageMeta, SITE_URL } from "@/lib/site";
 import { breadcrumbs, JsonLd } from "@/components/JsonLd";
 
@@ -67,14 +66,12 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           {service.details && <ServiceDetails text={service.details} />}
 
           {!service.priceUsd && (
-            <div className="card">
-              <h3>Solicitar cotización</h3>
-              <p className="muted small">Te enviaremos una propuesta ajustada a tu institución.</p>
-              <QuoteForm
-                serviceId={service.id}
-                institutional={service.audience !== "FAMILIAS"}
-                defaults={{ name: user?.name ?? "", email: user?.email ?? "" }}
-              />
+            <div className="card stack">
+              <h3 style={{ margin: 0 }}>Solicitar cotización</h3>
+              <p className="muted small" style={{ margin: 0 }}>Escríbenos por WhatsApp con el nombre de tu institución, la ciudad y el número aproximado de participantes, y te enviamos una propuesta ajustada.</p>
+              <a className="btn btn-wa" style={{ alignSelf: "flex-start" }} href={serviceWhatsappUrl(service)} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon size={20} /> Solicitar cotización por WhatsApp
+              </a>
             </div>
           )}
         </div>
@@ -105,11 +102,16 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
               </>
             )
           ) : (
-            <p className="small" style={{ margin: 0 }}>
-              {service.audience === "GOBIERNO"
-                ? "Acompañamos el proceso de contratación pública con la documentación técnica y de impacto."
-                : "Valor de referencia; la propuesta final depende del alcance."}
-            </p>
+            <>
+              <p className="small" style={{ margin: 0 }}>
+                {service.audience === "GOBIERNO"
+                  ? "Acompañamos el proceso de contratación pública con la documentación técnica y de impacto."
+                  : "Valor de referencia; la propuesta final depende del alcance."}
+              </p>
+              <a className="btn btn-wa" href={serviceWhatsappUrl(service)} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon size={20} /> Solicitar cotización
+              </a>
+            </>
           )}
         </aside>
       </div>

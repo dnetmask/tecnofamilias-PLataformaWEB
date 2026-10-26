@@ -3,7 +3,8 @@ import { db } from "@/lib/db";
 import { MASTERCLASS_DEFAULTS } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { AUDIENCE_ORDER, AUDIENCES } from "@/lib/services";
-import { WHATSAPP_SERVICES } from "@/lib/whatsapp";
+import { serviceWhatsappUrl, WHATSAPP_SERVICES } from "@/lib/whatsapp";
+import { WhatsAppIcon } from "./WhatsAppButton";
 
 /** Servicios adicionales agrupados por público (diapositivas 7 a 9 de la presentación). */
 export async function ServicesCatalog() {
@@ -28,21 +29,36 @@ export async function ServicesCatalog() {
               </div>
             </div>
             <div className="grid services-grid">
-              {items.map((s) => (
-                <Link key={s.id} href={`/servicios/${s.slug}`} className={`card card-link service-card${s.featured ? " service-dark" : ""}`}>
-                  <div style={{ minWidth: 0 }}>
-                    <h3>{s.name}</h3>
-                    <p className="small" style={{ margin: 0 }}>{s.description}</p>
+              {items.map((s) => {
+                // Las cotizaciones y la asesoría se atienden por WhatsApp; los servicios con compra en línea van a su ficha.
+                const viaWhatsapp = WHATSAPP_SERVICES.has(s.slug) || !s.priceUsd;
+                return (
+                  <div key={s.id} className={`card service-card${s.featured ? " service-dark" : ""}`}>
+                    <div style={{ minWidth: 0 }}>
+                      <h3><Link href={`/servicios/${s.slug}`} className="service-title">{s.name}</Link></h3>
+                      <p className="small" style={{ margin: 0 }}>{s.description}</p>
+                      <Link href={`/servicios/${s.slug}`} className="small service-more">Ver detalles →</Link>
+                    </div>
+                    <div className="service-price">
+                      <div className="price-label">{pricing.range(s.priceFromUsd, s.priceToUsd, s.priceCop)}</div>
+                      <div className="small">{s.unit}</div>
+                      {viaWhatsapp ? (
+                        <a
+                          href={serviceWhatsappUrl(s)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`btn btn-sm ${WHATSAPP_SERVICES.has(s.slug) ? "btn-wa" : s.featured ? "btn-yellow" : ""}`}
+                          style={{ marginTop: 10, gap: 6 }}
+                        >
+                          <WhatsAppIcon size={16} /> {WHATSAPP_SERVICES.has(s.slug) ? "Hablar por WhatsApp" : "Solicitar cotización"}
+                        </a>
+                      ) : (
+                        <Link href={`/servicios/${s.slug}`} className="btn btn-sm btn-red" style={{ marginTop: 10 }}>Comprar</Link>
+                      )}
+                    </div>
                   </div>
-                  <div className="service-price">
-                    <div className="price-label">{pricing.range(s.priceFromUsd, s.priceToUsd, s.priceCop)}</div>
-                    <div className="small">{s.unit}</div>
-                    <span className={`btn btn-sm ${WHATSAPP_SERVICES.has(s.slug) ? "btn-wa" : s.priceUsd ? "btn-red" : s.featured ? "btn-yellow" : ""}`} style={{ marginTop: 10 }}>
-                      {WHATSAPP_SERVICES.has(s.slug) ? "Hablar por WhatsApp" : s.priceUsd ? "Comprar" : "Solicitar cotización"}
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </section>
         );
