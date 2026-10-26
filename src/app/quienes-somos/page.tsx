@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { TEAM } from "@/lib/team";
 import { pageMeta, SITE_URL } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
+import { whatsappUrl } from "@/lib/whatsapp";
 
 export const metadata: Metadata = pageMeta(
   "/quienes-somos",
@@ -11,7 +12,7 @@ export const metadata: Metadata = pageMeta(
   "El equipo Tecnofamilias: especialistas en tecnología y ciberseguridad, y papás y mamás, que ayudan a las familias a proteger a sus hijos en el mundo digital.",
 );
 
-const WHATSAPP = "https://wa.me/573138743101";
+const WHATSAPP = whatsappUrl("Hola Tecnofamilias, quiero más información.");
 
 const VALUES = [
   { icon: "💬", color: "var(--blue)", title: "Lenguaje de papá y mamá", text: "Explicamos la tecnología sin tecnicismos, con ejemplos de la vida real de una familia." },

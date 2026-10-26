@@ -9,7 +9,7 @@ export default function TermsPage() {
         decretos reglamentarios.
       </p>
       <h3>Responsable del tratamiento</h3>
-      <p>Tecnofamilias · www.tecnofamilias.com · +57 313 874 3101.</p>
+      <p>Tecnofamilias · www.tecnofamilias.com · +57 300 674 0003.</p>
       <h3>Datos que recolectamos</h3>
       <p>
         Nombre, correo y contraseña cifrada para la cuenta; historial de compras; mensajes que publiques en la
