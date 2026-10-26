@@ -8,7 +8,10 @@ import { hashPassword, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { slugify } from "@/lib/format";
 import { extendSubscription, fulfillOrder } from "@/lib/payments";
+import { notifyIndexNow } from "@/lib/indexnow";
 import { PLATFORM_KEY } from "@/lib/launch";
+import { SITE_URL } from "@/lib/site";
+import sitemap from "@/app/sitemap";
 import { MASTERCLASS_KEY } from "@/lib/masterclass";
 import { RATES_KEY } from "@/lib/pricing";
 
@@ -244,6 +247,8 @@ export async function saveResourceAction(formData: FormData) {
     throw err;
   }
   revalidatePath("/herramientas");
+  // Las herramientas publicadas se avisan a Bing al instante (IndexNow).
+  if (resource.published) await notifyIndexNow([`${SITE_URL}/herramientas/${resource.slug}`, `${SITE_URL}/herramientas`]);
   done(`/admin/recursos/${resource.id}`, "Herramienta guardada");
 }
 
@@ -491,4 +496,15 @@ export async function saveMasterclassAction(formData: FormData) {
   });
   revalidatePath("/", "layout");
   done("/admin/masterclass", "Masterclass actualizada");
+}
+
+/* ---------- Buscadores ---------- */
+
+export async function notifySearchEnginesAction() {
+  await requireAdmin();
+  const urls = (await sitemap()).map((e) => e.url);
+  const r = await notifyIndexNow(urls);
+  if (r.status === null) fail("/admin", r.count ? "No se pudo contactar a IndexNow; intenta más tarde" : "El aviso a buscadores solo funciona en producción");
+  if (!r.ok) fail("/admin", `IndexNow respondió ${r.status}`);
+  done("/admin", `Bing recibió ${r.count} páginas para revisar`);
 }

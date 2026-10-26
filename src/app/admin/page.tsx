@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { formatCop } from "@/lib/format";
+import { SubmitButton } from "@/components/SubmitButton";
+import { notifySearchEnginesAction } from "./actions";
+import { Notice, type NoticeParams } from "./Notice";
 
-export default async function AdminHome() {
+export default async function AdminHome({ searchParams }: { searchParams: NoticeParams }) {
+  const { error, ok } = await searchParams;
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const [users, subs, lessons, pacts, threads, reports, revenue, monthRevenue, requests] = await Promise.all([
@@ -32,6 +36,14 @@ export default async function AdminHome() {
   return (
     <>
       <h1>Resumen</h1>
+      <Notice error={error} ok={ok} />
+      <form action={notifySearchEnginesAction} className="card row between">
+        <div>
+          <strong>Avisar a los buscadores</strong>
+          <p className="small muted" style={{ margin: 0 }}>Envía todas las páginas públicas a Bing con IndexNow. Las herramientas nuevas se avisan solas al guardarlas.</p>
+        </div>
+        <SubmitButton className="btn btn-sm">Avisar a Bing</SubmitButton>
+      </form>
       <div className="grid grid-4">
         {stats.map((s) => (
           <Link key={s.label} href={s.href} className="card card-link">
