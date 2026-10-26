@@ -8,6 +8,13 @@ const nextConfig = {
   async redirects() {
     // Videos y podcasts pasó a llamarse Caja de herramientas.
     return [
+      // Dominio principal: www.tecnofamilias.com redirige (301) a tecnofamilias.com.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.tecnofamilias.com" }],
+        destination: "https://tecnofamilias.com/:path*",
+        statusCode: 301,
+      },
       { source: "/recursos", destination: "/herramientas", permanent: true },
       // Otros servicios ahora vive dentro de Planes.
       { source: "/servicios", destination: "/planes#servicios", permanent: false },
