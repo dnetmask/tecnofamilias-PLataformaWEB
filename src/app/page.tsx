@@ -91,7 +91,7 @@ export default async function Home() {
             </p>
             <div className="row" style={{ marginTop: 24 }}>
               <Link href="/planes" className="btn btn-yellow">Ver planes</Link>
-              {freeGame && <Link href={`/juegos/${freeGame.slug}`} className="btn btn-light">🎮 Juega gratis</Link>}
+              <Link href="/juegos" className="btn btn-light">🎮 Juega gratis</Link>
             </div>
           </div>
         </div>
