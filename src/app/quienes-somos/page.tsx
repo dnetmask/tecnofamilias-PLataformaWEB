@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { TEAM } from "@/lib/team";
-import { pageMeta } from "@/lib/site";
+import { pageMeta, SITE_URL } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata: Metadata = pageMeta(
   "/quienes-somos",
@@ -29,6 +30,21 @@ export default async function AboutPage() {
   const user = await getCurrentUser();
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            { "@type": "AboutPage", url: `${SITE_URL}/quienes-somos`, name: "Quiénes somos", about: { "@id": `${SITE_URL}/#organization` }, inLanguage: "es" },
+            ...TEAM.map((t) => ({
+              "@type": "Person",
+              name: t.name,
+              description: t.bio,
+              image: `${SITE_URL}${t.img}`,
+              worksFor: { "@id": `${SITE_URL}/#organization` },
+            })),
+          ],
+        }}
+      />
       <section className="hero">
         <span className="bubble b1" />
         <span className="bubble b2" />

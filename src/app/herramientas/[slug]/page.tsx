@@ -10,6 +10,7 @@ import { resolvePodcastEmbed, resolveVideo } from "@/lib/video";
 import { FavoriteButton } from "../FavoriteButton";
 import { isPlatformOpen } from "@/lib/launch";
 import { pageMeta, SITE_URL } from "@/lib/site";
+import { breadcrumbs, JsonLd } from "@/components/JsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="container section">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={{ "@context": "https://schema.org", "@graph": [{ ...jsonLd, "@context": undefined }, breadcrumbs([["Inicio", SITE_URL], ["Caja de herramientas", `${SITE_URL}/herramientas`], [tool.title, `${SITE_URL}/herramientas/${tool.slug}`]])] }} />
       <p className="small"><Link href="/herramientas">← Caja de herramientas</Link></p>
       <div className="layout-aside">
         <div className="stack" style={{ minWidth: 0 }}>

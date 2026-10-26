@@ -390,3 +390,9 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
   transition: transform .15s ease; }
 .wa-float:hover { transform: scale(1.07); text-decoration: none; color: #fff; }
 @media (max-width: 860px) { .wa-float { right: 14px; bottom: 14px; width: 54px; height: 54px; } .wa-float.wa-raise { bottom: 88px; } }
+
+/* ---------- Preguntas frecuentes ---------- */
+.faq details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+.faq summary { font-weight: 800; cursor: pointer; color: var(--navy); font-size: 1.05rem; }
+.faq details p { margin: 8px 0 0; color: var(--muted); }
+

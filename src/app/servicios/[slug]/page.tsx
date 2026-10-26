@@ -11,7 +11,8 @@ import { AUDIENCES } from "@/lib/services";
 import { WHATSAPP_SERVICES, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import { QuoteForm } from "../QuoteForm";
-import { NOINDEX, pageMeta } from "@/lib/site";
+import { NOINDEX, pageMeta, SITE_URL } from "@/lib/site";
+import { breadcrumbs, JsonLd } from "@/components/JsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -30,8 +31,30 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   // Algunos servicios (p. ej. la asesoría) se atienden por ahora por WhatsApp en lugar de comprarse en línea.
   const viaWhatsapp = WHATSAPP_SERVICES.has(service.slug);
 
+  const serviceUrl = `${SITE_URL}/servicios/${service.slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        name: service.name,
+        description: service.description,
+        url: serviceUrl,
+        serviceType: "Seguridad digital y ciberseguridad para familias e instituciones",
+        provider: { "@id": `${SITE_URL}/#organization` },
+        areaServed: ["Latinoamérica", "España", "Estados Unidos"],
+        audience: { "@type": "Audience", audienceType: meta.label },
+        offers: service.priceUsd
+          ? { "@type": "Offer", price: service.priceUsd, priceCurrency: "USD", availability: "https://schema.org/InStock", url: serviceUrl }
+          : { "@type": "AggregateOffer", lowPrice: service.priceFromUsd, highPrice: service.priceToUsd, priceCurrency: "USD" },
+      },
+      breadcrumbs([["Inicio", SITE_URL], ["Planes", `${SITE_URL}/planes`], [service.name, serviceUrl]]),
+    ],
+  };
+
   return (
     <div className="container section">
+      <JsonLd data={jsonLd} />
       <p className="small"><Link href="/planes#servicios">← Planes</Link></p>
       <div className="layout-aside">
         <div className="stack" style={{ minWidth: 0 }}>

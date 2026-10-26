@@ -8,6 +8,9 @@ import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import "./globals.css";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ClickTracker } from "@/components/ClickTracker";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 
@@ -57,6 +60,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main>{children}</main>
         <Footer />
         <WhatsAppButton />
+        <ClickTracker />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

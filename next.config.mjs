@@ -16,6 +16,8 @@ const nextConfig = {
         statusCode: 301,
       },
       { source: "/recursos", destination: "/herramientas", permanent: true },
+      // El podcast "Bullying en redes sociales" tenía la dirección de la herramienta de ejemplo.
+      { source: "/herramientas/ejemplo-podcast-para-familias", destination: "/herramientas/bullying-en-redes-sociales-mi-mundo-mis-huellas", permanent: true },
       // Otros servicios ahora vive dentro de Planes.
       { source: "/servicios", destination: "/planes#servicios", permanent: false },
     ];

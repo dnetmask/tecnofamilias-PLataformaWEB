@@ -7,6 +7,7 @@ import { AGE_STAGES } from "@/lib/format";
 import { MasterclassPromo } from "@/components/MasterclassPromo";
 import { isPlatformOpen } from "@/lib/launch";
 import { SITE_URL } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
 
 export const dynamic = "force-dynamic";
 export const metadata = { alternates: { canonical: SITE_URL } };
@@ -52,6 +53,18 @@ const PILLARS = [
     text: "Un foro moderado para preguntar, compartir experiencias y apoyarse entre familias.",
   },
 ];
+
+// Preguntas frecuentes del inicio: visibles para las familias y marcadas como FAQPage para buscadores e IA.
+function homeFaq(platformOpen: boolean): [string, string][] {
+  return [
+    ["¿Qué es Tecnofamilias?", "Tecnofamilias es una iniciativa colombiana de especialistas en ciberseguridad y padres de familia que ayuda a las familias de habla hispana a proteger a sus hijos en internet: control parental, prevención de riesgos como el grooming y el ciberacoso, y acuerdos familiares sobre el uso de la tecnología."],
+    ["¿Qué puedo usar gratis?", "Sin crear cuenta puedes jugar Farmea aura, un juego para conversar en familia sobre la vida digital, y usar las herramientas de libre acceso de la Caja de herramientas: videos, podcasts y apps de control parental que el equipo revisó y recomienda."],
+    ["¿Cómo funciona la asesoría personalizada?", "Es un mes de acompañamiento uno a uno para tu hogar: dos sesiones virtuales con un experto, un informe con el diagnóstico de los dispositivos y hábitos de tu familia y soporte por WhatsApp. Escríbenos por WhatsApp y agendamos la primera sesión."],
+    ["¿Trabajan con colegios, empresas y entidades públicas?", "Sí. Tenemos charlas y programas anuales de seguridad digital para padres, docentes y estudiantes, programas de bienestar digital para empresas y programas sociales para alcaldías y gobernaciones."],
+    ["¿Atienden familias fuera de Colombia?", "Sí. Las asesorías y charlas son virtuales, así que acompañamos familias en cualquier país de habla hispana, incluido Estados Unidos. Los precios se muestran en dólares, pesos colombianos, pesos mexicanos y soles."],
+    ...(platformOpen ? [] : [["¿Cuándo abre la plataforma de suscripción?", "Muy pronto. Estamos preparando las clases por edad, los pactos digitales y la comunidad. Mientras tanto, el juego y las herramientas gratuitas ya están disponibles."] as [string, string]]),
+  ];
+}
 
 export default async function Home() {
   const user = await getCurrentUser();
@@ -166,6 +179,27 @@ export default async function Home() {
                 <p style={{ margin: 0, fontWeight: 700, color: "var(--navy)" }}>Las clases de cada etapa llegan muy pronto con la suscripción.</p>
               </>
             )}
+          </div>
+        </div>
+      </section>
+
+      <section className="section faq-home">
+        <div className="container" style={{ maxWidth: 820 }}>
+          <JsonLd
+            data={{
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: homeFaq(open).map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+            }}
+          />
+          <h2 className="center">Preguntas frecuentes</h2>
+          <div className="faq">
+            {homeFaq(open).map(([q, a]) => (
+              <details key={q}>
+                <summary>{q}</summary>
+                <p>{a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
