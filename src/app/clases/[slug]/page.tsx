@@ -8,12 +8,13 @@ import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { ACCESS_LABELS, stageLabel } from "@/lib/format";
 import { formatCop } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
+import { NOINDEX } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const lesson = await db.lesson.findUnique({ where: { slug: (await params).slug }, select: { title: true } });
-  return { title: lesson?.title ?? "Clase" };
+  return { title: lesson?.title ?? "Clase", ...NOINDEX };
 }
 
 export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {

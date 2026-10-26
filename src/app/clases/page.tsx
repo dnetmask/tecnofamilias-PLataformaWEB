@@ -6,9 +6,10 @@ import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ACCESS_LABELS, AGE_STAGES, stageShort } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
+import { NOINDEX } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Clases" };
+export const metadata = { title: "Clases", ...NOINDEX };
 
 export default async function LessonsPage({ searchParams }: { searchParams: Promise<{ etapa?: string; tipo?: string }> }) {
   const { etapa, tipo } = await searchParams;

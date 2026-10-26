@@ -12,9 +12,10 @@ import { paymentsMode } from "@/lib/payments";
 import { canUseTool } from "@/lib/tools";
 import { createOrderAction } from "./actions";
 import { WHATSAPP_SERVICES } from "@/lib/whatsapp";
+import { NOINDEX } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Pago" };
+export const metadata = { title: "Pago", ...NOINDEX };
 
 export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ plan?: string; clase?: string; servicio?: string; herramienta?: string }> }) {
   const { plan: planSlug, clase, servicio, herramienta } = await searchParams;

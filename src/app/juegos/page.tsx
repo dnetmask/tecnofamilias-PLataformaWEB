@@ -3,9 +3,10 @@ import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { isPlatformOpen } from "@/lib/launch";
+import { pageMeta } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Juegos en familia" };
+export const metadata = pageMeta("/juegos", "Juegos en familia sobre seguridad digital", "Juegos para conversar en familia de pantallas, redes sociales y cuidado en internet. Prueba gratis Farmea aura, un duelo de risas entre generaciones.");
 
 export default async function GamesPage() {
   const user = await getCurrentUser();

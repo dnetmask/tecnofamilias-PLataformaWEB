@@ -3,8 +3,9 @@ import { getCurrentUser } from "@/lib/auth";
 import { isPlatformOpen, isServiceCheckout } from "@/lib/launch";
 import { safeNext } from "@/lib/url";
 import { LoginForm } from "../AuthForms";
+import { NOINDEX } from "@/lib/site";
 
-export const metadata = { title: "Ingresar" };
+export const metadata = { title: "Ingresar", ...NOINDEX };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams;

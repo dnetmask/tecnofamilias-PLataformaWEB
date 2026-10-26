@@ -6,8 +6,10 @@ import { MemberHome } from "./MemberHome";
 import { AGE_STAGES } from "@/lib/format";
 import { MasterclassPromo } from "@/components/MasterclassPromo";
 import { isPlatformOpen } from "@/lib/launch";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
+export const metadata = { alternates: { canonical: SITE_URL } };
 
 // `auth`: para visitantes sin sesión el enlace lleva a Planes.
 const PILLARS = [

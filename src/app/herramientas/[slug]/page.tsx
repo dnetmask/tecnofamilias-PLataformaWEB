@@ -9,12 +9,16 @@ import { canUseTool, TOOL_ACCESS, TOOL_KINDS, usesLabel } from "@/lib/tools";
 import { resolvePodcastEmbed, resolveVideo } from "@/lib/video";
 import { FavoriteButton } from "../FavoriteButton";
 import { isPlatformOpen } from "@/lib/launch";
+import { pageMeta, SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const t = await db.resource.findUnique({ where: { slug: (await params).slug }, select: { title: true } });
-  return { title: t?.title ?? "Herramienta" };
+  const t = await db.resource.findUnique({ where: { slug: (await params).slug }, select: { slug: true, title: true, description: true, kind: true, author: true, imageUrl: true } });
+  if (!t) return { title: "Herramienta" };
+  const description = `${TOOL_KINDS[t.kind].label}${t.author ? ` de ${t.author}` : ""} recomendado por Tecnofamilias. ${t.description}`.slice(0, 160);
+  const meta = pageMeta(`/herramientas/${t.slug}`, t.title, description);
+  return { ...meta, openGraph: { ...meta.openGraph, ...(t.imageUrl ? { images: [t.imageUrl] } : {}) } };
 }
 
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -41,8 +45,24 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const hasPrice = tool.priceUsd > 0 || !!tool.priceCop;
   const checkout = `/checkout?herramienta=${tool.slug}`;
 
+  const SCHEMA_TYPE = { VIDEO: "VideoObject", PODCAST: "PodcastEpisode", BOOK: "Book", EBOOK: "Book", DOCUMENT: "DigitalDocument", SOFTWARE: "SoftwareApplication", HARDWARE: "Product" } as const;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": SCHEMA_TYPE[tool.kind],
+    name: tool.title,
+    description: tool.description,
+    url: `${SITE_URL}/herramientas/${tool.slug}`,
+    sameAs: tool.url,
+    inLanguage: "es",
+    ...(tool.author ? { author: { "@type": "Organization", name: tool.author } } : {}),
+    ...(tool.imageUrl ? { image: tool.imageUrl } : {}),
+    ...(tool.kind === "VIDEO" ? { uploadDate: tool.createdAt.toISOString(), thumbnailUrl: tool.imageUrl || `${SITE_URL}/opengraph-image` } : {}),
+    isAccessibleForFree: tool.access === "FREE" || tool.access === "EXTERNAL",
+  };
+
   return (
     <div className="container section">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <p className="small"><Link href="/herramientas">← Caja de herramientas</Link></p>
       <div className="layout-aside">
         <div className="stack" style={{ minWidth: 0 }}>

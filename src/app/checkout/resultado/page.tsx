@@ -5,9 +5,10 @@ import { db } from "@/lib/db";
 import { formatCop } from "@/lib/format";
 import { MASTERCLASS_DEFAULTS } from "@/lib/masterclass";
 import { failOrder, fetchMpPayment, fulfillOrder, paymentsMode } from "@/lib/payments";
+import { NOINDEX } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Resultado del pago" };
+export const metadata = { title: "Resultado del pago", ...NOINDEX };
 
 export default async function ResultPage({
   searchParams,

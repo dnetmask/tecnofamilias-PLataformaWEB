@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { TEAM } from "@/lib/team";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Quiénes somos",
-  description: "El equipo Tecnofamilias: especialistas en tecnología y ciberseguridad, y papás y mamás, que ayudan a las familias a proteger a sus hijos en el mundo digital.",
-};
+export const metadata: Metadata = pageMeta(
+  "/quienes-somos",
+  "Quiénes somos: especialistas en ciberseguridad y padres de familia",
+  "El equipo Tecnofamilias: especialistas en tecnología y ciberseguridad, y papás y mamás, que ayudan a las familias a proteger a sus hijos en el mundo digital.",
+);
 
 const WHATSAPP = "https://wa.me/573138743101";
 

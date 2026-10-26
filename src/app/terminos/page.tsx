@@ -1,4 +1,4 @@
-export const metadata = { title: "Términos y tratamiento de datos" };
+export const metadata = { title: "Términos y tratamiento de datos", alternates: { canonical: "/terminos" } };
 
 export default function TermsPage() {
   return (

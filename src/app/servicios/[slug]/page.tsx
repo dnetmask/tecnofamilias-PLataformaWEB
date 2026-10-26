@@ -11,12 +11,15 @@ import { AUDIENCES } from "@/lib/services";
 import { WHATSAPP_SERVICES, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import { QuoteForm } from "../QuoteForm";
+import { NOINDEX, pageMeta } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const s = await db.service.findUnique({ where: { slug: (await params).slug }, select: { name: true } });
-  return { title: s?.name ?? "Servicio" };
+  const s = await db.service.findUnique({ where: { slug: (await params).slug }, select: { slug: true, name: true, description: true } });
+  if (!s) return { title: "Servicio" };
+  if (s.slug.startsWith("masterclass-crianza")) return { title: s.name, ...NOINDEX };
+  return pageMeta(`/servicios/${s.slug}`, s.name, s.description.slice(0, 160));
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {

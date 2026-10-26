@@ -11,6 +11,8 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Masterclass Crianza digital segura",
+  // Aún no se lanza: fuera de los buscadores hasta definir la fecha.
+  robots: { index: false, follow: false },
   description:
     "Masterclass en vivo para familias con hijos de 3 a 17 años: riesgos reales por edad y configuración paso a paso de Roblox, Instagram, YouTube, WhatsApp y los celulares de tus hijos.",
 };

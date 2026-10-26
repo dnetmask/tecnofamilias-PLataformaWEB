@@ -8,8 +8,9 @@ import { isPlatformOpen, isServiceCheckout } from "@/lib/launch";
 import { getPricing } from "@/lib/pricing";
 import { safeNext } from "@/lib/url";
 import { RegisterForm } from "../AuthForms";
+import { NOINDEX } from "@/lib/site";
 
-export const metadata = { title: "Crear cuenta" };
+export const metadata = { title: "Crear cuenta", ...NOINDEX };
 
 export default async function RegisterPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams;

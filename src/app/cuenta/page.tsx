@@ -5,9 +5,10 @@ import { db } from "@/lib/db";
 import { formatCop, formatDate, formatDateTime } from "@/lib/format";
 import { REQUEST_STATUS } from "@/lib/services";
 import { PasswordForm, ProfileForm } from "./Forms";
+import { NOINDEX } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Mi cuenta" };
+export const metadata = { title: "Mi cuenta", ...NOINDEX };
 
 const ORDER_STATUS = {
   PENDING: ["Pendiente", "badge-yellow"],

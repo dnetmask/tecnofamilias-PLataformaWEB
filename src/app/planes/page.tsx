@@ -5,9 +5,10 @@ import { CurrencyNote } from "@/components/CurrencyNote";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { getPricing } from "@/lib/pricing";
 import { db } from "@/lib/db";
+import { pageMeta } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Planes" };
+export const metadata = pageMeta("/planes", "Asesoría y programas de seguridad digital para familias, colegios y empresas", "Asesoría personalizada en ciberseguridad para el hogar y programas de seguridad digital para colegios, empresas, alcaldías y gobernaciones.");
 
 export default async function PlansPage({ searchParams }: { searchParams: Promise<{ requiere?: string }> }) {
   const { requiere } = await searchParams;

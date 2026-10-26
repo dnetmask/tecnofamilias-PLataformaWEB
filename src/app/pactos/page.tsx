@@ -4,9 +4,10 @@ import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/format";
+import { NOINDEX } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Pactos digitales" };
+export const metadata = { title: "Pactos digitales", ...NOINDEX };
 
 const STATUS = {
   DRAFT: { label: "Borrador", cls: "badge-gray" },

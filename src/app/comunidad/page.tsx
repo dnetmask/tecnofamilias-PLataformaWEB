@@ -3,9 +3,10 @@ import { Avatar } from "@/components/Avatar";
 import { requireSubscriber } from "@/lib/access";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/format";
+import { NOINDEX } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Comunidad" };
+export const metadata = { title: "Comunidad", ...NOINDEX };
 
 export default async function CommunityPage() {
   await requireSubscriber("/comunidad");

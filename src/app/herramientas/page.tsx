@@ -8,9 +8,10 @@ import { getPricing } from "@/lib/pricing";
 import { TOOL_KIND_ORDER, TOOL_KINDS } from "@/lib/tools";
 import { ToolCard } from "./ToolCard";
 import { isPlatformOpen } from "@/lib/launch";
+import { pageMeta } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Caja de herramientas" };
+export const metadata = pageMeta("/herramientas", "Caja de herramientas: control parental, videos y guías de seguridad digital", "Apps de control parental, videos, podcasts, libros y guías que el equipo Tecnofamilias revisó y recomienda para proteger a tus hijos en internet, organizados por edad.");
 
 export default async function ToolsPage({ searchParams }: { searchParams: Promise<{ tipo?: string; etapa?: string; favoritos?: string }> }) {
   const { tipo, etapa, favoritos } = await searchParams;
