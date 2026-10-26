@@ -73,7 +73,7 @@ export default async function Home() {
           <div className="hero-inner">
             <h1>Protege a tu familia en el mundo digital</h1>
             <p>
-              Aprende a poner reglas sin pelear, configura los dispositivos de tus hijos y conoce qué hacer si alguien
+              Aprende a poner reglas sin pelear, configura los dispositivos de tus hijos y ten claro qué hacer si alguien
               los contacta. Todo en una sola plataforma.
             </p>
             <div className="row" style={{ marginTop: 24 }}>
