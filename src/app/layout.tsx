@@ -56,6 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="es" className={nunito.variable}>
       <body>
+        <GoogleTag />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }} />
         <Header user={user ? { name: user.name, role: user.role, member } : null} platformOpen={open} />
         <main>{children}</main>
@@ -64,7 +65,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ClickTracker />
         <Analytics />
         <SpeedInsights />
-        <GoogleTag />
       </body>
     </html>
   );
