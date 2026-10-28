@@ -3,7 +3,7 @@ import { hasMemberAccess } from "@/lib/access";
 import type { CurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { stageShort } from "@/lib/format";
-import { TOOL_KINDS } from "@/lib/tools";
+import { TOOL_KINDS, availableToolWhere } from "@/lib/tools";
 import { MasterclassPromo } from "@/components/MasterclassPromo";
 import { isPlatformOpen } from "@/lib/launch";
 
@@ -50,7 +50,7 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
           select: { id: true, title: true, category: { select: { name: true } }, _count: { select: { posts: { where: { hidden: false } } } } },
         })
       : [],
-    db.resource.findMany({ where: { published: true }, orderBy: [{ uses: "desc" }, { order: "asc" }, { createdAt: "desc" }], take: 3, select: { id: true, slug: true, title: true, kind: true, author: true } }),
+    db.resource.findMany({ where: availableToolWhere(), orderBy: [{ uses: "desc" }, { order: "asc" }, { createdAt: "desc" }], take: 3, select: { id: true, slug: true, title: true, kind: true, author: true } }),
   ]);
   const lock = (href: string) => (member ? href : "/planes");
 

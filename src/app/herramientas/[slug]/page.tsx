@@ -5,18 +5,19 @@ import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatCop, stageLabel } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
-import { canUseTool, TOOL_ACCESS, TOOL_KINDS, usesLabel } from "@/lib/tools";
+import { canUseTool, formatFileSize, formatUntil, isToolExpired, TOOL_ACCESS, TOOL_KINDS, usesLabel } from "@/lib/tools";
 import { resolvePodcastEmbed, resolveVideo } from "@/lib/video";
 import { FavoriteButton } from "../FavoriteButton";
 import { isPlatformOpen } from "@/lib/launch";
-import { pageMeta, SITE_URL } from "@/lib/site";
+import { NOINDEX, pageMeta, SITE_URL } from "@/lib/site";
 import { breadcrumbs, JsonLd } from "@/components/JsonLd";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const t = await db.resource.findUnique({ where: { slug: (await params).slug }, select: { slug: true, title: true, description: true, kind: true, author: true, imageUrl: true } });
+  const t = await db.resource.findUnique({ where: { slug: (await params).slug }, select: { slug: true, title: true, description: true, kind: true, author: true, imageUrl: true, availableUntil: true } });
   if (!t) return { title: "Herramienta" };
+  if (isToolExpired(t)) return { title: t.title, ...NOINDEX };
   const description = `${TOOL_KINDS[t.kind].label}${t.author ? ` de ${t.author}` : ""} recomendado por Tecnofamilias. ${t.description}`.slice(0, 160);
   const meta = pageMeta(`/herramientas/${t.slug}`, t.title, description);
   return { ...meta, openGraph: { ...meta.openGraph, ...(t.imageUrl ? { images: [t.imageUrl] } : {}) } };
@@ -26,6 +27,19 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const [tool, user, pricing, platformOpen] = await Promise.all([db.resource.findUnique({ where: { slug } }), getCurrentUser(), getPricing(), isPlatformOpen()]);
   if (!tool || (!tool.published && user?.role !== "ADMIN")) notFound();
+  if (isToolExpired(tool) && user?.role !== "ADMIN") {
+    return (
+      <div className="container section" style={{ maxWidth: 640 }}>
+        <p className="small"><Link href="/herramientas">← Caja de herramientas</Link></p>
+        <div className="card stack center">
+          <div style={{ fontSize: "2.5rem" }}>⏳</div>
+          <h1 style={{ fontSize: "1.6rem", margin: 0 }}>{tool.title}</h1>
+          <p className="muted" style={{ margin: 0 }}>Esta herramienta estuvo disponible hasta el {formatUntil(tool.availableUntil!)} y ya no se puede abrir.</p>
+          <Link className="btn" href="/herramientas">Ver otras herramientas</Link>
+        </div>
+      </div>
+    );
+  }
 
   const [viewer, favorite] = await Promise.all([
     getToolViewer(user),
@@ -53,7 +67,8 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
     name: tool.title,
     description: tool.description,
     url: `${SITE_URL}/herramientas/${tool.slug}`,
-    sameAs: tool.url,
+    ...(tool.url ? { sameAs: tool.url } : {}),
+    ...(tool.fileUrl ? { encodingFormat: "application/pdf" } : {}),
     inLanguage: "es",
     ...(tool.author ? { author: { "@type": "Organization", name: tool.author } } : {}),
     ...(tool.imageUrl ? { image: tool.imageUrl } : {}),
@@ -93,6 +108,11 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             </div>
           )}
           {tool.uses > 0 && <p className="small muted" style={{ margin: 0 }}>👥 {usesLabel(tool.uses)}</p>}
+          {tool.availableUntil && (
+            <p className="small" style={{ margin: 0, color: isToolExpired(tool) ? "var(--red)" : "var(--yellow-dark)", fontWeight: 700 }}>
+              ⏳ {isToolExpired(tool) ? `Vencida el ${formatUntil(tool.availableUntil)} (solo la ven los administradores)` : `Disponible hasta el ${formatUntil(tool.availableUntil)}`}
+            </p>
+          )}
         </div>
 
         <aside className="card stack">
@@ -110,7 +130,14 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           ) : usable ? (
             <>
               {tool.access === "PAID" && !viewer.admin && <div className="badge badge-green" style={{ alignSelf: "flex-start" }}>✓ Ya es tuya</div>}
-              {!embedded && <a className="btn" href={open} target="_blank" rel="noopener noreferrer">{kind.open} ↗</a>}
+              {tool.fileUrl ? (
+                <>
+                  <a className="btn" href={open} target="_blank" rel="noopener noreferrer">Abrir PDF ↗</a>
+                  <a className="btn btn-ghost" href={`${open}?descargar=1`}>Descargar PDF{tool.fileSize ? ` · ${formatFileSize(tool.fileSize)}` : ""}</a>
+                </>
+              ) : (
+                !embedded && <a className="btn" href={open} target="_blank" rel="noopener noreferrer">{kind.open} ↗</a>
+              )}
               {embedded && <p className="small muted" style={{ margin: 0 }}>Disfrútala aquí mismo o <a href={open} target="_blank" rel="noopener noreferrer">ábrela en una pestaña nueva ↗</a>.</p>}
             </>
           ) : tool.access === "PAID" ? (

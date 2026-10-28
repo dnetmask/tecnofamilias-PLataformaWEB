@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { stageShort } from "@/lib/format";
-import { TOOL_ACCESS, TOOL_KINDS } from "@/lib/tools";
+import { formatUntil, isToolExpired, TOOL_ACCESS, TOOL_KINDS } from "@/lib/tools";
 import { Notice, type NoticeParams } from "../Notice";
 
 export default async function AdminResourcesPage({ searchParams }: { searchParams: NoticeParams }) {
@@ -32,7 +32,13 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
                 <td>{r.uses}</td>
                 <td>{r._count.favorites}</td>
                 <td>{r.access === "PAID" ? r._count.purchases : "—"}</td>
-                <td>{r.published ? <span className="badge badge-green">Publicado</span> : <span className="badge badge-gray">Oculto</span>}</td>
+                <td>
+                  {!r.published ? <span className="badge badge-gray">Oculto</span>
+                    : isToolExpired(r) ? <span className="badge badge-gray">Vencida</span>
+                    : <span className="badge badge-green">Publicado</span>}
+                  {r.availableUntil && <div className="small muted">hasta {formatUntil(r.availableUntil)}</div>}
+                  {r.fileUrl && <div className="small muted">📄 PDF</div>}
+                </td>
               </tr>
             ))}
           </tbody>

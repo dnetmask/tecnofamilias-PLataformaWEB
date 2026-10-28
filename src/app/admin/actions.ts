@@ -7,6 +7,7 @@ import { z } from "zod";
 import { hashPassword, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { deleteUserAccount } from "@/lib/account";
+import { deleteToolFile } from "@/lib/blob";
 import { slugify } from "@/lib/format";
 import { extendSubscription, fulfillOrder } from "@/lib/payments";
 import { notifyIndexNow } from "@/lib/indexnow";
@@ -223,7 +224,16 @@ const resourceSchema = z
     title: z.string().trim().min(2).max(160),
     author: z.string().trim().max(120).default(""),
     description: z.string().trim().max(2000).default(""),
-    url: z.string().trim().url("URL no válida").startsWith("https://", "Debe usar https"),
+    url: optionalUrl.default(""),
+    // PDF subido desde el navegador a Vercel Blob (ver /api/admin/upload).
+    fileUrl: z.union([z.literal(""), z.string().trim().url().regex(/^https:\/\/[a-z0-9-]+\.private\.blob\.vercel-storage\.com\//i, "archivo no válido")]).default(""),
+    fileName: z.string().trim().max(200).default(""),
+    fileSize: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(0).nullable()),
+    // Último día disponible (AAAA-MM-DD): vale hasta las 23:59 de Colombia.
+    availableUntil: z.preprocess(
+      (v) => (v === "" || v == null ? null : new Date(`${v}T23:59:59-05:00`)),
+      z.date({ invalid_type_error: "fecha no válida" }).nullable(),
+    ),
     imageUrl: optionalUrl.default(""),
     priceUsd: z.coerce.number().int().min(0).max(100000).default(0),
     priceCop: z.preprocess((v) => (v === "" || v == null ? null : v), z.coerce.number().int().min(0).max(100000000).nullable()),
@@ -231,13 +241,17 @@ const resourceSchema = z
     order: z.coerce.number().int().default(0),
     published: checkbox,
   })
-  .refine((d) => d.access !== "PAID" || d.priceUsd > 0, { path: ["priceUsd"], message: "una herramienta paga necesita precio en dólares" });
+  .refine((d) => d.access !== "PAID" || d.priceUsd > 0, { path: ["priceUsd"], message: "una herramienta paga necesita precio en dólares" })
+  .refine((d) => d.url || d.fileUrl, { path: ["url"], message: "pon un enlace o sube un PDF" })
+  .refine((d) => d.access !== "EXTERNAL" || d.url, { path: ["url"], message: "las que se compran por fuera necesitan el enlace de la tienda" });
 
 export async function saveResourceAction(formData: FormData) {
   await requireAdmin();
   const path = `/admin/recursos/${formData.get("id") || "nuevo"}`;
   const { id, slug: rawSlug, ...data } = parse(resourceSchema, formData, path);
   const slug = slugify(rawSlug || data.title) || "herramienta";
+  if (!data.fileUrl) Object.assign(data, { fileName: "", fileSize: null });
+  const previous = id ? await db.resource.findUnique({ where: { id }, select: { fileUrl: true } }) : null;
   let resource;
   try {
     resource = id
@@ -247,6 +261,8 @@ export async function saveResourceAction(formData: FormData) {
     if (isUniqueError(err)) fail(path, "Ya existe una herramienta con esa dirección (slug); cámbiala");
     throw err;
   }
+  // Si se reemplazó o quitó el PDF, se borra el anterior del almacén.
+  if (previous?.fileUrl && previous.fileUrl !== resource.fileUrl) await deleteToolFile(previous.fileUrl);
   revalidatePath("/herramientas");
   // Las herramientas publicadas se avisan a Bing al instante (IndexNow).
   if (resource.published) await notifyIndexNow([`${SITE_URL}/herramientas/${resource.slug}`, `${SITE_URL}/herramientas`]);
@@ -255,7 +271,8 @@ export async function saveResourceAction(formData: FormData) {
 
 export async function deleteResourceAction(formData: FormData) {
   await requireAdmin();
-  await db.resource.delete({ where: { id: String(formData.get("id")) } });
+  const resource = await db.resource.delete({ where: { id: String(formData.get("id")) } });
+  if (resource.fileUrl) await deleteToolFile(resource.fileUrl);
   done("/admin/recursos", "Herramienta eliminada");
 }
 

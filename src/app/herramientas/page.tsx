@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { AGE_STAGES } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
-import { TOOL_KIND_ORDER, TOOL_KINDS } from "@/lib/tools";
+import { TOOL_KIND_ORDER, TOOL_KINDS, availableToolWhere } from "@/lib/tools";
 import { ToolCard } from "./ToolCard";
 import { isPlatformOpen } from "@/lib/launch";
 import { pageMeta } from "@/lib/site";
@@ -22,7 +22,7 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
   const open = await isPlatformOpen();
   const onlyFavorites = favoritos === "1" && !!user;
 
-  const where: Prisma.ResourceWhereInput = { published: true };
+  const where: Prisma.ResourceWhereInput = availableToolWhere();
   if (kind) where.kind = kind;
   if (stage) where.ageStage = { in: [stage, "ALL"] };
   if (onlyFavorites) where.favorites = { some: { userId: user.id } };
@@ -30,7 +30,7 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
 
   const [tools, top, viewer, favorites, pricing] = await Promise.all([
     db.resource.findMany({ where, orderBy: [{ order: "asc" }, { createdAt: "desc" }] }),
-    filtered ? [] : db.resource.findMany({ where: { published: true, uses: { gt: 0 } }, orderBy: [{ uses: "desc" }, { order: "asc" }], take: 4 }),
+    filtered ? [] : db.resource.findMany({ where: { ...availableToolWhere(), uses: { gt: 0 } }, orderBy: [{ uses: "desc" }, { order: "asc" }], take: 4 }),
     getToolViewer(user),
     user ? db.resourceFavorite.findMany({ where: { userId: user.id }, select: { resourceId: true } }) : [],
     getPricing(),

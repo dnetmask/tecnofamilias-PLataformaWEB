@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { availableToolWhere } from "@/lib/tools";
 import { db } from "@/lib/db";
 import { SITE_URL } from "@/lib/site";
 
@@ -6,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [tools, games, services] = await Promise.all([
-    db.resource.findMany({ where: { published: true }, select: { slug: true, createdAt: true } }),
+    db.resource.findMany({ where: availableToolWhere(), select: { slug: true, createdAt: true } }),
     db.game.findMany({ where: { published: true, free: true }, select: { slug: true, updatedAt: true } }),
     db.service.findMany({ where: { active: true }, select: { slug: true, createdAt: true } }),
   ]);

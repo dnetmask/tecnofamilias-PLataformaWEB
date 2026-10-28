@@ -2,7 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
 import { db } from "@/lib/db";
-import { TOOL_ACCESS, TOOL_KIND_ORDER, TOOL_KINDS } from "@/lib/tools";
+import { formatUntil, isToolExpired, TOOL_ACCESS, TOOL_KIND_ORDER, TOOL_KINDS } from "@/lib/tools";
+import { FileField } from "../FileField";
+
+/** AAAA-MM-DD de la fecha en hora de Colombia, para el campo de fecha. */
+function bogotaDate(d: Date) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota" }).format(d);
+}
 import { deleteResourceAction, saveResourceAction } from "../../actions";
 import { Notice, type NoticeParams } from "../../Notice";
 import { StageSelect } from "../../StageSelect";
@@ -22,6 +28,7 @@ export default async function AdminResourcePage({ params, searchParams }: { para
           Página: <Link href={`/herramientas/${r.slug}`}>/herramientas/{r.slug}</Link>
           {r.access === "PAID" && <> · Pago: <Link href={`/checkout?herramienta=${r.slug}`}>/checkout?herramienta={r.slug}</Link></>}
           {" · "}👥 {r.uses} usos
+          {r.availableUntil && <>{" · "}{isToolExpired(r) ? <span className="badge badge-gray">Vencida el {formatUntil(r.availableUntil)}</span> : <>Disponible hasta el {formatUntil(r.availableUntil)}</>}</>}
         </p>
       )}
       <Notice error={error} ok={ok} />
@@ -54,10 +61,11 @@ export default async function AdminResourcePage({ params, searchParams }: { para
           <strong>Se compra por fuera:</strong> el enlace lleva a la tienda del vendedor.
         </div>
         <div className="field">
-          <label>URL</label>
-          <input className="input" name="url" defaultValue={r?.url} required placeholder="https://… (video, episodio, archivo, tienda o sitio del producto)" />
-          <span className="hint">YouTube, Vimeo y Spotify se muestran embebidos. En las pagas, es el enlace que recibe quien compra (p. ej. el archivo del ebook). En las externas, la tienda.</span>
+          <label>Enlace</label>
+          <input className="input" name="url" defaultValue={r?.url} placeholder="https://… (video, episodio, tienda o sitio del producto)" />
+          <span className="hint">YouTube, Vimeo y Spotify se muestran embebidos. En las externas, la tienda. Obligatorio si no subes un PDF.</span>
         </div>
+        <FileField initial={{ url: r?.fileUrl ?? "", name: r?.fileName ?? "", size: r?.fileSize ?? null }} />
         <div className="field">
           <label>Imagen (opcional)</label>
           <input className="input" name="imageUrl" defaultValue={r?.imageUrl} placeholder="https://… portada del libro o foto del producto" />
@@ -75,7 +83,14 @@ export default async function AdminResourcePage({ params, searchParams }: { para
           </div>
         </div>
         <div className="field"><label>¿Por qué la recomendamos?</label><textarea className="textarea" name="description" defaultValue={r?.description} rows={4} /></div>
-        <div className="field" style={{ maxWidth: 160 }}><label>Orden</label><input className="input" name="order" type="number" defaultValue={r?.order ?? 0} /></div>
+        <div className="grid grid-2" style={{ gap: 14 }}>
+          <div className="field">
+            <label>Disponible hasta (opcional)</label>
+            <input className="input" name="availableUntil" type="date" defaultValue={r?.availableUntil ? bogotaDate(r.availableUntil) : ""} />
+            <span className="hint">Último día en que se muestra y se puede abrir (hasta las 11:59 p. m. de Colombia). Vacío = sin fecha límite.</span>
+          </div>
+          <div className="field"><label>Orden</label><input className="input" name="order" type="number" defaultValue={r?.order ?? 0} /></div>
+        </div>
         <label className="check"><input type="checkbox" name="published" defaultChecked={r?.published ?? true} /> Publicada</label>
         <div><SubmitButton>Guardar</SubmitButton></div>
       </form>

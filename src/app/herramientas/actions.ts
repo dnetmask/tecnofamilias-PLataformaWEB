@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { availableToolWhere } from "@/lib/tools";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -15,7 +16,7 @@ export async function toggleFavoriteAction(formData: FormData) {
   const existing = await db.resourceFavorite.findUnique({ where: key });
   if (existing) {
     await db.resourceFavorite.delete({ where: key });
-  } else if (await db.resource.findFirst({ where: { id: resourceId, published: true }, select: { id: true } })) {
+  } else if (await db.resource.findFirst({ where: { id: resourceId, ...availableToolWhere() }, select: { id: true } })) {
     await db.resourceFavorite.create({ data: { userId: user.id, resourceId } });
   }
   revalidatePath("/herramientas");

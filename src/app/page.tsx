@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { availableToolWhere } from "@/lib/tools";
 import { PlanCards } from "@/components/PlanCards";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -73,7 +74,7 @@ export default async function Home() {
   const [plans, freeGame, freeTools, open] = await Promise.all([
     db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
     db.game.findFirst({ where: { free: true, published: true }, orderBy: { order: "asc" }, select: { slug: true, title: true, emoji: true, color: true, description: true } }),
-    db.resource.count({ where: { published: true, access: { in: ["FREE", "EXTERNAL"] } } }),
+    db.resource.count({ where: { ...availableToolWhere(), access: { in: ["FREE", "EXTERNAL"] } } }),
     isPlatformOpen(),
   ]);
   return (

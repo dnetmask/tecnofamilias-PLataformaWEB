@@ -9,7 +9,7 @@ import { formatCop, formatDate } from "@/lib/format";
 import { getPricing } from "@/lib/pricing";
 import { isPlatformOpen } from "@/lib/launch";
 import { paymentsMode } from "@/lib/payments";
-import { canUseTool } from "@/lib/tools";
+import { canUseTool, isToolExpired } from "@/lib/tools";
 import { createOrderAction } from "./actions";
 import { WHATSAPP_SERVICES } from "@/lib/whatsapp";
 import { NOINDEX } from "@/lib/site";
@@ -63,7 +63,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
     detail = `${service.unit}. Después del pago te contactamos para agendar.`;
   } else if (herramienta) {
     const tool = await db.resource.findUnique({ where: { slug: herramienta } });
-    if (!tool || !tool.published || tool.access !== "PAID") redirect("/herramientas");
+    if (!tool || !tool.published || isToolExpired(tool) || tool.access !== "PAID") redirect("/herramientas");
     if (!(await hasMemberAccess(user))) redirect("/planes?requiere=suscripcion");
     if (canUseTool(await getToolViewer(user), tool)) redirect(`/herramientas/${tool.slug}`);
     title = tool.title;

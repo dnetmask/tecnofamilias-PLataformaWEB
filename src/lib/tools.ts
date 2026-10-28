@@ -1,4 +1,4 @@
-import type { ResourceAccess, ResourceKind } from "@prisma/client";
+import type { Prisma, ResourceAccess, ResourceKind } from "@prisma/client";
 
 /** Tipos de herramienta de la Caja de herramientas. */
 export const TOOL_KINDS: Record<ResourceKind, { label: string; plural: string; icon: string; color: string; open: string }> = {
@@ -43,4 +43,25 @@ export function canUseTool(viewer: ToolViewer, tool: { id: string; access: Resou
 
 export function usesLabel(uses: number) {
   return uses === 1 ? "1 familia la usó" : `${uses.toLocaleString("es-CO")} familias la usaron`;
+}
+
+/** Filtro de Prisma: herramientas publicadas y aún vigentes (sin fecha máxima o con fecha futura). */
+export function availableToolWhere(now = new Date()): Prisma.ResourceWhereInput {
+  return { published: true, OR: [{ availableUntil: null }, { availableUntil: { gt: now } }] };
+}
+
+export function isToolExpired(tool: { availableUntil: Date | null }, now = new Date()) {
+  return !!tool.availableUntil && tool.availableUntil <= now;
+}
+
+/** "30 de noviembre de 2026" en hora de Colombia. */
+export function formatUntil(date: Date) {
+  return new Intl.DateTimeFormat("es-CO", { dateStyle: "long", timeZone: "America/Bogota" }).format(date);
+}
+
+export const MAX_PDF_MB = 50;
+
+export function formatFileSize(bytes: number | null) {
+  if (!bytes) return "";
+  return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1).replace(".", ",")} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }

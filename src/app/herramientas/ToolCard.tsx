@@ -1,7 +1,7 @@
 import type { Resource } from "@prisma/client";
 import Link from "next/link";
 import { stageShort } from "@/lib/format";
-import { canUseTool, TOOL_ACCESS, TOOL_KINDS, type ToolViewer, usesLabel } from "@/lib/tools";
+import { canUseTool, formatUntil, TOOL_ACCESS, TOOL_KINDS, type ToolViewer, usesLabel } from "@/lib/tools";
 import { FavoriteButton } from "./FavoriteButton";
 
 export function ToolCard({
@@ -51,6 +51,8 @@ export function ToolCard({
         <span className="badge">{kind.label}</span>
         <span className={`badge ${access.badge}`}>{access.label}</span>
         {tool.ageStage !== "ALL" && <span className="badge badge-gray">{stageShort(tool.ageStage)} años</span>}
+        {tool.fileUrl && <span className="badge badge-gray">📄 PDF</span>}
+        {tool.availableUntil && <span className="badge badge-yellow">⏳ Hasta el {formatUntil(tool.availableUntil)}</span>}
       </div>
       {tool.description && <p className="muted small tool-desc" style={{ margin: 0 }}>{tool.description}</p>}
       <div className="row between" style={{ marginTop: "auto" }}>

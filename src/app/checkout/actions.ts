@@ -8,7 +8,7 @@ import { chargeCop } from "@/lib/currency";
 import { fulfillOrder, paymentsMode, startCheckout } from "@/lib/payments";
 import { isPlatformOpen } from "@/lib/launch";
 import { getRatesInfo } from "@/lib/pricing";
-import { canUseTool } from "@/lib/tools";
+import { canUseTool, isToolExpired } from "@/lib/tools";
 import { WHATSAPP_SERVICES } from "@/lib/whatsapp";
 
 export async function createOrderAction(formData: FormData) {
@@ -73,7 +73,7 @@ export async function createOrderAction(formData: FormData) {
   } else if (typeof toolSlug === "string" && toolSlug) {
     // Herramientas pagas: pago adicional a una suscripción activa.
     const tool = await db.resource.findUnique({ where: { slug: toolSlug } });
-    if (!tool || !tool.published || tool.access !== "PAID") redirect("/herramientas");
+    if (!tool || !tool.published || isToolExpired(tool) || tool.access !== "PAID") redirect("/herramientas");
     if (!(await hasMemberAccess(user))) redirect("/planes?requiere=suscripcion");
     if (canUseTool(await getToolViewer(user), tool)) redirect(`/herramientas/${tool.slug}`);
     order = await db.order.create({

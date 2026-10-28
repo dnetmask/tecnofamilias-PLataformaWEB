@@ -1,13 +1,13 @@
 import { db } from "@/lib/db";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
-import { TOOL_KINDS } from "@/lib/tools";
+import { TOOL_KINDS, availableToolWhere } from "@/lib/tools";
 
 export const dynamic = "force-dynamic";
 
 /** Resumen del sitio para asistentes de IA (https://llmstxt.org). */
 export async function GET() {
   const [tools, games] = await Promise.all([
-    db.resource.findMany({ where: { published: true }, orderBy: [{ order: "asc" }, { createdAt: "desc" }], select: { slug: true, title: true, kind: true, author: true } }),
+    db.resource.findMany({ where: availableToolWhere(), orderBy: [{ order: "asc" }, { createdAt: "desc" }], select: { slug: true, title: true, kind: true, author: true } }),
     db.game.findMany({ where: { published: true, free: true }, select: { slug: true, title: true, description: true } }),
   ]);
   const lines = [

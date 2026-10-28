@@ -219,25 +219,32 @@ model Order {
 /// Herramienta de la Caja de herramientas (video, podcast, libro, ebook,
 /// documento, software o hardware).
 model Resource {
-  id          String         @id @default(cuid())
-  slug        String         @unique
-  kind        ResourceKind
-  title       String
-  author      String         @default("")
-  description String         @default("")
-  url         String
-  imageUrl    String         @default("")
-  ageStage    AgeStage       @default(ALL)
-  access      ResourceAccess @default(SUBSCRIPTION)
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  kind           ResourceKind
+  title          String
+  author         String         @default("")
+  description    String         @default("")
+  /// Enlace externo (video, podcast, tienda…). Vacío si la herramienta es un archivo subido.
+  url            String         @default("")
+  /// PDF subido a Vercel Blob (almacén privado): solo se entrega por /herramientas/<slug>/abrir.
+  fileUrl        String         @default("")
+  fileName       String         @default("")
+  fileSize       Int?
+  /// Después de esta fecha la herramienta deja de mostrarse y de abrirse (null = sin vencimiento).
+  availableUntil DateTime?
+  imageUrl       String         @default("")
+  ageStage       AgeStage       @default(ALL)
+  access         ResourceAccess @default(SUBSCRIPTION)
   /// PAID: precio de la compra en línea. EXTERNAL: precio de referencia (0 = no se muestra).
-  priceUsd    Int            @default(0)
+  priceUsd       Int            @default(0)
   /// Precio fijo en COP (opcional); si existe reemplaza la conversión del dólar.
-  priceCop    Int?
+  priceCop       Int?
   /// Familias distintas que la han usado (abierto, visto o descargado).
-  uses        Int            @default(0)
-  published   Boolean        @default(true)
-  order       Int            @default(0)
-  createdAt   DateTime       @default(now())
+  uses           Int            @default(0)
+  published      Boolean        @default(true)
+  order          Int            @default(0)
+  createdAt      DateTime       @default(now())
 
   orders    Order[]
   purchases ResourcePurchase[]
