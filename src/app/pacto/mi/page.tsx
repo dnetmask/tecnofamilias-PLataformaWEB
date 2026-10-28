@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { PUBLIC_PACT_COOKIE } from "@/lib/pacts";
 import { NOINDEX } from "@/lib/site";
 import { CopyLink } from "../../pactos/CopyLink";
+import { DownloadPactButton } from "../../pactos/DownloadPactButton";
 import { PactDocument } from "../../pactos/PactDocument";
 import { PrintButton } from "../../pactos/PrintButton";
 import { deletePublicPactAction, signPublicParentAction } from "../actions";
@@ -70,6 +71,7 @@ export default async function MyPublicPactPage({ searchParams }: { searchParams:
           </div>
 
           <div className="card stack">
+            {pact.parentSignature && <DownloadPactButton shareToken={pact.shareToken} signed={pact.status === "SIGNED"} />}
             <PrintButton />
             <form action={deletePublicPactAction}>
               <button className="btn-link btn-danger-link small">Eliminar este pacto</button>

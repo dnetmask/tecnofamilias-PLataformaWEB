@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { SignaturePad } from "@/components/SignaturePad";
 import { db } from "@/lib/db";
 import { signByTokenAction } from "../../actions";
+import { DownloadPactButton } from "../../DownloadPactButton";
 import { PactDocument } from "../../PactDocument";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +27,11 @@ export default async function SignByTokenPage({ params }: { params: Promise<{ to
             signerHint="Si estás de acuerdo con todo, firma con el dedo aquí."
           />
         ) : (
-          <div className="alert alert-ok">¡Este pacto ya está firmado por los dos!</div>
+          <div className="card stack center">
+            <div className="alert alert-ok" style={{ margin: 0 }}>¡Este pacto ya está firmado por los dos!</div>
+            <div><DownloadPactButton shareToken={token} signed /></div>
+            <p className="small muted" style={{ margin: 0 }}>Guárdalo en tu celular para tenerlo siempre a mano.</p>
+          </div>
         )}
       </div>
     </div>

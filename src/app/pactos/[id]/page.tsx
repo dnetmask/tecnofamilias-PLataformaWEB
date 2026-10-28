@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { deletePactAction, duplicatePactAction, regenerateTokenAction, signPactAction } from "../actions";
 import { CopyLink } from "../CopyLink";
+import { DownloadPactButton } from "../DownloadPactButton";
 import { PactDocument } from "../PactDocument";
 import { PrintButton } from "../PrintButton";
 
@@ -68,6 +69,7 @@ export default async function PactPage({ params }: { params: Promise<{ id: strin
           )}
 
           <div className="card stack">
+            {pact.parentSignature && <DownloadPactButton shareToken={pact.shareToken} signed={pact.status === "SIGNED"} />}
             <PrintButton />
             <form action={duplicatePactAction}>
               <input type="hidden" name="id" value={pact.id} />
