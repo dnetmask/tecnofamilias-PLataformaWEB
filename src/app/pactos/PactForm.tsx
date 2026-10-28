@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { FormMessage, type FormState } from "@/components/FormMessage";
 import { SubmitButton } from "@/components/SubmitButton";
+import { fieldInfo, fieldsIn, fillClause, hasFields } from "@/lib/pact-fields";
 
 type Initial = {
   id?: string;
@@ -31,6 +32,10 @@ export function PactForm({ initial, action, submitLabel, publicForm = false }: P
     (initial.clauses.length ? initial.clauses : [""]).map((text, i) => ({ key: i, text, on: true })),
   );
   const [nextKey, setNextKey] = useState(initial.clauses.length + 1);
+  // Valores de los campos de los acuerdos ({horas}, {lugar}, {hora}…).
+  const [values, setValues] = useState<Record<string, string>>({});
+  const fields = fieldsIn(clauses.filter((c) => c.on).map((c) => c.text));
+  const shown = (text: string) => (hasFields(text) ? fillClause(text, values) : text);
 
   const update = (key: number, patch: Partial<{ text: string; on: boolean }>) =>
     setClauses((cs) => cs.map((c) => (c.key === key ? { ...c, ...patch } : c)));
@@ -58,6 +63,25 @@ export function PactForm({ initial, action, submitLabel, publicForm = false }: P
           <label htmlFor="childAge">Edad</label>
           <input className="input" id="childAge" name="childAge" type="number" min={0} max={25} defaultValue={initial.childAge} />
         </div>
+        {fields.map((name) => {
+          const f = fieldInfo(name);
+          return (
+            <div className="field" key={name}>
+              <label htmlFor={`f-${name}`}>{f.label}</label>
+              <input
+                className="input"
+                id={`f-${name}`}
+                type={f.type}
+                min={f.type === "number" ? 0 : undefined}
+                placeholder={f.placeholder}
+                value={values[name] ?? ""}
+                onChange={(e) => setValues((v) => ({ ...v, [name]: e.target.value }))}
+                required
+              />
+              <span className="hint">Se completa en el acuerdo de abajo.</span>
+            </div>
+          );
+        })}
       </div>
 
       <fieldset className="card card-tint" style={{ margin: 0 }}>
@@ -76,7 +100,8 @@ export function PactForm({ initial, action, submitLabel, publicForm = false }: P
               <textarea
                 className="textarea"
                 name={c.on ? "clause" : undefined}
-                value={c.text}
+                value={shown(c.text)}
+                // Si editan a mano un acuerdo con campos, queda con el texto ya completado.
                 onChange={(e) => update(c.key, { text: e.target.value })}
                 placeholder="Escribe un acuerdo…"
                 style={c.on ? undefined : { opacity: 0.5 }}

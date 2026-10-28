@@ -114,8 +114,8 @@ const TEMPLATES = [
     description: "Reglas básicas para el primer dispositivo propio.",
     clauses: [
       "El celular es una herramienta de la familia; mamá o papá conocen la clave de desbloqueo.",
-      "De lunes a viernes lo uso máximo ___ horas, después de terminar las tareas.",
-      "En la noche el celular duerme fuera de mi cuarto, cargando en ___ desde las ___.",
+      "De lunes a viernes lo uso máximo {horas} horas, después de terminar las tareas.",
+      "En la noche el celular duerme fuera de mi cuarto, cargando en {lugar} desde las {hora}.",
       "No uso el celular en la mesa ni cuando estamos compartiendo en familia.",
       "Antes de descargar una app o un juego, lo pregunto.",
       "No comparto mi ubicación, dirección, colegio ni fotos con desconocidos.",
@@ -136,7 +136,7 @@ const TEMPLATES = [
       "Nunca comparto mi contraseña, mi nombre completo, mi colegio ni fotos.",
       "No compro Robux ni acepto regalos de desconocidos; las compras las hacemos juntos.",
       "Si alguien me pide secretos, fotos o me ofrece Robux a cambio de algo, le cuento a mamá o papá enseguida.",
-      "Juego en un espacio común de la casa, máximo ___ minutos por día.",
+      "Juego en un espacio común de la casa, máximo {minutos} minutos por día.",
     ],
   },
   {
@@ -149,7 +149,7 @@ const TEMPLATES = [
       "Juego en modo un jugador o en servidores/Realms que mis papás aprueben.",
       "El chat con desconocidos está desactivado.",
       "No descargo mods ni archivos de páginas desconocidas sin preguntar.",
-      "Juego máximo ___ minutos y aviso cuando falten 10 minutos para terminar.",
+      "Juego máximo {minutos} minutos y aviso cuando falten 10 minutos para terminar.",
       "Si alguien es grosero o me pide datos personales, lo bloqueo, lo reporto y le cuento a un adulto.",
     ],
   },
@@ -164,7 +164,7 @@ const TEMPLATES = [
       "Veo videos en la sala o en espacios comunes, no a solas en mi cuarto.",
       "Si aparece algo que me asusta o me incomoda, cierro el video y le cuento a un adulto.",
       "No comento ni subo videos sin permiso.",
-      "Máximo ___ minutos al día y nada de pantallas una hora antes de dormir.",
+      "Máximo {minutos} minutos al día y nada de pantallas una hora antes de dormir.",
     ],
   },
   {
@@ -179,7 +179,7 @@ const TEMPLATES = [
       "No publico videos con el uniforme del colegio, mi casa o lugares que permitan ubicarme.",
       "No hago retos que pongan en riesgo mi salud o la de otros.",
       "Antes de publicar, me pregunto: ¿me sentiría bien si lo viera toda mi familia y mi colegio?",
-      "Uso TikTok máximo ___ minutos al día con el límite de tiempo activado.",
+      "Uso TikTok máximo {minutos} minutos al día con el límite de tiempo activado.",
       "Si alguien me molesta o me presiona, lo bloqueo, lo reporto y lo hablo en casa.",
     ],
   },
@@ -195,7 +195,7 @@ const TEMPLATES = [
       "No envío ni pido fotos íntimas, y si alguien me las pide o me las envía, se lo cuento a un adulto.",
       "No comparto mi ubicación en historias ni publicaciones.",
       "No participo en cuentas o grupos para burlarse de otras personas.",
-      "Uso Instagram máximo ___ minutos al día.",
+      "Uso Instagram máximo {minutos} minutos al día.",
     ],
   },
   {
@@ -210,7 +210,7 @@ const TEMPLATES = [
       "No reenvío fotos, audios o capturas de otras personas sin su permiso.",
       "En los grupos del colegio trato a todos con respeto; si hay burlas, no participo y aviso.",
       "No contesto mensajes ni llamadas de números desconocidos.",
-      "Después de las ___ silencio el celular y no reviso mensajes.",
+      "Después de las {hora} silencio el celular y no reviso mensajes.",
     ],
   },
   {
@@ -220,7 +220,7 @@ const TEMPLATES = [
     minAge: 12,
     description: "Partidas, compras de diamantes y contacto con extraños.",
     clauses: [
-      "Juego máximo ___ partidas o ___ minutos al día, después de las tareas.",
+      "Juego máximo {partidas} partidas o {minutos} minutos al día, después de las tareas.",
       "No hago compras de diamantes sin permiso; las compras las hacemos juntos.",
       "No acepto ofertas de cuentas, diamantes o skins gratis de desconocidos.",
       "Si en el chat de voz alguien es agresivo o me pide datos, lo silencio, lo reporto y lo cuento.",

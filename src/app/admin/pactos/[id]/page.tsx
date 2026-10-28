@@ -29,6 +29,11 @@ export default async function AdminTemplatePage({ params, searchParams }: { para
         <div className="field">
           <label>Cláusulas sugeridas (una por línea)</label>
           <textarea className="textarea" name="clauses" defaultValue={clauses} rows={12} required />
+          <span className="hint">
+            Para que la familia complete un dato, escribe un campo entre llaves: {"{horas}"}, {"{minutos}"}, {"{partidas}"},{" "}
+            {"{lugar}"} o {"{hora}"} (o cualquier otro nombre, p. ej. {"{dias}"}). El formulario muestra un campo por cada uno después de la
+            edad y lo completa en el acuerdo.
+          </span>
         </div>
         <div className="field" style={{ maxWidth: 160 }}><label>Orden</label><input className="input" name="order" type="number" defaultValue={t?.order ?? 0} /></div>
         <label className="check"><input type="checkbox" name="published" defaultChecked={t?.published ?? true} /> Publicada</label>
