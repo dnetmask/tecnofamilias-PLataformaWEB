@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { hashPassword, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { deleteUserAccount } from "@/lib/account";
 import { slugify } from "@/lib/format";
 import { extendSubscription, fulfillOrder } from "@/lib/payments";
 import { notifyIndexNow } from "@/lib/indexnow";
@@ -162,7 +163,7 @@ export async function deleteUserAction(formData: FormData) {
   const id = String(formData.get("id"));
   if (id === admin.id) fail(`/admin/usuarios/${id}`, "No puedes eliminar tu propia cuenta");
   if (formData.get("confirm") !== "ELIMINAR") fail(`/admin/usuarios/${id}`, "Escribe ELIMINAR para confirmar");
-  await db.user.delete({ where: { id } });
+  await deleteUserAccount(id);
   done("/admin/usuarios", "Usuario eliminado");
 }
 

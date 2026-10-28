@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = { title: "Términos y tratamiento de datos", alternates: { canonical: "/terminos" } };
 
 export default function TermsPage() {
@@ -33,7 +35,9 @@ export default function TermsPage() {
       <h3>Tus derechos</h3>
       <p>
         Puedes conocer, actualizar, rectificar y solicitar la eliminación de tus datos escribiéndonos. También puedes
-        eliminar tus pactos desde la plataforma en cualquier momento.
+        eliminar tus pactos desde la plataforma en cualquier momento, y eliminar tu cuenta tú mismo desde{" "}
+        <Link href="/eliminar-cuenta">Eliminar mi cuenta</Link>: se borran tus datos personales y solo conservamos, sin tu
+        nombre ni tu correo, el registro de los pagos que exige la ley contable.
       </p>
     </div>
   );

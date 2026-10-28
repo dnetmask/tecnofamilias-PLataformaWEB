@@ -133,34 +133,37 @@ export async function fulfillOrder(orderId: string, providerRef?: string) {
     });
     if (updated.count === 0) return false;
     const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { plan: true, user: true } });
+    // La cuenta se eliminó antes de confirmarse el pago: queda registrado, sin nada que entregar.
+    if (!order.userId || !order.user) return true;
+    const { userId, user } = order;
 
     if (order.kind === "SUBSCRIPTION" && order.plan) {
-      await extendSubscription(order.userId, order.plan.id, order.plan.interval, false, tx);
+      await extendSubscription(userId, order.plan.id, order.plan.interval, false, tx);
     }
     if (order.kind === "SERVICE" && order.serviceId) {
       // Queda como solicitud pagada para que el equipo agende el servicio.
       await tx.serviceRequest.create({
         data: {
           serviceId: order.serviceId,
-          userId: order.userId,
+          userId,
           orderId: order.id,
-          name: order.user.name,
-          email: order.user.email,
+          name: user.name,
+          email: user.email,
           status: "PAID",
         },
       });
     }
     if (order.kind === "RESOURCE" && order.resourceId) {
       await tx.resourcePurchase.upsert({
-        where: { userId_resourceId: { userId: order.userId, resourceId: order.resourceId } },
-        create: { userId: order.userId, resourceId: order.resourceId, orderId: order.id },
+        where: { userId_resourceId: { userId, resourceId: order.resourceId } },
+        create: { userId, resourceId: order.resourceId, orderId: order.id },
         update: {},
       });
     }
     if (order.kind === "LESSON" && order.lessonId) {
       await tx.purchase.upsert({
-        where: { userId_lessonId: { userId: order.userId, lessonId: order.lessonId } },
-        create: { userId: order.userId, lessonId: order.lessonId, orderId: order.id },
+        where: { userId_lessonId: { userId, lessonId: order.lessonId } },
+        create: { userId, lessonId: order.lessonId, orderId: order.id },
         update: {},
       });
     }

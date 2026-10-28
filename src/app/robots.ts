@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
-const PRIVATE = ["/admin", "/api", "/checkout", "/cuenta", "/ingresar", "/registro", "/pactos/", "/comunidad", "/juegos/*/jugar", "/herramientas/*/abrir"];
+const PRIVATE = ["/admin", "/api", "/checkout", "/cuenta", "/ingresar", "/registro", "/recuperar", "/restablecer", "/pactos/", "/comunidad", "/juegos/*/jugar", "/herramientas/*/abrir"];
 
 // Buscadores y asistentes de IA tienen acceso al contenido público para poder citarlo.
 export default function robots(): MetadataRoute.Robots {

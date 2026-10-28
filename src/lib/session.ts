@@ -5,7 +5,7 @@ import { SignJWT, jwtVerify } from "jose";
 export const SESSION_COOKIE = "tf_session";
 export const SESSION_MAX_AGE = 60 * 60 * 24 * 30; // 30 días
 
-export type SessionPayload = { sub: string; role: "USER" | "ADMIN" };
+export type SessionPayload = { sub: string; role: "USER" | "ADMIN"; /** Segundos desde 1970 en que se firmó. */ iat?: number };
 
 function secret() {
   const value = process.env.AUTH_SECRET;
@@ -29,7 +29,7 @@ export async function verifySession(token: string | undefined): Promise<SessionP
   try {
     const { payload } = await jwtVerify(token, secret(), { algorithms: ["HS256"] });
     if (typeof payload.sub !== "string") return null;
-    return { sub: payload.sub, role: payload.role === "ADMIN" ? "ADMIN" : "USER" };
+    return { sub: payload.sub, role: payload.role === "ADMIN" ? "ADMIN" : "USER", iat: payload.iat };
   } catch {
     return null;
   }

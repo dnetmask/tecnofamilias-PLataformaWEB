@@ -94,15 +94,17 @@ enum PactStatus {
 }
 
 model User {
-  id              String    @id @default(cuid())
-  email           String    @unique
-  name            String
-  passwordHash    String
-  role            Role      @default(USER)
-  active          Boolean   @default(true)
-  acceptedTermsAt DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String
+  passwordHash      String
+  role              Role      @default(USER)
+  active            Boolean   @default(true)
+  acceptedTermsAt   DateTime?
+  /// Las sesiones iniciadas antes de este momento dejan de valer (cambio o recuperación de contraseña).
+  passwordChangedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   subscription      Subscription?
   purchases         Purchase[]
@@ -115,6 +117,7 @@ model User {
   threads           ForumThread[]
   posts             ForumPost[]
   reports           ForumReport[]
+  resetTokens       PasswordResetToken[]
 }
 
 model Plan {
@@ -186,8 +189,9 @@ model Purchase {
 
 model Order {
   id          String      @id @default(cuid())
-  userId      String
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// null si el usuario eliminó su cuenta: el pago se conserva por obligaciones contables.
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   kind        OrderKind
   planId      String?
   plan        Plan?       @relation(fields: [planId], references: [id], onDelete: SetNull)
@@ -451,4 +455,17 @@ model Setting {
   key       String   @id
   value     Json
   updatedAt DateTime @updatedAt
+}
+
+/// Enlace de un solo uso para recuperar la contraseña. Se guarda solo el hash del token.
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
 }

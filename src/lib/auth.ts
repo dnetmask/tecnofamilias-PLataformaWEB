@@ -38,10 +38,13 @@ export const getCurrentUser = cache(async () => {
   if (!session) return null;
   const user = await db.user.findUnique({
     where: { id: session.sub },
-    select: { id: true, email: true, name: true, role: true, active: true, createdAt: true },
+    select: { id: true, email: true, name: true, role: true, active: true, createdAt: true, passwordChangedAt: true },
   });
   if (!user || !user.active) return null;
-  return user;
+  // Tras cambiar o recuperar la contraseña, las sesiones anteriores (otros dispositivos) dejan de valer.
+  if (user.passwordChangedAt && (session.iat ?? 0) < Math.floor(user.passwordChangedAt.getTime() / 1000)) return null;
+  const { passwordChangedAt: _, ...rest } = user;
+  return rest;
 });
 
 export type CurrentUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;

@@ -17,7 +17,8 @@ const ORDER_STATUS = {
   REFUNDED: ["Reembolsado", "badge-gray"],
 } as const;
 
-export default async function AccountPage() {
+export default async function AccountPage({ searchParams }: { searchParams: Promise<{ clave?: string }> }) {
+  const { clave } = await searchParams;
   const user = await requireUser("/cuenta");
   const [sub, purchases, orders, requests] = await Promise.all([
     getActiveSubscription(user.id),
@@ -35,6 +36,9 @@ export default async function AccountPage() {
         </div>
       </div>
       <div className="container section grid grid-2" style={{ alignItems: "start" }}>
+        {clave === "nueva" && (
+          <div className="alert alert-ok" style={{ gridColumn: "1 / -1" }}>Listo: tu contraseña quedó actualizada y cerramos la sesión en tus otros dispositivos.</div>
+        )}
         <div className="card stack">
           <h3>Suscripción</h3>
           {sub ? (
@@ -103,6 +107,12 @@ export default async function AccountPage() {
               </table>
             </div>
           )}
+        </div>
+
+        <div className="card stack" style={{ gridColumn: "1 / -1" }}>
+          <h3>Eliminar mi cuenta</h3>
+          <p className="muted small" style={{ margin: 0 }}>Borra tu cuenta y tus datos personales de forma definitiva.</p>
+          <Link className="btn-link btn-danger-link small" href="/eliminar-cuenta" style={{ alignSelf: "flex-start" }}>Eliminar mi cuenta</Link>
         </div>
       </div>
     </>

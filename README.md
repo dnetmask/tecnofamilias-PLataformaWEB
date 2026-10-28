@@ -11,13 +11,15 @@ Plataforma **exclusivamente por suscripción** para familias. La suscripción in
 | Inicio | `/` | Sin sesión: portada comercial. Con sesión: panel con accesos directos (clases, juegos, pactos, caja de herramientas, comunidad, planes) y contenido para empezar a usar |
 | Planes | `/planes` | Un solo plan: **Anual** (el mensual quedó desactivado). Con sesión iniciada sale del menú; quien no tiene plan ve “Suscribirme” |
 | Registro / ingreso | `/registro`, `/ingresar` | Público. Tras registrarse, el usuario va a elegir plan |
+| Recuperar contraseña | `/recuperar` → correo → `/restablecer` | Enlace de un solo uso que vence en 1 hora (el token pasa a una cookie privada para que no quede en la dirección ni en la analítica). Al cambiar o recuperar la contraseña se cierran las sesiones de los otros dispositivos. Necesita `RESEND_API_KEY` y `EMAIL_FROM` |
+| Eliminar cuenta | `/eliminar-cuenta` | Pública (enlazada en el pie y en Mi cuenta, como piden las tiendas de apps). Con sesión, se elimina confirmando contraseña y escribiendo ELIMINAR. Se borran datos personales, suscripción, compras, pactos, favoritos y publicaciones; los pagos se conservan sin usuario (obligación contable) y las solicitudes de servicios quedan anonimizadas |
 | Clases pregrabadas | `/clases` | Catálogo visible como vitrina. Video: **Incluida** → suscriptores · **Complemento** → suscriptores que lo compraron (disponible mientras la suscripción esté activa) |
 | Caja de herramientas | `/herramientas` (antes `/recursos`, que redirige) | Videos, podcasts, libros, ebooks, documentos, software y hardware. Cada herramienta es de libre acceso, incluida en la suscripción, de pago adicional dentro de la plataforma (página propia y pago en `/checkout?herramienta=<slug>`) o se compra por fuera. Los usuarios marcan favoritos (★) y arriba se muestran las 4 más usadas (familias distintas que la abrieron, vieron o descargaron). YouTube, Vimeo y Spotify se ven embebidos |
 | Pactos por aplicación | `/pactos` | Suscriptores crean pactos ilimitados desde plantillas por app (Roblox, TikTok, WhatsApp…). Firma con el dedo del adulto y luego del menor (en el mismo dispositivo o por enlace privado), impresión/PDF. Si la suscripción vence, los pactos existentes se pueden seguir viendo, imprimiendo o eliminando |
 | Juegos en familia | `/juegos` | Suscriptores. Cada juego es un HTML autocontenido (*Modo Familia*, *La aventura de Tecnito*, *Colorea con Tecnito* y *Farmea aura*). Los juegos se agregan desde el código: archivo en `prisma/games/` y una migración que lo inserta en la tabla `Game` que se sirve en `/juegos/<slug>/jugar` solo a suscriptores, dentro de un iframe con sandbox (sin acceso a la sesión ni a la página) |
 | Otros servicios | `/planes#servicios` (`/servicios` redirige) | Dentro de Planes, con o sin sesión; en el menú todo aparece como Planes. Asesoría personalizada (compra en línea, no requiere suscripción) y programas para colegios, empresas y cajas, alcaldías y gobernaciones (solicitud de cotización). Las solicitudes y las asesorías pagadas llegan a `/admin/solicitudes` |
 | Comunidad | `/comunidad` | Solo suscriptores (leer y publicar). Reportes y moderación |
-| Mi cuenta | `/cuenta` | Suscripción, clases compradas, historial de pagos, datos y contraseña |
+| Mi cuenta | `/cuenta` | Suscripción, clases compradas, historial de pagos, datos, contraseña y enlace para eliminar la cuenta |
 | Administración | `/admin` | Solo rol ADMIN |
 
 **Panel de administración:** resumen (usuarios, suscriptores, ingresos), usuarios (crear, editar rol, activar/desactivar, otorgar meses de cortesía o complementos, restablecer contraseña, eliminar), clases, caja de herramientas (acceso, precio, usos, favoritos y ventas), plantillas de pactos, comunidad, monedas (tasas de cambio) (categorías, reportes, ocultar contenido), planes y precios, pagos (marcar manualmente como pagada una transferencia).
@@ -65,6 +67,7 @@ npm run dev
    - `PAYMENTS_MODE` — `mercadopago`
    - `MP_ACCESS_TOKEN` — token de producción de Mercado Pago Colombia
    - `MP_WEBHOOK_SECRET` — clave secreta de webhooks (Mercado Pago → Tus integraciones → Webhooks, evento *Pagos*, URL `https://<dominio>/api/webhooks/mercadopago`)
+   - `RESEND_API_KEY` y `EMAIL_FROM` — correos de recuperación de contraseña con [Resend](https://resend.com) (verificar el dominio tecnofamilias.com en Resend; p. ej. `Tecnofamilias <hola@tecnofamilias.com>`)
 4. **Administrador inicial:** agregar `ADMIN_EMAIL` y `ADMIN_PASSWORD` (tipo *Sensitive*) y desplegar. El build ejecuta `prisma/seed.mjs`, que crea el administrador y, si la base está vacía, carga el contenido de ejemplo. Después del primer ingreso se puede borrar `ADMIN_PASSWORD` (cambiar la clave desde *Mi cuenta*).
 5. Ingresar a `/admin` y reemplazar el contenido de ejemplo (videos de las clases, recursos, precios).
 

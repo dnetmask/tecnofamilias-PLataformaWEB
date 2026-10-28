@@ -8,6 +8,10 @@ import { db } from "@/lib/db";
 import { safeNext } from "@/lib/url";
 import { isSubscriber } from "@/lib/access";
 import { isPlatformOpen, isServiceCheckout } from "@/lib/launch";
+import { createResetToken, findValidResetToken, recentlyRequested, RESET_COOKIE } from "@/lib/account";
+import { cookies } from "next/headers";
+import { sendEmail } from "@/lib/email";
+import { appUrl } from "@/lib/payments";
 
 
 const registerSchema = z.object({
@@ -58,4 +62,59 @@ export async function loginAction(_: FormState, formData: FormData): Promise<For
 export async function logoutAction() {
   await endSession();
   redirect("/");
+}
+
+/* ---------- Recuperar contraseña ---------- */
+
+export async function requestResetAction(_: FormState, formData: FormData): Promise<FormState> {
+  const email = z.string().trim().toLowerCase().email().safeParse(formData.get("email"));
+  if (!email.success) return { error: "Correo no válido" };
+  // La respuesta es la misma exista o no la cuenta, para no revelar qué correos están registrados.
+  const sent = { ok: "Si hay una cuenta con ese correo, te enviamos un enlace para crear una nueva contraseña. Revisa también la carpeta de spam. El enlace vence en 1 hora." };
+  const user = await db.user.findUnique({ where: { email: email.data } });
+  if (!user || !user.active || (await recentlyRequested(user.id))) return sent;
+
+  const token = await createResetToken(user.id);
+  const link = `${appUrl()}/restablecer/${token}`;
+  const first = user.name.split(" ")[0];
+  await sendEmail({
+    to: user.email,
+    subject: "Crea una nueva contraseña · Tecnofamilias",
+    text: `Hola, ${first}:\n\nRecibimos una solicitud para cambiar la contraseña de tu cuenta de Tecnofamilias. Abre este enlace para crear una nueva (vence en 1 hora):\n\n${link}\n\nSi no fuiste tú, ignora este correo: tu contraseña no cambia.\n\nEquipo Tecnofamilias`,
+    html: `<div style="font-family:Arial,sans-serif;color:#28395f;max-width:520px">
+<p>Hola, ${escapeHtml(first)}:</p>
+<p>Recibimos una solicitud para cambiar la contraseña de tu cuenta de Tecnofamilias.</p>
+<p><a href="${link}" style="display:inline-block;background:#283a60;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:bold">Crear nueva contraseña</a></p>
+<p style="font-size:13px;color:#5b6884">El enlace vence en 1 hora y sirve una sola vez. Si no fuiste tú, ignora este correo: tu contraseña no cambia.</p>
+<p>Equipo Tecnofamilias</p></div>`,
+  });
+  return sent;
+}
+
+const resetSchema = z
+  .object({
+    password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres").max(100),
+    confirm: z.string(),
+  })
+  .refine((d) => d.password === d.confirm, { message: "Las contraseñas no coinciden" });
+
+export async function resetPasswordAction(_: FormState, formData: FormData): Promise<FormState> {
+  const parsed = resetSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: parsed.error.issues[0].message };
+  const jar = await cookies();
+  const row = await findValidResetToken(jar.get(RESET_COOKIE)?.value ?? "");
+  if (!row) return { error: "El enlace venció o ya se usó. Pide uno nuevo." };
+  const now = new Date();
+  await db.$transaction([
+    db.user.update({ where: { id: row.userId }, data: { passwordHash: await hashPassword(parsed.data.password), passwordChangedAt: now } }),
+    db.passwordResetToken.deleteMany({ where: { userId: row.userId } }),
+  ]);
+  jar.delete(RESET_COOKIE);
+  // Las sesiones de otros dispositivos se cierran; aquí se inicia una nueva.
+  await startSession(row.user);
+  redirect("/cuenta?clave=nueva");
+}
+
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }

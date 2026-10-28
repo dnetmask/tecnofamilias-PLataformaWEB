@@ -14,7 +14,7 @@ export async function Footer() {
         </div>
         <div className="stack small">
           <div><Link href="/clases">Clases</Link> · <Link href="/herramientas">Caja de herramientas</Link> · <Link href="/pactos">Pactos</Link> · <Link href="/juegos">Juegos</Link> · <Link href="/comunidad">Comunidad</Link></div>
-          <div><Link href="/quienes-somos">Quiénes somos</Link> · <Link href="/terminos">Términos y tratamiento de datos</Link></div>
+          <div><Link href="/quienes-somos">Quiénes somos</Link> · <Link href="/terminos">Términos y tratamiento de datos</Link> · <Link href="/eliminar-cuenta">Eliminar cuenta</Link></div>
           <div>www.tecnofamilias.com · WhatsApp <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">+57 300 674 0003</a></div>
           <div><CurrencySwitcher current={currency} dark /></div>
         </div>
