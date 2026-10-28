@@ -29,7 +29,7 @@ export default async function SignByTokenPage({ params }: { params: Promise<{ to
         ) : (
           <div className="card stack center">
             <div className="alert alert-ok" style={{ margin: 0 }}>¡Este pacto ya está firmado por los dos!</div>
-            <div><DownloadPactButton shareToken={token} signed /></div>
+            <div><DownloadPactButton shareToken={token} signed by="menor" /></div>
             <p className="small muted" style={{ margin: 0 }}>Guárdalo en tu celular para tenerlo siempre a mano.</p>
           </div>
         )}

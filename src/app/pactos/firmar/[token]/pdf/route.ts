@@ -9,12 +9,23 @@ export const dynamic = "force-dynamic";
  * pacto (shareToken), igual que la página de firma, y solo cuando ya hay al
  * menos una firma.
  */
-export async function GET(_: Request, { params }: { params: Promise<{ token: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const pact = await db.pact.findUnique({ where: { shareToken: token } });
   if (!pact) redirect("/");
   if (!pact.parentSignature) redirect(`/pactos/firmar/${token}`);
   const pdf = await renderPactPdf(pact);
+  // Contador del admin: quién descargó y de qué plantilla, sin nombres.
+  await db.pactDownload.create({
+    data: {
+      pactId: pact.id,
+      templateId: pact.templateId,
+      appName: pact.appName,
+      by: new URL(request.url).searchParams.get("por") === "menor" ? "CHILD" : "ADULT",
+      withAccount: !!pact.userId,
+      fullySigned: pact.status === "SIGNED",
+    },
+  });
   return new Response(Buffer.from(pdf), {
     headers: {
       "Content-Type": "application/pdf",

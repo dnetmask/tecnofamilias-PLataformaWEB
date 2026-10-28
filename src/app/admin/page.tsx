@@ -9,7 +9,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Notice
   const { error, ok } = await searchParams;
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const [users, subs, lessons, pacts, threads, reports, revenue, monthRevenue, requests] = await Promise.all([
+  const [users, subs, lessons, pacts, threads, reports, revenue, monthRevenue, requests, pactDownloads] = await Promise.all([
     db.user.count(),
     db.subscription.count({ where: { status: "ACTIVE", currentPeriodEnd: { gt: now } } }),
     db.lesson.count({ where: { published: true } }),
@@ -19,6 +19,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Notice
     db.order.aggregate({ where: { status: "PAID" }, _sum: { amountCop: true } }),
     db.order.aggregate({ where: { status: "PAID", paidAt: { gte: monthStart } }, _sum: { amountCop: true } }),
     db.serviceRequest.count({ where: { status: { in: ["NEW", "PAID"] } } }),
+    db.pactDownload.count(),
   ]);
 
   const stats = [
@@ -26,6 +27,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Notice
     { label: "Suscriptores activos", value: subs, href: "/admin/usuarios?filtro=suscriptores" },
     { label: "Clases publicadas", value: lessons, href: "/admin/clases" },
     { label: "Pactos creados", value: pacts, href: "/admin/pactos" },
+    { label: "Pactos descargados (PDF)", value: pactDownloads, href: "/admin/pactos" },
     { label: "Conversaciones", value: threads, href: "/admin/comunidad" },
     { label: "Reportes pendientes", value: reports, href: "/admin/comunidad" },
     { label: "Solicitudes por atender", value: requests, href: "/admin/solicitudes" },

@@ -302,7 +302,8 @@ model PactTemplate {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 
-  pacts Pact[]
+  pacts     Pact[]
+  downloads PactDownload[]
 }
 
 model Pact {
@@ -332,6 +333,8 @@ model Pact {
   manageToken     String?       @unique
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+
+  downloads PactDownload[]
 
   @@index([userId])
 }
@@ -480,4 +483,28 @@ model PasswordResetToken {
   createdAt DateTime  @default(now())
 
   @@index([userId])
+}
+
+/// Quién descargó el PDF del pacto.
+enum PactSigner {
+  ADULT
+  CHILD
+}
+
+/// Cada descarga del PDF de un pacto (sin datos personales), para el contador del admin.
+model PactDownload {
+  id          String        @id @default(cuid())
+  pactId      String?
+  pact        Pact?         @relation(fields: [pactId], references: [id], onDelete: SetNull)
+  templateId  String?
+  template    PactTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  /// Aplicación del pacto al momento de descargarlo (sirve si se borra el pacto o la plantilla).
+  appName     String
+  by          PactSigner
+  withAccount Boolean
+  fullySigned Boolean
+  createdAt   DateTime      @default(now())
+
+  @@index([templateId])
+  @@index([createdAt])
 }
