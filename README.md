@@ -11,7 +11,7 @@ Plataforma **exclusivamente por suscripción** para familias. La suscripción in
 | Inicio | `/` | Sin sesión: portada comercial. Con sesión: panel con accesos directos (clases, juegos, pactos, caja de herramientas, comunidad, planes) y contenido para empezar a usar |
 | Planes | `/planes` | Un solo plan: **Anual** (el mensual quedó desactivado). Con sesión iniciada sale del menú; quien no tiene plan ve “Suscribirme” |
 | Registro / ingreso | `/registro`, `/ingresar` | Público. Tras registrarse, el usuario va a elegir plan |
-| Recuperar contraseña | `/recuperar` → correo → `/restablecer` | Enlace de un solo uso que vence en 1 hora (el token pasa a una cookie privada para que no quede en la dirección ni en la analítica). Al cambiar o recuperar la contraseña se cierran las sesiones de los otros dispositivos. Necesita `RESEND_API_KEY` y `EMAIL_FROM` |
+| Recuperar contraseña | `/recuperar` → correo → `/restablecer` | Enlace de un solo uso que vence en 1 hora (el token pasa a una cookie privada para que no quede en la dirección ni en la analítica). Al cambiar o recuperar la contraseña se cierran las sesiones de los otros dispositivos. Envía desde un buzón de Microsoft 365 con Microsoft Graph (variables `MS_*`) |
 | Eliminar cuenta | `/eliminar-cuenta` | Pública (enlazada en el pie y en Mi cuenta, como piden las tiendas de apps). Con sesión, se elimina confirmando contraseña y escribiendo ELIMINAR. Se borran datos personales, suscripción, compras, pactos, favoritos y publicaciones; los pagos se conservan sin usuario (obligación contable) y las solicitudes de servicios quedan anonimizadas |
 | Clases pregrabadas | `/clases` | Catálogo visible como vitrina. Video: **Incluida** → suscriptores · **Complemento** → suscriptores que lo compraron (disponible mientras la suscripción esté activa) |
 | Caja de herramientas | `/herramientas` (antes `/recursos`, que redirige) | Videos, podcasts, libros, ebooks, documentos, software y hardware. Cada herramienta es de libre acceso, incluida en la suscripción, de pago adicional dentro de la plataforma (página propia y pago en `/checkout?herramienta=<slug>`) o se compra por fuera. El admin puede subir un **PDF** (hasta 50 MB, a un almacén privado de Vercel Blob; solo se entrega por `/herramientas/<slug>/abrir` a quien tenga acceso, para ver o descargar) y fijar una fecha **Disponible hasta**: después de ese día la herramienta sale de los listados, del sitemap y no se abre. Los usuarios marcan favoritos (★) y arriba se muestran las 4 más usadas (familias distintas que la abrieron, vieron o descargaron). YouTube, Vimeo y Spotify se ven embebidos |
@@ -69,7 +69,7 @@ npm run dev
    - `MP_ACCESS_TOKEN` — token de producción de Mercado Pago Colombia
    - `MP_WEBHOOK_SECRET` — clave secreta de webhooks (Mercado Pago → Tus integraciones → Webhooks, evento *Pagos*, URL `https://<dominio>/api/webhooks/mercadopago`)
    - `BLOB_READ_WRITE_TOKEN` — lo crea Vercel al conectar un almacén **Blob privado** al proyecto (Storage → Create → Blob, acceso *Private*); necesario para subir los PDF de la Caja de herramientas
-   - `RESEND_API_KEY` y `EMAIL_FROM` — correos de recuperación de contraseña con [Resend](https://resend.com) (verificar el dominio tecnofamilias.com en Resend; p. ej. `Tecnofamilias <hola@tecnofamilias.com>`)
+   - `MS_TENANT_ID`, `MS_CLIENT_ID`, `MS_CLIENT_SECRET` y `MS_SENDER` — correos (recuperación de contraseña) desde un buzón de **Microsoft 365** con Microsoft Graph. En Microsoft Entra → Registros de aplicaciones: crear la app, darle el permiso de **aplicación** `Mail.Send` (Microsoft Graph) con consentimiento de administrador y crear un secreto de cliente. `MS_SENDER` es el buzón que envía (p. ej. `hola@tecnofamilias.com`). Recomendado: limitar la app a ese buzón con una directiva de acceso de Exchange (RBAC para aplicaciones). Opcional: `EMAIL_FROM_NAME` (por defecto "Tecnofamilias")
 4. **Administrador inicial:** agregar `ADMIN_EMAIL` y `ADMIN_PASSWORD` (tipo *Sensitive*) y desplegar. El build ejecuta `prisma/seed.mjs`, que crea el administrador y, si la base está vacía, carga el contenido de ejemplo. Después del primer ingreso se puede borrar `ADMIN_PASSWORD` (cambiar la clave desde *Mi cuenta*).
 5. Ingresar a `/admin` y reemplazar el contenido de ejemplo (videos de las clases, recursos, precios).
 
@@ -80,6 +80,5 @@ Cada clase guarda una URL de video. Recomendado: **Vimeo** con privacidad “Ocu
 ## Pendientes antes de lanzar
 
 - Revisión legal de `/terminos` (Ley 1581 de 2012) — el texto actual es una base.
-- Recuperación de contraseña por correo (hoy la restablece un administrador desde `/admin/usuarios`); requiere un proveedor de correo (p. ej. Resend).
 - Cobro recurrente automático (preapprovals de Mercado Pago) si se quiere débito mensual sin intervención del usuario.
 - En reembolsos el webhook marca la orden como *Reembolsado*, pero no retira el acceso: hacerlo desde la ficha del usuario.
