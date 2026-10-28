@@ -288,6 +288,7 @@ const templateSchema = z.object({
   clauses: z.string().min(1, "Agrega al menos una cláusula"),
   order: z.coerce.number().int().default(0),
   published: checkbox,
+  public: checkbox,
 });
 
 export async function saveTemplateAction(formData: FormData) {

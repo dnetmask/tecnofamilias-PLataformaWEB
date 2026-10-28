@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { requireSubscriber } from "@/lib/access";
+import { redirect } from "next/navigation";
+import { hasMemberAccess, requireSubscriber } from "@/lib/access";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createPactAction } from "../actions";
 import { PactForm } from "../PactForm";
@@ -9,6 +11,11 @@ export const metadata = { title: "Nuevo pacto" };
 
 export default async function NewPactPage({ searchParams }: { searchParams: Promise<{ plantilla?: string }> }) {
   const { plantilla } = await searchParams;
+  // Las plantillas públicas se pueden usar sin cuenta ni suscripción desde /pacto/<slug>.
+  if (plantilla) {
+    const pub = await db.pactTemplate.findFirst({ where: { slug: plantilla, published: true, public: true }, select: { slug: true } });
+    if (pub && !(await hasMemberAccess(await getCurrentUser()))) redirect(`/pacto/${pub.slug}`);
+  }
   const user = await requireSubscriber(plantilla ? `/pactos/nuevo?plantilla=${plantilla}` : "/pactos/nuevo");
   const template = plantilla ? await db.pactTemplate.findUnique({ where: { slug: plantilla } }) : null;
 

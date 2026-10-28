@@ -21,9 +21,11 @@ type Props = {
   initial: Initial;
   action: (state: FormState, formData: FormData) => Promise<FormState>;
   submitLabel: string;
+  /** Pacto sin cuenta: pide aceptar términos y agrega un campo trampa contra bots. */
+  publicForm?: boolean;
 };
 
-export function PactForm({ initial, action, submitLabel }: Props) {
+export function PactForm({ initial, action, submitLabel, publicForm = false }: Props) {
   const [state, formAction] = useActionState(action, undefined);
   const [clauses, setClauses] = useState(() =>
     (initial.clauses.length ? initial.clauses : [""]).map((text, i) => ({ key: i, text, on: true })),
@@ -120,6 +122,18 @@ export function PactForm({ initial, action, submitLabel }: Props) {
         <input className="input" id="reviewDate" name="reviewDate" type="date" defaultValue={initial.reviewDate} />
       </div>
 
+      {publicForm && (
+        <>
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px" }} />
+          <label className="check">
+            <input type="checkbox" name="terms" required />
+            <span>
+              Acepto los <a href="/terminos" target="_blank">términos y la política de tratamiento de datos</a>. Solo guardamos lo
+              que escribes en el pacto y las firmas.
+            </span>
+          </label>
+        </>
+      )}
       <FormMessage state={state} />
       <div>
         <SubmitButton>{submitLabel}</SubmitButton>

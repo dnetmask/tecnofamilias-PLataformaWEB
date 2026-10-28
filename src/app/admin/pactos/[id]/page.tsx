@@ -32,6 +32,10 @@ export default async function AdminTemplatePage({ params, searchParams }: { para
         </div>
         <div className="field" style={{ maxWidth: 160 }}><label>Orden</label><input className="input" name="order" type="number" defaultValue={t?.order ?? 0} /></div>
         <label className="check"><input type="checkbox" name="published" defaultChecked={t?.published ?? true} /> Publicada</label>
+        <label className="check">
+          <input type="checkbox" name="public" defaultChecked={t?.public ?? false} /> Enlace público: cualquiera puede crear este pacto sin cuenta
+          {t?.public && <> en <Link href={`/pacto/${t.slug}`}>/pacto/{t.slug}</Link></>}
+        </label>
         <div><SubmitButton>Guardar plantilla</SubmitButton></div>
       </form>
       {t && (

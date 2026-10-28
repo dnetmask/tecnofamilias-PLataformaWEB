@@ -30,7 +30,10 @@ export default async function AdminTemplatesPage({ searchParams }: { searchParam
                 <td><span className="icon-dot" style={{ background: t.color, width: 14, height: 14, display: "inline-block", marginRight: 8, verticalAlign: "middle" }} /><Link href={`/admin/pactos/${t.id}`}>{t.appName}</Link></td>
                 <td>{Array.isArray(t.clauses) ? t.clauses.length : 0}</td>
                 <td>{t._count.pacts}</td>
-                <td>{t.published ? <span className="badge badge-green">Publicada</span> : <span className="badge badge-gray">Oculta</span>}</td>
+                <td>
+                  {t.published ? <span className="badge badge-green">Publicada</span> : <span className="badge badge-gray">Oculta</span>}
+                  {t.public && t.published && <div className="small"><Link href={`/pacto/${t.slug}`}>🔗 Enlace público</Link></div>}
+                </td>
               </tr>
             ))}
           </tbody>

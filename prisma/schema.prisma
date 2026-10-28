@@ -297,6 +297,8 @@ model PactTemplate {
   /// Lista de cláusulas sugeridas (string[])
   clauses     Json
   published   Boolean  @default(true)
+  /// Se puede usar sin cuenta desde un enlace público (/pacto/<slug>).
+  public      Boolean  @default(false)
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 
@@ -305,8 +307,9 @@ model PactTemplate {
 
 model Pact {
   id              String        @id @default(cuid())
-  userId          String
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// null en los pactos creados sin cuenta desde el enlace público.
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
   templateId      String?
   template        PactTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
   appName         String
@@ -325,6 +328,8 @@ model Pact {
   childSignedAt   DateTime?
   /// Token para que el hijo firme desde su propio dispositivo.
   shareToken      String        @unique @default(cuid())
+  /// Enlace privado con el que quien lo creó sin cuenta vuelve a su pacto.
+  manageToken     String?       @unique
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
