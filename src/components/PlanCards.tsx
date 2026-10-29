@@ -10,7 +10,6 @@ const INCLUDES = [
   "Pactos digitales ilimitados para firmar con tus hijos",
   "Juegos para jugar y conversar en familia",
   "Comunidad de apoyo entre familias",
-  "Opción de sumar cursos complementarios con pago adicional",
 ];
 
 export async function PlanCards({ plans }: { plans: Plan[] }) {
