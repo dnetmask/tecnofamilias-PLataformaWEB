@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { PlanCards } from "@/components/PlanCards";
 import { ServicesCatalog } from "@/components/ServicesCatalog";
 import { CurrencyNote } from "@/components/CurrencyNote";
@@ -33,14 +32,6 @@ export default async function PlansPage({ searchParams }: { searchParams: Promis
         )}
         <PlanCards plans={plans} />
         <div className="center" style={{ maxWidth: 640, margin: "0 auto" }}><CurrencyNote currency={pricing.currency} /></div>
-        <div className="card card-tint">
-          <h3>¿Qué son los cursos complementarios?</h3>
-          <p className="muted" style={{ margin: 0 }}>
-            La suscripción incluye toda la base de clases, la caja de herramientas, pactos y la comunidad. Algunos cursos
-            especializados son complementos: los suscriptores los compran una sola vez con un pago adicional y quedan
-            en su cuenta mientras la suscripción esté activa. Míralos en el <Link href="/clases?tipo=complementos">catálogo</Link>.
-          </p>
-        </div>
       </div>
       <div className="container section" id="servicios" style={{ borderTop: "1px solid var(--line)" }}>
         <h2>Otros servicios</h2>
