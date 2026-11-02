@@ -36,7 +36,7 @@ export async function MemberHome({ user }: { user: CurrentUser }) {
       select: { id: true, slug: true, title: true, ageStage: true, access: true, durationMin: true, thumbnailUrl: true },
     }),
     db.game.findMany({
-      where: { published: true },
+      where: { published: true, unlisted: false },
       orderBy: [{ order: "asc" }, { createdAt: "desc" }],
       select: { id: true, slug: true, title: true, emoji: true, color: true, ageLabel: true, free: true },
     }),

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const [tools, games] = await Promise.all([
     db.resource.findMany({ where: availableToolWhere(), orderBy: [{ order: "asc" }, { createdAt: "desc" }], select: { slug: true, title: true, kind: true, author: true } }),
-    db.game.findMany({ where: { published: true, free: true }, select: { slug: true, title: true, description: true } }),
+    db.game.findMany({ where: { published: true, free: true, unlisted: false }, select: { slug: true, title: true, description: true } }),
   ]);
   const lines = [
     `# ${SITE_NAME}`,

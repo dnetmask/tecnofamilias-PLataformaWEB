@@ -17,22 +17,24 @@ function ageRange(label: string) {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const game = await db.game.findUnique({ where: { slug: (await params).slug }, select: { slug: true, title: true, description: true, free: true } });
+  const game = await db.game.findUnique({ where: { slug: (await params).slug }, select: { slug: true, title: true, description: true, free: true, unlisted: true } });
   if (!game) return { title: "Juego" };
   // Solo los juegos gratis son públicos; los demás requieren suscripción.
+  // Los de la sección oculta no se indexan.
+  if (game.unlisted) return { title: game.title, ...NOINDEX };
   return game.free ? pageMeta(`/juegos/${game.slug}`, `${game.title} · juego gratis en familia`, game.description.slice(0, 160)) : { title: game.title, ...NOINDEX };
 }
 
 export default async function GamePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const game = await db.game.findUnique({ where: { slug }, select: { slug: true, title: true, description: true, ageLabel: true, published: true, fullHeight: true, free: true } });
+  const game = await db.game.findUnique({ where: { slug }, select: { slug: true, title: true, description: true, ageLabel: true, published: true, fullHeight: true, free: true, unlisted: true } });
   // Los juegos gratis se abren sin cuenta; los demás requieren suscripción.
   const user = game?.free ? await getCurrentUser() : await requireSubscriber(`/juegos/${slug}`);
   if (!game || (!game.published && user?.role !== "ADMIN")) notFound();
 
   return (
     <div className="container section stack">
-      {game.free && (
+      {game.free && !game.unlisted && (
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -56,7 +58,7 @@ export default async function GamePage({ params }: { params: Promise<{ slug: str
           }}
         />
       )}
-      <p className="small"><Link href="/juegos">← Juegos</Link></p>
+      <p className="small">{game.unlisted ? <Link href="/juegos-gratis-seguros">← Juegos gratis y seguros</Link> : <Link href="/juegos">← Juegos</Link>}</p>
       <header className="stack" style={{ gap: 6 }}>
         <div className="row" style={{ gap: 8 }}>
           <h1 style={{ margin: 0, fontSize: "1.6rem" }}>{game.title}</h1>

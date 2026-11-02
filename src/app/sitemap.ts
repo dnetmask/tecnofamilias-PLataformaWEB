@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [tools, games, services, pacts] = await Promise.all([
     db.resource.findMany({ where: availableToolWhere(), select: { slug: true, createdAt: true } }),
-    db.game.findMany({ where: { published: true, free: true }, select: { slug: true, updatedAt: true } }),
+    db.game.findMany({ where: { published: true, free: true, unlisted: false }, select: { slug: true, updatedAt: true } }),
     db.service.findMany({ where: { active: true }, select: { slug: true, createdAt: true } }),
     db.pactTemplate.findMany({ where: { published: true, public: true }, select: { slug: true, createdAt: true } }),
   ]);

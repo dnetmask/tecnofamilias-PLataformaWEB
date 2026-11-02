@@ -13,7 +13,7 @@ export default async function GamesPage() {
   const open = await isPlatformOpen();
   const [games, member] = await Promise.all([
     db.game.findMany({
-      where: { published: true },
+      where: { published: true, unlisted: false },
       orderBy: [{ order: "asc" }, { createdAt: "desc" }],
       select: { id: true, slug: true, title: true, description: true, ageLabel: true, emoji: true, color: true, free: true },
     }),

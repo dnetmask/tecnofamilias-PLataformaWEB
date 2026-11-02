@@ -412,6 +412,9 @@ model Game {
   fullHeight  Boolean  @default(false)
   /// true: libre y gratis para todos, sin cuenta ni suscripción.
   free        Boolean  @default(false)
+  /// true: solo en la sección oculta /juegos-gratis-seguros (sin SEO): no
+  /// aparece en /juegos, el inicio, el sitemap ni llms.txt.
+  unlisted    Boolean  @default(false)
   published   Boolean  @default(true)
   order       Int      @default(0)
   createdAt   DateTime @default(now())

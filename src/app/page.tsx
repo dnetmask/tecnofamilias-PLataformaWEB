@@ -73,7 +73,7 @@ export default async function Home() {
   if (user) return <MemberHome user={user} />;
   const [plans, freeGame, freeTools, open] = await Promise.all([
     db.plan.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
-    db.game.findFirst({ where: { free: true, published: true }, orderBy: { order: "asc" }, select: { slug: true, title: true, emoji: true, color: true, description: true } }),
+    db.game.findFirst({ where: { free: true, published: true, unlisted: false }, orderBy: { order: "asc" }, select: { slug: true, title: true, emoji: true, color: true, description: true } }),
     db.resource.count({ where: { ...availableToolWhere(), access: { in: ["FREE", "EXTERNAL"] } } }),
     isPlatformOpen(),
   ]);
