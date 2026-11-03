@@ -16,7 +16,12 @@ export type MasterclassSetting = {
   seatsPct: number;
   recordingDays: number;
   showOnHome: boolean;
+  /** Enlace de pago de Mercado Pago. Vacío: se compra con el checkout de la plataforma. */
+  paymentLink: string;
 };
+
+/** Solo se aceptan enlaces de pago de Mercado Pago. */
+export const MP_LINK_PATTERN = /^https:\/\/(mpago\.(li|la)|link\.mercadopago\.com(\.[a-z]{2})?|(www\.)?mercadopago\.com(\.[a-z]{2})?)\/\S+$/;
 
 export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   serviceSlug: "masterclass-crianza-digital-segura",
@@ -28,6 +33,7 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   seatsPct: 63,
   recordingDays: 30,
   showOnHome: true,
+  paymentLink: "https://mpago.li/2TeDwDw",
 };
 
 export const getMasterclass = cache(async () => {

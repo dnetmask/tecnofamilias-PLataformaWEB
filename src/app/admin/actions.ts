@@ -14,7 +14,7 @@ import { notifyIndexNow } from "@/lib/indexnow";
 import { PLATFORM_KEY } from "@/lib/launch";
 import { SITE_URL } from "@/lib/site";
 import sitemap from "@/app/sitemap";
-import { MASTERCLASS_KEY } from "@/lib/masterclass";
+import { MASTERCLASS_KEY, MP_LINK_PATTERN } from "@/lib/masterclass";
 import { RATES_KEY } from "@/lib/pricing";
 
 function fail(path: string, message: string): never {
@@ -501,6 +501,7 @@ const masterclassSchema = z.object({
   seatsPct: z.coerce.number().int().min(0).max(100),
   recordingDays: z.coerce.number().int().min(0).max(365),
   showOnHome: z.preprocess((v) => v === "on", z.boolean()),
+  paymentLink: z.string().trim().max(300).refine((v) => v === "" || MP_LINK_PATTERN.test(v), "El enlace de pago debe ser de Mercado Pago (https://mpago.li/…)"),
 });
 
 export async function saveMasterclassAction(formData: FormData) {

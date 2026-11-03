@@ -19,7 +19,11 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
         Datos de la próxima masterclass que se muestran en la landing <strong>/masterclass</strong> y en el aviso de los inicios.
         El precio se edita en <Link href="/admin/servicios">Otros servicios</Link>
         {mc.service ? <> ({mc.service.name})</> : <> — <strong>no se encontró el servicio {mc.serviceSlug}</strong></>}.
-        Las compras aparecen en <Link href="/admin/solicitudes">Solicitudes</Link>.
+        {mc.paymentLink ? (
+          <> El cobro se hace con el <strong>enlace de pago de Mercado Pago</strong>: las compras aparecen en tu cuenta de Mercado Pago, no en Solicitudes. Verifica que el valor del enlace coincida con el precio del servicio.</>
+        ) : (
+          <> Las compras aparecen en <Link href="/admin/solicitudes">Solicitudes</Link>.</>
+        )}
       </p>
 
       <div className="card">
@@ -60,6 +64,11 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
             <input id="mc-seats" className="input" type="number" min={0} max={100} name="seatsPct" defaultValue={mc.seatsPct} required />
             <span className="hint">Porcentaje que muestra la barra de cupos.</span>
           </div>
+        </div>
+        <div className="field">
+          <label htmlFor="mc-pay">Enlace de pago de Mercado Pago</label>
+          <input id="mc-pay" className="input" type="url" name="paymentLink" defaultValue={mc.paymentLink} placeholder="https://mpago.li/…" />
+          <span className="hint">Los botones “Reservar mi cupo” abren este enlace. Déjalo vacío para cobrar con el checkout de la plataforma.</span>
         </div>
         <label className="check"><input type="checkbox" name="showOnHome" defaultChecked={mc.showOnHome} /> Mostrar el aviso en los inicios</label>
         <div><SubmitButton className="btn btn-sm">Guardar</SubmitButton></div>

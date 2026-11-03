@@ -129,9 +129,16 @@ export default async function MasterclassPage() {
   const price = pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
   const buyHref = mc.service ? `/checkout?servicio=${mc.service.slug}` : "/planes";
+  // Con enlace de Mercado Pago el pago se hace allá, en otra pestaña.
+  const BuyLink = ({ className, style, children }: { className: string; style?: React.CSSProperties; children: React.ReactNode }) =>
+    mc.paymentLink ? (
+      <a href={mc.paymentLink} target="_blank" rel="noopener noreferrer" className={className} style={style}>{children}</a>
+    ) : (
+      <Link href={buyHref} className={className} style={style}>{children}</Link>
+    );
   const Reserve = ({ className = "btn btn-yellow", label = `Reservar mi cupo · ${price}` }: { className?: string; label?: string }) =>
     canBuy ? (
-      <Link href={buyHref} className={className} style={{ fontSize: "1.05rem", padding: "14px 26px" }}>{label}</Link>
+      <BuyLink className={className} style={{ fontSize: "1.05rem", padding: "14px 26px" }}>{label}</BuyLink>
     ) : (
       <span className="btn btn-ghost" aria-disabled>Inscripciones cerradas</span>
     );
@@ -401,7 +408,7 @@ export default async function MasterclassPage() {
         <div className="mc-sticky">
           <div className="container row between" style={{ flexWrap: "nowrap" }}>
             <span className="small"><strong>{mc.shortDate}</strong> · {mc.seatsPct} % ocupado</span>
-            <Link href={buyHref} className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>Reservar · {price}</Link>
+            <BuyLink className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>Reservar · {price}</BuyLink>
           </div>
         </div>
       )}
