@@ -54,7 +54,10 @@ p { margin: 0 0 1em; }
 .center { text-align: center; }
 
 /* Encabezado */
-.header { background: var(--navy); color: #fff; position: sticky; top: 0; z-index: 20; }
+.header { background: var(--navy); color: #fff; position: sticky; top: 0; z-index: 20; transition: transform .25s ease; }
+.header-hidden { transform: translateY(-100%); }
+.header:focus-within { transform: none; }
+@media (prefers-reduced-motion: reduce) { .header { transition: none; } }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
 .brand { display: flex; align-items: center; }
 .brand img { height: 40px; width: auto; }
@@ -209,6 +212,17 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 
 .game-frame { width: 100%; height: 85vh; border: 0; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); display: block; }
 .game-frame:fullscreen { height: 100% !important; border-radius: 0; }
+/* Página del juego: barra compacta con el título y el botón de pantalla completa. */
+.game-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; }
+.game-bar h1 { margin: 0; font-size: 1.35rem; }
+.game-bar .game-bar-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+/* Pantalla completa propia para el iPhone (Safari no deja poner un iframe en pantalla completa). */
+.game-fs { position: fixed; inset: 0; z-index: 1000; background: var(--navy); height: 100vh; height: 100dvh; margin: 0 !important; display: flex; flex-direction: column; }
+.game-fs .game-frame { flex: 1 1 auto; height: auto !important; min-height: 0; border-radius: 0; box-shadow: none; margin: 0 !important; }
+/* Franja delgada encima del juego para salir, sin tapar los botones del juego. */
+.game-fs-bar { flex: none; display: flex; justify-content: flex-end; padding: calc(4px + env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-right, 0px)) 4px max(8px, env(safe-area-inset-left, 0px)); margin: 0 !important; }
+.game-fs-exit { border: 0; border-radius: 999px; padding: 4px 12px; font: inherit; font-size: .8rem; font-weight: 800; color: #fff; background: rgb(255 255 255 / 16%); cursor: pointer; }
+.game-fs-exit:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* Otros servicios (estilo de la diapositiva de precios) */
 .service-card { display: flex; gap: 16px; justify-content: space-between; align-items: flex-start; background: var(--tint); border-color: transparent; box-shadow: none; }
@@ -231,7 +245,8 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
   .service-price { text-align: left; align-items: flex-start; max-width: none; }
 }
 .services-grid { grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); }
-.game-frame-screen { height: calc(100dvh - 150px); min-height: 560px; }
+/* Juegos por pantallas: ocupan todo el alto; al bajar, el menú se esconde y el juego llena la pantalla. */
+.game-frame-screen { height: 100vh; height: 100dvh; min-height: 300px; }
 
 /* Selector de moneda */
 .currency-switch { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: #fff; border: 1.5px solid var(--line); flex-wrap: wrap; }

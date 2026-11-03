@@ -59,15 +59,12 @@ export default async function GamePage({ params }: { params: Promise<{ slug: str
         />
       )}
       <p className="small">{game.unlisted ? <Link href="/juegos-gratis-seguros">← Juegos gratis y seguros</Link> : <Link href="/juegos">← Juegos</Link>}</p>
-      <header className="stack" style={{ gap: 6 }}>
-        <div className="row" style={{ gap: 8 }}>
-          <h1 style={{ margin: 0, fontSize: "1.6rem" }}>{game.title}</h1>
-          {game.free && <span className="badge badge-green">Gratis para todos</span>}
-          {game.ageLabel && <span className="badge">{game.ageLabel}</span>}
-        </div>
-        <p className="muted" style={{ margin: 0, maxWidth: 820 }}>{game.description}</p>
-      </header>
-      <GameFrame src={`/juegos/${game.slug}/jugar`} title={game.title} fullHeight={game.fullHeight} />
+      {/* La descripción ya la muestra cada juego en su portada; aquí solo va lo esencial. */}
+      <GameFrame src={`/juegos/${game.slug}/jugar`} title={game.title} fullHeight={game.fullHeight}>
+        <h1>{game.title}</h1>
+        {game.free && <span className="badge badge-green">Gratis</span>}
+        {game.ageLabel && <span className="badge">{game.ageLabel}</span>}
+      </GameFrame>
     </div>
   );
 }

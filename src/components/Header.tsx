@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logoutAction } from "@/app/(auth)/actions";
 
 type Props = {
@@ -25,10 +25,24 @@ const LINKS = [
 export function Header({ user, platformOpen }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  // Se esconde al bajar y vuelve al subir: en el celular deja toda la pantalla al contenido (p. ej. los juegos).
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - last) < 8) return;
+      setHidden(y > last && y > 80);
+      last = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => setHidden(false), [pathname]);
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   return (
-    <header className="header">
+    <header className={`header${hidden && !open ? " header-hidden" : ""}`}>
       <div className="container header-inner">
         <Link href="/" className="brand" aria-label="Tecnofamilias, inicio">
           <img src="/logo-light.svg" alt="Tecnofamilias" width={120} height={40} />

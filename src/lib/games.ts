@@ -23,13 +23,29 @@ var s={getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.ca
 Object.defineProperty(s,"length",{get:function(){return Object.keys(m).length}});
 try{Object.defineProperty(window,"localStorage",{value:s,configurable:true})}catch(e){}})()</script>`;
 
-/** Agrega al HTML del juego el reporte de altura y el almacenamiento local. */
+/**
+ * Safari del iPhone no deja usar la pantalla completa del navegador. Si el
+ * juego trae su propio botón, este script se lo pide a la página, que usa su
+ * pantalla completa propia.
+ */
+export const GAME_FULLSCREEN_MESSAGE = "tf-game-fullscreen";
+
+const FULLSCREEN_SCRIPT = `<script>(function(){if(document.fullscreenEnabled||document.webkitFullscreenEnabled)return;var on=false;
+function set(v){if(on===v)return;on=v;try{document.dispatchEvent(new Event("fullscreenchange"))}catch(e){}}
+function ask(v){set(v);try{parent.postMessage({type:"${GAME_FULLSCREEN_MESSAGE}",on:v},"*")}catch(e){}return Promise.resolve()}
+addEventListener("message",function(e){if(e.source===parent&&e.data&&e.data.type==="${GAME_FULLSCREEN_MESSAGE}")set(e.data.on===true)});
+Element.prototype.requestFullscreen=function(){return ask(true)};Element.prototype.webkitRequestFullscreen=function(){ask(true)};
+document.exitFullscreen=function(){return ask(false)};document.webkitExitFullscreen=function(){ask(false)};
+try{Object.defineProperty(document,"fullscreenEnabled",{get:function(){return true},configurable:true});Object.defineProperty(document,"fullscreenElement",{get:function(){return on?document.documentElement:null},configurable:true})}catch(e){}})()</script>`;
+
+/** Agrega al HTML del juego el reporte de altura, el almacenamiento local y la pantalla completa del iPhone. */
 export function withHeightReporter(html: string) {
   const lower = html.toLowerCase();
   // El almacenamiento va antes de cualquier script del juego.
   const head = lower.indexOf("<head");
   const headEnd = head === -1 ? -1 : lower.indexOf(">", head) + 1;
-  let out = headEnd > 0 ? html.slice(0, headEnd) + STORAGE_SCRIPT + html.slice(headEnd) : STORAGE_SCRIPT + html;
+  const injected = STORAGE_SCRIPT + FULLSCREEN_SCRIPT;
+  let out = headEnd > 0 ? html.slice(0, headEnd) + injected + html.slice(headEnd) : injected + html;
   const i = out.toLowerCase().lastIndexOf("</body>");
   out = i === -1 ? out + HEIGHT_SCRIPT : out.slice(0, i) + HEIGHT_SCRIPT + out.slice(i);
   return out;

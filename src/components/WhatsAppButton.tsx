@@ -11,10 +11,10 @@ export function WhatsAppIcon({ size = 28 }: { size?: number }) {
   );
 }
 
-/** Botón flotante de WhatsApp en todas las páginas (salvo la administración). */
+/** Botón flotante de WhatsApp en todas las páginas (salvo la administración y los juegos, donde tapaba los controles). */
 export function WhatsAppButton() {
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/admin") || pathname.startsWith("/juegos/")) return null;
   return (
     <a
       href={whatsappUrl("Hola Tecnofamilias, quiero más información.")}
