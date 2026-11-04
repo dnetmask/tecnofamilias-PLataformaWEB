@@ -173,6 +173,11 @@ export default async function MasterclassPage() {
             </div>
             <div className="row" style={{ gap: 16 }}>
               <Reserve />
+              {canBuy && mc.testLink && (
+                <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ color: "#fff", borderColor: "rgb(255 255 255 / 55%)" }}>
+                  Pago de prueba · {formatCop(mc.testAmountCop)}
+                </a>
+              )}
               <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender</a>
             </div>
           </div>
