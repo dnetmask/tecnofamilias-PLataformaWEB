@@ -48,7 +48,7 @@ const ORG_JSON_LD = {
   ],
 };
 
-export const viewport: Viewport = { themeColor: "#28395f" };
+export const viewport: Viewport = { themeColor: "#ffffff" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();

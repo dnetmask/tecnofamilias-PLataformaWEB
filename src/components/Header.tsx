@@ -45,10 +45,10 @@ export function Header({ user, platformOpen }: Props) {
     <header className={`header${hidden && !open ? " header-hidden" : ""}`}>
       <div className="container header-inner">
         <Link href="/" className="brand" aria-label="Tecnofamilias, inicio">
-          <img src="/logo-light.svg" alt="Tecnofamilias" width={120} height={40} />
+          <img src="/logo.svg" alt="Tecnofamilias" width={120} height={40} />
         </Link>
         <button
-          className="btn btn-light btn-sm menu-toggle"
+          className="btn btn-ghost btn-sm menu-toggle"
           aria-expanded={open}
           aria-controls="main-nav"
           onClick={() => setOpen((v) => !v)}
@@ -81,7 +81,7 @@ export function Header({ user, platformOpen }: Props) {
                 Mi cuenta
               </Link>
               <form action={logoutAction}>
-                <button className="btn btn-ghost btn-sm" style={{ color: "#fff", borderColor: "rgb(255 255 255 / 30%)" }}>
+                <button className="btn btn-ghost btn-sm">
                   Salir
                 </button>
               </form>
