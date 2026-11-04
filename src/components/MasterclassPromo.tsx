@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatCop } from "@/lib/format";
 import { getMasterclass } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { SeatsBar } from "./SeatsBar";
@@ -19,7 +20,7 @@ export async function MasterclassPromo({ compact = false }: { compact?: boolean 
             {" "}{mc.dateLabel} · {mc.time} ({mc.timezone}) · {mc.modality}.
           </p>
           <div className="row" style={{ marginTop: 6 }}>
-            <Link href="/masterclass" className="btn btn-yellow">Reservar mi cupo · {pricing.price(mc.service.priceUsd ?? 0, mc.service.priceCop)}</Link>
+            <Link href="/masterclass" className="btn btn-yellow">Reservar mi cupo · {mc.paymentLink && mc.paymentAmountCop ? formatCop(mc.paymentAmountCop) : pricing.price(mc.service.priceUsd ?? 0, mc.service.priceCop)}</Link>
             <Link href="/masterclass#contenido" className="btn btn-light">Ver el contenido</Link>
           </div>
         </div>

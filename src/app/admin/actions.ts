@@ -502,6 +502,9 @@ const masterclassSchema = z.object({
   recordingDays: z.coerce.number().int().min(0).max(365),
   showOnHome: z.preprocess((v) => v === "on", z.boolean()),
   paymentLink: z.string().trim().max(300).refine((v) => v === "" || MP_LINK_PATTERN.test(v), "El enlace de pago debe ser de Mercado Pago (https://mpago.li/…)"),
+  paymentAmountCop: z.coerce.number().int().min(0).max(100_000_000),
+  testLink: z.string().trim().max(300).refine((v) => v === "" || MP_LINK_PATTERN.test(v), "El enlace de prueba debe ser de Mercado Pago (https://mpago.li/…)"),
+  testAmountCop: z.coerce.number().int().min(0).max(100_000_000),
 });
 
 export async function saveMasterclassAction(formData: FormData) {

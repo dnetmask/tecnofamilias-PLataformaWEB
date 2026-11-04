@@ -126,7 +126,8 @@ export default async function MasterclassPage() {
   const [mc, pricing] = await Promise.all([getMasterclass(), getPricing()]);
   const usd = mc.service?.priceUsd ?? 0;
   const cop = mc.service?.priceCop;
-  const price = pricing.price(usd, cop);
+  // Con enlace de Mercado Pago se cobra un valor fijo en pesos: ese es el precio que se muestra.
+  const price = mc.paymentLink && mc.paymentAmountCop ? formatCop(mc.paymentAmountCop) : pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
   const buyHref = mc.service ? `/checkout?servicio=${mc.service.slug}` : "/planes";
   // Con enlace de Mercado Pago el pago se hace allá, en otra pestaña.
@@ -368,16 +369,25 @@ export default async function MasterclassPage() {
             <h3 style={{ margin: 0, fontSize: "1.7rem" }}>Masterclass: Crianza digital segura</h3>
             <div>
               <span className="price" style={{ fontSize: "2.6rem" }}>{price}</span> <span className="muted">por persona</span>
-              {usd > 0 && <div className="small muted">Se cobra hoy {formatCop(pricing.charge(usd, cop))} · precio base USD {usd}</div>}
+              {mc.paymentLink ? (
+                <div className="small muted">Se paga en pesos colombianos con Mercado Pago.</div>
+              ) : (
+                usd > 0 && <div className="small muted">Se cobra hoy {formatCop(pricing.charge(usd, cop))} · precio base USD {usd}</div>
+              )}
             </div>
-            <CurrencySwitcher current={pricing.currency} />
+            {!mc.paymentLink && <CurrencySwitcher current={pricing.currency} />}
             <ul style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 6 }}>
               <li>{mc.dateLabel} · {mc.time} ({mc.timezone})</li>
               <li>{mc.modality} · {mc.duration}</li>
               <li>Taller en vivo de controles parentales</li>
               <li>Kit completo de materiales y grabación por {mc.recordingDays} días</li>
             </ul>
-            <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
+            <Reserve className="btn btn-yellow" label={`Reservar mi cupo · ${price}`} />
+            {canBuy && mc.testLink && (
+              <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)
+              </a>
+            )}
             <p className="small muted center" style={{ margin: 0 }}>Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo).</p>
           </div>
           <p className="center small" style={{ color: "#dce6f2", margin: 0 }}>

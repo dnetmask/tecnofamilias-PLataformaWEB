@@ -65,10 +65,26 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
             <span className="hint">Porcentaje que muestra la barra de cupos.</span>
           </div>
         </div>
-        <div className="field">
-          <label htmlFor="mc-pay">Enlace de pago de Mercado Pago</label>
-          <input id="mc-pay" className="input" type="url" name="paymentLink" defaultValue={mc.paymentLink} placeholder="https://mpago.li/…" />
-          <span className="hint">Los botones “Reservar mi cupo” abren este enlace. Déjalo vacío para cobrar con el checkout de la plataforma.</span>
+        <div className="grid grid-2" style={{ gap: 14 }}>
+          <div className="field">
+            <label htmlFor="mc-pay">Enlace de pago de Mercado Pago</label>
+            <input id="mc-pay" className="input" type="url" name="paymentLink" defaultValue={mc.paymentLink} placeholder="https://mpago.li/…" />
+            <span className="hint">Los botones “Reservar mi cupo” abren este enlace. Déjalo vacío para cobrar con el checkout de la plataforma.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-pay-cop">Valor que cobra el enlace (COP)</label>
+            <input id="mc-pay-cop" className="input" type="number" min={0} step={1000} name="paymentAmountCop" defaultValue={mc.paymentAmountCop} required />
+            <span className="hint">Es el precio que muestra la landing; debe coincidir con el del enlace.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-test">Enlace de pago de prueba</label>
+            <input id="mc-test" className="input" type="url" name="testLink" defaultValue={mc.testLink} placeholder="https://mpago.li/…" />
+            <span className="hint">Muestra un botón “Pago de prueba” en la sección de precio. Déjalo vacío para quitarlo antes de anunciar la masterclass.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-test-cop">Valor de la prueba (COP)</label>
+            <input id="mc-test-cop" className="input" type="number" min={0} step={1000} name="testAmountCop" defaultValue={mc.testAmountCop} required />
+          </div>
         </div>
         <label className="check"><input type="checkbox" name="showOnHome" defaultChecked={mc.showOnHome} /> Mostrar el aviso en los inicios</label>
         <div><SubmitButton className="btn btn-sm">Guardar</SubmitButton></div>

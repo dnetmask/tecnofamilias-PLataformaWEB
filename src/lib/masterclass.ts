@@ -18,6 +18,11 @@ export type MasterclassSetting = {
   showOnHome: boolean;
   /** Enlace de pago de Mercado Pago. Vacío: se compra con el checkout de la plataforma. */
   paymentLink: string;
+  /** Valor en pesos que cobra el enlace de pago (se muestra en la landing). */
+  paymentAmountCop: number;
+  /** Enlace de pago de prueba (valor bajo) para verificar el flujo; vacío lo oculta. */
+  testLink: string;
+  testAmountCop: number;
 };
 
 /** Solo se aceptan enlaces de pago de Mercado Pago. */
@@ -34,6 +39,9 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   recordingDays: 30,
   showOnHome: true,
   paymentLink: "https://mpago.li/2TeDwDw",
+  paymentAmountCop: 165000,
+  testLink: "https://mpago.li/1WMMqMR",
+  testAmountCop: 5000,
 };
 
 export const getMasterclass = cache(async () => {
