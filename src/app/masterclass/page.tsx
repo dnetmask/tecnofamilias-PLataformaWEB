@@ -156,6 +156,33 @@ export default async function MasterclassPage() {
       <span className="btn btn-ghost" aria-disabled>Inscripciones cerradas</span>
     );
 
+  // Las dos formas de pago juntas (Colombia y exterior), iguales arriba, en el precio y al final.
+  const PayOptions = ({ compact = false }: { compact?: boolean }) =>
+    canBuy ? (
+      <div className={`mc-pay${compact ? " compact" : ""}`}>
+        <div className="mc-pay-opt">
+          <span className="mc-pay-label">🇨🇴 En Colombia · {price}</span>
+          <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
+          <span className="small muted">Mercado Pago: tarjeta, PSE, Nequi y efectivo.</span>
+          {mc.testLink && (
+            <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)</a>
+          )}
+        </div>
+        {paypal && (
+          <div className="mc-pay-opt">
+            <span className="mc-pay-label">🌎 Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
+            {checkoutClientId ? <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} /> : <PayPalLink />}
+            <span className="small muted">PayPal: con tu cuenta o con tarjeta internacional.</span>
+            {paypalTestHref && (
+              <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
+            )}
+          </div>
+        )}
+      </div>
+    ) : (
+      <Reserve />
+    );
+
   const faqs = [
     ["¿Necesito saber de tecnología?", "No. Todo se explica en lenguaje sencillo y vamos configurando juntos, pantalla por pantalla."],
     ["¿Sirve si mis hijos tienen Android, iPhone o consola?", "Sí. Cubrimos Android, iPhone y computador, y te mostramos dónde están los controles en consolas y televisores."],
@@ -188,21 +215,8 @@ export default async function MasterclassPage() {
               <span>🕕 {mc.time} ({mc.timezone})</span>
               <span>💻 {mc.modality}</span>
             </div>
-            <div className="row" style={{ gap: 16 }}>
-              <Reserve />
-              {canBuy && mc.testLink && (
-                <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ color: "#fff", borderColor: "rgb(255 255 255 / 55%)" }}>
-                  Pago de prueba · {formatCop(mc.testAmountCop)}
-                </a>
-              )}
-              <PayPalLink />
-              {paypalTestHref && (
-                <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ color: "#fff", borderColor: "rgb(255 255 255 / 55%)" }}>
-                  Pago de prueba en dólares · USD {mc.paypalTestAmountUsd}
-                </a>
-              )}
-              <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender</a>
-            </div>
+            <PayOptions />
+            <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender ↓</a>
           </div>
           <div className="mc-art" aria-hidden>
             <span className="b" style={{ right: 10, top: 0, width: 280, height: 280, background: "var(--blue)" }} />
@@ -410,30 +424,7 @@ export default async function MasterclassPage() {
               <li>Taller en vivo de controles parentales</li>
               <li>Kit completo de materiales y grabación por {mc.recordingDays} días</li>
             </ul>
-            <Reserve className="btn btn-yellow" label={`Reservar mi cupo · ${price}`} />
-            {canBuy && mc.testLink && (
-              <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
-                Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)
-              </a>
-            )}
-            <p className="small muted center" style={{ margin: 0 }}>Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo).</p>
-            {checkoutClientId ? (
-              <div id="pagar-dolares" className="stack" style={{ gap: 10, borderTop: "1px solid var(--line)", paddingTop: 16, scrollMarginTop: 90 }}>
-                <p style={{ margin: 0, fontWeight: 800 }}>¿Estás fuera de Colombia? Reserva en dólares · USD {mc.paypalAmountUsd}</p>
-                <p className="small muted" style={{ margin: 0 }}>Paga con tu cuenta de PayPal o con tarjeta de crédito o débito internacional, sin salir de esta página.</p>
-                <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} />
-              </div>
-            ) : paypal && (
-              <>
-                <PayPalLink />
-                <p className="small muted center" style={{ margin: 0 }}>Fuera de Colombia: pago en dólares con PayPal, con tu cuenta o con tarjeta internacional.</p>
-                {paypalTestHref && (
-                  <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
-                    Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)
-                  </a>
-                )}
-              </>
-            )}
+            <PayOptions compact />
           </div>
           <p className="center small" style={{ color: "#dce6f2", margin: 0 }}>
             ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ color: "#fff", fontWeight: 800 }}>Pide una propuesta institucional</Link>
@@ -455,11 +446,7 @@ export default async function MasterclassPage() {
       <section className="mc-final">
         <div className="container row between" style={{ gap: 20 }}>
           <h2 style={{ margin: 0, color: "var(--navy-dark)", flex: "1 1 420px" }}>{mc.duration} hoy para dormir más tranquilo mañana.</h2>
-          <div className="row" style={{ gap: 12 }}>
-            <Reserve className="btn" label={`Reservar mi cupo · ${price}`} />
-            {/* Sobre el fondo amarillo de esta franja el botón en dólares va en blanco para que se vea. */}
-            <PayPalLink className="btn btn-light" />
-          </div>
+          <div style={{ flex: "1 1 520px", minWidth: 0 }}><PayOptions /></div>
         </div>
       </section>
 

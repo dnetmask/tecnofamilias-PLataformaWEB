@@ -25,7 +25,15 @@ export function PayPalCheckout({ clientId, amountUsd }: { clientId: string; amou
   const [state, setState] = useState<{ kind: "idle" | "paid" | "error"; text?: string }>({ kind: "idle" });
 
   useEffect(() => {
-    if (window.paypal) setSdkReady(true);
+    // Con varios botones en la página el SDK se carga una sola vez: cada uno espera a que exista.
+    if (window.paypal) return setSdkReady(true);
+    const timer = setInterval(() => {
+      if (window.paypal) {
+        setSdkReady(true);
+        clearInterval(timer);
+      }
+    }, 200);
+    return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {

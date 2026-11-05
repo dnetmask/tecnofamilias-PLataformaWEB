@@ -423,3 +423,11 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 @media (max-width: 560px) {
   .mc-hero .btn, .mc-price .btn, .mc-final .btn { width: 100%; white-space: normal; text-align: center; padding-left: 16px !important; padding-right: 16px !important; }
 }
+
+/* Masterclass: las dos formas de pago juntas (Colombia con Mercado Pago, exterior con PayPal). */
+.mc-pay { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; background: #fff; color: var(--ink); border-radius: 20px; padding: 14px; box-shadow: 0 12px 30px rgb(15 25 50 / 18%); }
+.mc-pay.compact { grid-template-columns: 1fr; padding: 0; box-shadow: none; background: transparent; }
+.mc-pay-opt { display: flex; flex-direction: column; gap: 8px; min-width: 0; background: var(--tint); border-radius: 14px; padding: 14px; }
+.mc-pay-label { font-weight: 800; font-size: .95rem; color: var(--navy); }
+.mc-pay .btn { width: 100%; white-space: normal; text-align: center; min-height: 48px; }
+.mc-pay-test { color: var(--muted); text-decoration: underline; }
