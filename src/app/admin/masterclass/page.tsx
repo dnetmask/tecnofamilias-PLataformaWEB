@@ -88,7 +88,7 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
           <div className="field">
             <label htmlFor="mc-pp-button">PayPal · ID del botón</label>
             <input id="mc-pp-button" className="input" name="paypalButtonId" defaultValue={mc.paypalButtonId} placeholder="p. ej. ABCD1234EFGH5" />
-            <span className="hint">Está en el código del botón: <code>hostedButtonId: &quot;…&quot;</code>. El botón “Pagar en dólares” abre su página de pago (PayPal, Apple Pay o tarjeta). Vacío: se usa el checkout propio de PayPal.</span>
+            <span className="hint">Está en el código del botón: <code>hostedButtonId: &quot;…&quot;</code>. Solo se usa si PayPal no está conectado (sin credenciales en Vercel): “Pagar en dólares” abre la página de pago de este botón.</span>
           </div>
           <div className="field">
             <label htmlFor="mc-pp-usd">Valor en PayPal (USD)</label>

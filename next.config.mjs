@@ -1,15 +1,15 @@
 // Política de contenido: solo se cargan recursos del sitio y de los servicios que usa
 // (Tag Manager y Google Analytics, analítica de Vercel, videos y podcasts incrustados,
-// subida de archivos a Vercel Blob). Los pagos (Mercado Pago, PayPal) se hacen en sus páginas.
+// subida de archivos a Vercel Blob y el formulario de pago de PayPal). Mercado Pago es un enlace externo.
 const CSP = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'"} https://www.googletagmanager.com https://*.googletagmanager.com`,
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'"} https://www.googletagmanager.com https://*.googletagmanager.com https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "media-src 'self' blob: https:",
-  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://vercel.com https://*.vercel-storage.com",
-  "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://open.spotify.com https://www.googletagmanager.com",
+  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://vercel.com https://*.vercel-storage.com https://*.paypal.com https://*.paypalobjects.com",
+  "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://open.spotify.com https://www.googletagmanager.com https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",

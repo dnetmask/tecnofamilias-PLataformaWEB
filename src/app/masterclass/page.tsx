@@ -5,9 +5,8 @@ import { SeatsBar } from "@/components/SeatsBar";
 import { formatCop } from "@/lib/format";
 import { getMasterclass } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
-import { paypalEnabled } from "@/lib/paypal";
+import { paypalClientId } from "@/lib/paypal";
 import { TEAM } from "@/lib/team";
-import { PayInDollarsButton } from "./PayInDollarsButton";
 
 export const dynamic = "force-dynamic";
 
@@ -131,10 +130,10 @@ export default async function MasterclassPage() {
   // Con enlace de Mercado Pago se cobra un valor fijo en pesos: ese es el precio que se muestra.
   const price = mc.paymentLink && mc.paymentAmountCop ? formatCop(mc.paymentAmountCop) : pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
-  // Pago en dólares: con ID de botón de PayPal, su página de pago (PayPal, Apple Pay o tarjeta); si no, el
-  // checkout propio con la API de PayPal.
-  const payLink = canBuy && !!mc.paypalButtonId;
-  const checkout = canBuy && !payLink && !!mc.paypalAmountUsd && paypalEnabled();
+  // Pago en dólares: la página de pago propia con tarjeta (integración de PayPal); sin credenciales de
+  // PayPal, el enlace de pago de un botón de PayPal, si está configurado.
+  const checkout = canBuy && !!mc.paypalAmountUsd && !!paypalClientId();
+  const payLink = canBuy && !checkout && !!mc.paypalButtonId;
   const paypal = payLink || checkout;
   const paypalHref = `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
   const paypalTestHref = canBuy && mc.paypalTestButtonId ? `https://www.paypal.com/ncp/payment/${mc.paypalTestButtonId}` : null;
@@ -175,8 +174,8 @@ export default async function MasterclassPage() {
         {paypal && (
           <div className="mc-pay-opt">
             <span className="mc-pay-label">Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
-            {checkout ? <PayInDollarsButton amountUsd={mc.paypalAmountUsd} /> : <PayPalLink />}
-            <span className="small muted">{payLink ? "PayPal, Apple Pay o tarjeta internacional." : "PayPal o tarjeta internacional."}</span>
+            {checkout ? <Link href="/masterclass/pagar-dolares" className="btn btn-yellow">Pagar en dólares</Link> : <PayPalLink />}
+            <span className="small muted">{checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
             {detail && paypalTestHref && (
               <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
             )}

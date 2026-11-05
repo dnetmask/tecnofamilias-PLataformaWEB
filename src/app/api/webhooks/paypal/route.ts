@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { paypalEnabled, syncOrder, syncRefund } from "@/lib/paypal";
+import { paypalClientId, syncOrder, syncRefund } from "@/lib/paypal";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +13,7 @@ type Event = {
  * de volver. No se confía en el cuerpo: cada aviso se vuelve a consultar en la API.
  */
 export async function POST(request: Request) {
-  if (!paypalEnabled()) return NextResponse.json({ ok: true });
+  if (!paypalClientId()) return NextResponse.json({ ok: true });
   const event = (await request.json().catch(() => ({}))) as Event;
   try {
     switch (event.event_type) {

@@ -2,13 +2,12 @@ import "server-only";
 import { db } from "./db";
 import { getMasterclass } from "./masterclass";
 import { fulfillOrder } from "./payments";
-import { SITE_URL } from "./site";
 
 /**
  * Checkout de PayPal (pagos en dólares) con la API de órdenes v2: el servidor
- * crea la orden con el valor de la plataforma, lleva a la persona a la página de
- * pago de PayPal (cuenta o tarjeta) y, al volver, captura el pago. Nunca se
- * confía en el monto que llega del navegador.
+ * crea la orden con el valor de la plataforma y la captura cuando la persona
+ * paga en /masterclass/pagar-dolares (tarjeta o cuenta PayPal, con el SDK).
+ * Nunca se confía en el monto que llega del navegador.
  *
  * Variables: PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET y PAYPAL_ENV ("live" o
  * "sandbox", por defecto sandbox). Sin las dos primeras el checkout no se muestra.
@@ -22,9 +21,9 @@ function config() {
   return { clientId, secret, base };
 }
 
-/** true si el checkout de PayPal está configurado. */
-export function paypalEnabled() {
-  return config() !== null;
+/** Client ID público para el SDK del navegador, o null si PayPal no está configurado. */
+export function paypalClientId() {
+  return config()?.clientId ?? null;
 }
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
@@ -67,7 +66,6 @@ async function paypal<T>(path: string, init: { method?: string; body?: unknown; 
 type PayPalOrder = {
   id: string;
   status: string;
-  links?: { rel: string; href: string }[];
   payer?: { name?: { given_name?: string; surname?: string }; email_address?: string };
   purchase_units?: {
     custom_id?: string;
@@ -75,7 +73,7 @@ type PayPalOrder = {
   }[];
 };
 
-/** Crea la orden local y la de PayPal para la masterclass. Devuelve la página de pago de PayPal. */
+/** Crea la orden local y la de PayPal para la masterclass. Devuelve el id de la orden de PayPal. */
 export async function createMasterclassOrder(userId: string | null) {
   const mc = await getMasterclass();
   const service = mc.service;
@@ -100,30 +98,15 @@ export async function createMasterclassOrder(userId: string | null) {
           amount: { currency_code: "USD", value: amount.toFixed(2) },
         },
       ],
-      payment_source: {
-        paypal: {
-          experience_context: {
-            brand_name: "Tecnofamilias",
-            shipping_preference: "NO_SHIPPING",
-            user_action: "PAY_NOW",
-            landing_page: "NO_PREFERENCE",
-            locale: "es-CO",
-            // PayPal agrega ?token=<orden> al volver.
-            return_url: `${SITE_URL}/masterclass/pago`,
-            cancel_url: `${SITE_URL}/masterclass?pago=cancelado#precio`,
-          },
-        },
-      },
+      application_context: { brand_name: "Tecnofamilias", shipping_preference: "NO_SHIPPING", user_action: "PAY_NOW", locale: "es-CO" },
     },
   });
   if (status >= 300 || !data.id) {
     await db.order.update({ where: { id: order.id }, data: { status: "FAILED" } });
     throw new Error(`PayPal no creó la orden (${status}): ${JSON.stringify(data)}`);
   }
-  const approveUrl = data.links?.find((l) => l.rel === "payer-action" || l.rel === "approve")?.href;
-  if (!approveUrl) throw new Error(`PayPal no devolvió la página de pago: ${JSON.stringify(data)}`);
   await db.order.update({ where: { id: order.id }, data: { providerRef: data.id } });
-  return approveUrl;
+  return data.id;
 }
 
 /** Verifica una orden ya pagada en PayPal contra la orden local y entrega el cupo. */
@@ -144,7 +127,7 @@ async function settle(pp: PayPalOrder) {
   return { ok: true as const, email };
 }
 
-/** Captura el pago cuando la persona vuelve de PayPal (o por el webhook). Es idempotente. */
+/** Captura el pago cuando la persona lo aprueba (o por el webhook). Es idempotente. */
 export async function captureOrder(paypalOrderId: string) {
   const local = await db.order.findFirst({ where: { provider: "paypal", providerRef: paypalOrderId } });
   if (!local) return { ok: false as const, reason: "orden desconocida" };
