@@ -20,6 +20,12 @@ export function ClickTracker() {
         window.dataLayer?.push({ event: "begin_checkout", pagina: pathname, metodo: "mercado_pago" });
         return;
       }
+      if (a?.href.startsWith("https://www.paypal.com/ncp/payment/")) {
+        // Clic en el pago en dólares con PayPal (masterclass).
+        track("Pago PayPal", { pagina: pathname });
+        window.dataLayer?.push({ event: "begin_checkout", pagina: pathname, metodo: "paypal" });
+        return;
+      }
       if (!a?.href.startsWith("https://wa.me/")) return;
       const boton = a.classList.contains("wa-float") ? "flotante" : "pagina";
       track("WhatsApp", { pagina: pathname, boton });

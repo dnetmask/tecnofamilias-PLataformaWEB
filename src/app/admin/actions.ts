@@ -505,7 +505,6 @@ const masterclassSchema = z.object({
   paymentAmountCop: z.coerce.number().int().min(0).max(100_000_000),
   testLink: z.string().trim().max(300).refine((v) => v === "" || MP_LINK_PATTERN.test(v), "El enlace de prueba debe ser de Mercado Pago (https://mpago.li/…)"),
   testAmountCop: z.coerce.number().int().min(0).max(100_000_000),
-  paypalClientId: z.string().trim().max(200).regex(/^[A-Za-z0-9_-]*$/, "El Client ID de PayPal solo lleva letras, números, - y _"),
   paypalButtonId: z.string().trim().max(60).regex(/^[A-Za-z0-9]*$/, "El ID del botón de PayPal solo lleva letras y números"),
   paypalAmountUsd: z.coerce.number().int().min(0).max(100_000),
 });

@@ -86,14 +86,9 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
             <input id="mc-test-cop" className="input" type="number" min={0} step={1000} name="testAmountCop" defaultValue={mc.testAmountCop} required />
           </div>
           <div className="field">
-            <label htmlFor="mc-pp-client">PayPal · Client ID</label>
-            <input id="mc-pp-client" className="input" name="paypalClientId" defaultValue={mc.paypalClientId} />
-            <span className="hint">Está en el código del botón que da PayPal: <code>client-id=…</code></span>
-          </div>
-          <div className="field">
             <label htmlFor="mc-pp-button">PayPal · ID del botón</label>
             <input id="mc-pp-button" className="input" name="paypalButtonId" defaultValue={mc.paypalButtonId} placeholder="p. ej. ABCD1234EFGH5" />
-            <span className="hint">Está en el código del botón: <code>hostedButtonId: &quot;…&quot;</code>. Vacío: no se muestra el pago con PayPal.</span>
+            <span className="hint">Está en el código del botón: <code>hostedButtonId: &quot;…&quot;</code>. Los botones “Reserva tu cupo en dólares” abren su página de pago. Vacío: no se muestran.</span>
           </div>
           <div className="field">
             <label htmlFor="mc-pp-usd">Valor en PayPal (USD)</label>

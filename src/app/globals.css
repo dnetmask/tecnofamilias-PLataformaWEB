@@ -418,3 +418,8 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .service-card .service-title:hover { text-decoration: underline; }
 .service-card .service-more { display: inline-block; margin-top: 8px; font-weight: 700; color: var(--blue-dark); }
 .service-dark .service-more { color: var(--yellow); }
+
+/* Masterclass en el celular: los botones de pago ocupan el ancho y su texto puede partirse. */
+@media (max-width: 560px) {
+  .mc-hero .btn, .mc-price .btn, .mc-final .btn { width: 100%; white-space: normal; text-align: center; padding-left: 16px !important; padding-right: 16px !important; }
+}

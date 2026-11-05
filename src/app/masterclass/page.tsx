@@ -6,7 +6,6 @@ import { formatCop } from "@/lib/format";
 import { getMasterclass } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { TEAM } from "@/lib/team";
-import { PayPalButton } from "./PayPalButton";
 
 export const dynamic = "force-dynamic";
 
@@ -130,7 +129,14 @@ export default async function MasterclassPage() {
   // Con enlace de Mercado Pago se cobra un valor fijo en pesos: ese es el precio que se muestra.
   const price = mc.paymentLink && mc.paymentAmountCop ? formatCop(mc.paymentAmountCop) : pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
-  const paypal = canBuy && !!mc.paypalClientId && !!mc.paypalButtonId;
+  const paypal = canBuy && !!mc.paypalButtonId;
+  // Página de pago de PayPal del botón (checkout de PayPal: cuenta o tarjeta internacional).
+  const paypalHref = `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
+  const usdLabel = `Reserva tu cupo en dólares · USD ${mc.paypalAmountUsd}`;
+  const PayPalLink = ({ className = "btn btn-yellow" }: { className?: string }) =>
+    paypal ? (
+      <a href={paypalHref} target="_blank" rel="noopener noreferrer" className={className} style={{ fontSize: "1.05rem", padding: "14px 26px" }}>{usdLabel}</a>
+    ) : null;
   const buyHref = mc.service ? `/checkout?servicio=${mc.service.slug}` : "/planes";
   // Con enlace de Mercado Pago el pago se hace allá, en otra pestaña.
   const BuyLink = ({ className, style, children }: { className: string; style?: React.CSSProperties; children: React.ReactNode }) =>
@@ -185,7 +191,7 @@ export default async function MasterclassPage() {
                   Pago de prueba · {formatCop(mc.testAmountCop)}
                 </a>
               )}
-              {paypal && <a href="#pagar-dolares" style={{ color: "#fff", fontWeight: 700 }}>Pagar en dólares (USD {mc.paypalAmountUsd}) con PayPal</a>}
+              <PayPalLink />
               <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender</a>
             </div>
           </div>
@@ -403,11 +409,10 @@ export default async function MasterclassPage() {
             )}
             <p className="small muted center" style={{ margin: 0 }}>Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo).</p>
             {paypal && (
-              <div id="pagar-dolares" className="stack" style={{ gap: 8, borderTop: "1px solid var(--line)", paddingTop: 14, scrollMarginTop: 90 }}>
-                <p style={{ margin: 0, fontWeight: 800 }}>¿Estás fuera de Colombia? Paga USD {mc.paypalAmountUsd} con PayPal</p>
-                <p className="small muted" style={{ margin: 0 }}>Con tu cuenta de PayPal o con tarjeta de crédito o débito internacional.</p>
-                <PayPalButton clientId={mc.paypalClientId} buttonId={mc.paypalButtonId} />
-              </div>
+              <>
+                <PayPalLink />
+                <p className="small muted center" style={{ margin: 0 }}>Fuera de Colombia: pago en dólares con PayPal, con tu cuenta o con tarjeta internacional.</p>
+              </>
             )}
           </div>
           <p className="center small" style={{ color: "#dce6f2", margin: 0 }}>
@@ -430,7 +435,11 @@ export default async function MasterclassPage() {
       <section className="mc-final">
         <div className="container row between" style={{ gap: 20 }}>
           <h2 style={{ margin: 0, color: "var(--navy-dark)", flex: "1 1 420px" }}>{mc.duration} hoy para dormir más tranquilo mañana.</h2>
-          <Reserve className="btn" label={`Reservar mi cupo · ${price}`} />
+          <div className="row" style={{ gap: 12 }}>
+            <Reserve className="btn" label={`Reservar mi cupo · ${price}`} />
+            {/* Sobre el fondo amarillo de esta franja el botón en dólares va en blanco para que se vea. */}
+            <PayPalLink className="btn btn-light" />
+          </div>
         </div>
       </section>
 
