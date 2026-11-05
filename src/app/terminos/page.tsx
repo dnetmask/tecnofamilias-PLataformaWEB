@@ -6,10 +6,7 @@ export default function TermsPage() {
   return (
     <div className="container section" style={{ maxWidth: 800 }}>
       <h1>Términos y tratamiento de datos</h1>
-      <p className="alert alert-info">
-        Texto base para revisión legal antes de publicar. Debe ajustarse a la Ley 1581 de 2012 (Habeas Data) y sus
-        decretos reglamentarios.
-      </p>
+      <p className="muted">Política de tratamiento de datos personales conforme a la Ley 1581 de 2012 (Habeas Data) y sus decretos reglamentarios.</p>
       <h3>Responsable del tratamiento</h3>
       <p>Tecnofamilias · www.tecnofamilias.com · +57 300 674 0003.</p>
       <h3>Datos que recolectamos</h3>
