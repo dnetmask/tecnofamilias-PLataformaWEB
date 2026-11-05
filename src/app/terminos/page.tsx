@@ -8,7 +8,7 @@ export default function TermsPage() {
       <h1>Términos y tratamiento de datos</h1>
       <p className="muted">Política de tratamiento de datos personales conforme a la Ley 1581 de 2012 (Habeas Data) y sus decretos reglamentarios.</p>
       <h3>Responsable del tratamiento</h3>
-      <p>Tecnofamilias · www.tecnofamilias.com · +57 300 674 0003.</p>
+      <p>Tecnofamilias S.A.S. · www.tecnofamilias.com · WhatsApp +57 300 674 0003.</p>
       <h3>Datos que recolectamos</h3>
       <p>
         Nombre, correo y contraseña cifrada para la cuenta; historial de compras; mensajes que publiques en la
