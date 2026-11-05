@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from "react";
 
 type Buttons = { render: (el: HTMLElement) => Promise<void>; isEligible: () => boolean };
 type PayPalSdk = {
+  FUNDING: { PAYPAL: string };
   Buttons: (o: {
+    fundingSource?: string;
     style?: Record<string, unknown>;
     createOrder: () => Promise<string>;
     onApprove: (d: { orderID: string }, actions: { restart: () => Promise<void> }) => Promise<void>;
@@ -19,7 +21,8 @@ declare global {
 }
 
 /** Checkout de PayPal: la orden la crea y la cobra el servidor (USD, valor de la plataforma). */
-export function PayPalCheckout({ clientId, amountUsd }: { clientId: string; amountUsd: number }) {
+/** `simple`: un solo botón "Pagar con PayPal" (la tarjeta se ofrece dentro de PayPal), para los bloques de arriba y del final. */
+export function PayPalCheckout({ clientId, amountUsd, simple = false, color = "gold" }: { clientId: string; amountUsd: number; simple?: boolean; color?: "gold" | "black" | "white" }) {
   const ref = useRef<HTMLDivElement>(null);
   const [sdkReady, setSdkReady] = useState(false);
   const [state, setState] = useState<{ kind: "idle" | "paid" | "error"; text?: string }>({ kind: "idle" });
@@ -40,7 +43,10 @@ export function PayPalCheckout({ clientId, amountUsd }: { clientId: string; amou
     const el = ref.current;
     if (!sdkReady || !window.paypal || !el || el.childElementCount) return;
     const buttons = window.paypal.Buttons({
-      style: { layout: "vertical", color: "gold", shape: "pill", label: "pay", height: 48 },
+      ...(simple ? { fundingSource: window.paypal.FUNDING.PAYPAL } : {}),
+      style: simple
+        ? { layout: "horizontal", tagline: false, color, shape: "pill", label: "pay", height: 48 }
+        : { layout: "vertical", color, shape: "pill", label: "pay", height: 48 },
       async createOrder() {
         setState({ kind: "idle" });
         const res = await fetch("/api/paypal/orders", { method: "POST" });
@@ -65,7 +71,7 @@ export function PayPalCheckout({ clientId, amountUsd }: { clientId: string; amou
       },
     });
     if (buttons.isEligible()) buttons.render(el).catch(() => setState({ kind: "error", text: "No pudimos cargar PayPal. Recarga la página." }));
-  }, [sdkReady, amountUsd]);
+  }, [sdkReady, amountUsd, simple, color]);
 
   if (state.kind === "paid") {
     return (

@@ -156,32 +156,38 @@ export default async function MasterclassPage() {
       <span className="btn btn-ghost" aria-disabled>Inscripciones cerradas</span>
     );
 
-  // Las dos formas de pago juntas (Colombia y exterior), iguales arriba, en el precio y al final.
-  const PayOptions = ({ compact = false }: { compact?: boolean }) =>
-    canBuy ? (
-      <div className={`mc-pay${compact ? " compact" : ""}`}>
+  // Las dos formas de pago juntas (Colombia y exterior). Arriba y al final van solo el precio y un botón por
+  // opción; en la tarjeta de precio, el detalle de cada medio y los pagos de prueba.
+  const PayOptions = ({ variant }: { variant: "hero" | "final" | "detail" }) => {
+    if (!canBuy) return <Reserve />;
+    const detail = variant === "detail";
+    return (
+      <div className={`mc-pay mc-pay-${variant}`}>
         <div className="mc-pay-opt">
-          <span className="mc-pay-label">🇨🇴 En Colombia · {price}</span>
-          <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
-          <span className="small muted">Mercado Pago: tarjeta, PSE, Nequi y efectivo.</span>
-          {mc.testLink && (
+          <span className="mc-pay-label">En Colombia · {price}</span>
+          <Reserve className={variant === "final" ? "btn" : "btn btn-yellow"} label="Reservar mi cupo" />
+          {detail && <span className="small muted">Mercado Pago: tarjeta, PSE, Nequi y efectivo.</span>}
+          {detail && mc.testLink && (
             <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)</a>
           )}
         </div>
         {paypal && (
           <div className="mc-pay-opt">
-            <span className="mc-pay-label">🌎 Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
-            {checkoutClientId ? <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} /> : <PayPalLink />}
-            <span className="small muted">PayPal: con tu cuenta o con tarjeta internacional.</span>
-            {paypalTestHref && (
+            <span className="mc-pay-label">Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
+            {checkoutClientId ? (
+              <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} simple={!detail} color={variant === "final" ? "black" : "gold"} />
+            ) : (
+              <PayPalLink />
+            )}
+            {detail && <span className="small muted">PayPal: con tu cuenta o con tarjeta internacional.</span>}
+            {detail && paypalTestHref && (
               <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
             )}
           </div>
         )}
       </div>
-    ) : (
-      <Reserve />
     );
+  };
 
   const faqs = [
     ["¿Necesito saber de tecnología?", "No. Todo se explica en lenguaje sencillo y vamos configurando juntos, pantalla por pantalla."],
@@ -215,7 +221,7 @@ export default async function MasterclassPage() {
               <span>🕕 {mc.time} ({mc.timezone})</span>
               <span>💻 {mc.modality}</span>
             </div>
-            <PayOptions />
+            <PayOptions variant="hero" />
             <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender ↓</a>
           </div>
           <div className="mc-art" aria-hidden>
@@ -424,7 +430,7 @@ export default async function MasterclassPage() {
               <li>Taller en vivo de controles parentales</li>
               <li>Kit completo de materiales y grabación por {mc.recordingDays} días</li>
             </ul>
-            <PayOptions compact />
+            <PayOptions variant="detail" />
           </div>
           <p className="center small" style={{ color: "#dce6f2", margin: 0 }}>
             ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ color: "#fff", fontWeight: 800 }}>Pide una propuesta institucional</Link>
@@ -446,7 +452,7 @@ export default async function MasterclassPage() {
       <section className="mc-final">
         <div className="container row between" style={{ gap: 20 }}>
           <h2 style={{ margin: 0, color: "var(--navy-dark)", flex: "1 1 420px" }}>{mc.duration} hoy para dormir más tranquilo mañana.</h2>
-          <div style={{ flex: "1 1 520px", minWidth: 0 }}><PayOptions /></div>
+          <div style={{ flex: "1 1 460px", minWidth: 0 }}><PayOptions variant="final" /></div>
         </div>
       </section>
 

@@ -425,9 +425,14 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 }
 
 /* Masterclass: las dos formas de pago juntas (Colombia con Mercado Pago, exterior con PayPal). */
-.mc-pay { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; background: #fff; color: var(--ink); border-radius: 20px; padding: 14px; box-shadow: 0 12px 30px rgb(15 25 50 / 18%); }
-.mc-pay.compact { grid-template-columns: 1fr; padding: 0; box-shadow: none; background: transparent; }
-.mc-pay-opt { display: flex; flex-direction: column; gap: 8px; min-width: 0; background: var(--tint); border-radius: 14px; padding: 14px; }
-.mc-pay-label { font-weight: 800; font-size: .95rem; color: var(--navy); }
-.mc-pay .btn { width: 100%; white-space: normal; text-align: center; min-height: 48px; }
+.mc-pay { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 14px 18px; }
+.mc-pay-opt { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.mc-pay-label { font-weight: 800; font-size: .9rem; letter-spacing: .01em; }
+.mc-pay .btn { width: 100%; white-space: normal; text-align: center; min-height: 48px; padding-top: 0 !important; padding-bottom: 0 !important; }
+.mc-pay-hero { max-width: 560px; }
+.mc-pay-hero .mc-pay-label { color: #dce6f2; }
+.mc-pay-final .mc-pay-label { color: var(--navy-dark); }
+.mc-pay-detail { grid-template-columns: 1fr; gap: 0; }
+.mc-pay-detail .mc-pay-label { color: var(--navy); }
+.mc-pay-detail .mc-pay-opt + .mc-pay-opt { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 16px; }
 .mc-pay-test { color: var(--muted); text-decoration: underline; }
