@@ -430,8 +430,10 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .mc-pay-label { font-weight: 800; font-size: .9rem; letter-spacing: .01em; }
 .mc-pay .btn { width: 100%; white-space: normal; text-align: center; min-height: 48px; padding-top: 0 !important; padding-bottom: 0 !important; }
 .mc-pay-hero { max-width: 560px; }
-.mc-pay-hero .mc-pay-label { color: #dce6f2; }
-.mc-pay-final .mc-pay-label { color: var(--navy-dark); }
+/* Arriba y al final: tarjeta blanca con un recuadro por opción. */
+.mc-pay-boxed { background: #fff; border-radius: 20px; padding: 14px; box-shadow: 0 12px 30px rgb(15 25 50 / 18%); }
+.mc-pay-boxed .mc-pay-opt { background: var(--tint); border-radius: 14px; padding: 14px; }
+.mc-pay-boxed .mc-pay-label { color: var(--navy); }
 .mc-pay-detail { grid-template-columns: 1fr; gap: 0; }
 .mc-pay-detail .mc-pay-label { color: var(--navy); }
 .mc-pay-detail .mc-pay-opt + .mc-pay-opt { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 16px; }

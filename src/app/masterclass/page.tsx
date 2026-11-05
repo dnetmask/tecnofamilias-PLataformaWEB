@@ -156,17 +156,17 @@ export default async function MasterclassPage() {
       <span className="btn btn-ghost" aria-disabled>Inscripciones cerradas</span>
     );
 
-  // Las dos formas de pago juntas (Colombia y exterior). Arriba y al final van solo el precio y un botón por
-  // opción; en la tarjeta de precio, el detalle de cada medio y los pagos de prueba.
+  // Las dos formas de pago juntas (Colombia y exterior). Arriba y al final, en recuadros con el precio y el
+  // botón de cada opción; en la tarjeta de precio, además el detalle de cada medio y los pagos de prueba.
   const PayOptions = ({ variant }: { variant: "hero" | "final" | "detail" }) => {
     if (!canBuy) return <Reserve />;
     const detail = variant === "detail";
     return (
-      <div className={`mc-pay mc-pay-${variant}`}>
+      <div className={`mc-pay mc-pay-${variant}${detail ? "" : " mc-pay-boxed"}`}>
         <div className="mc-pay-opt">
           <span className="mc-pay-label">En Colombia · {price}</span>
-          <Reserve className={variant === "final" ? "btn" : "btn btn-yellow"} label="Reservar mi cupo" />
-          {detail && <span className="small muted">Mercado Pago: tarjeta, PSE, Nequi y efectivo.</span>}
+          <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
+          <span className="small muted">{detail ? "Mercado Pago: tarjeta, PSE, Nequi y efectivo." : "Tarjeta, PSE, Nequi o efectivo."}</span>
           {detail && mc.testLink && (
             <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)</a>
           )}
@@ -175,7 +175,7 @@ export default async function MasterclassPage() {
           <div className="mc-pay-opt">
             <span className="mc-pay-label">Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
             {checkoutClientId ? (
-              <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} simple={!detail} color={variant === "final" ? "black" : "gold"} />
+              <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} />
             ) : (
               <PayPalLink />
             )}
