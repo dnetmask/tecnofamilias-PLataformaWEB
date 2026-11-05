@@ -5,7 +5,9 @@ import { SeatsBar } from "@/components/SeatsBar";
 import { formatCop } from "@/lib/format";
 import { getMasterclass } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
+import { paypalClientId } from "@/lib/paypal";
 import { TEAM } from "@/lib/team";
+import { PayPalCheckout } from "./PayPalCheckout";
 
 export const dynamic = "force-dynamic";
 
@@ -129,14 +131,15 @@ export default async function MasterclassPage() {
   // Con enlace de Mercado Pago se cobra un valor fijo en pesos: ese es el precio que se muestra.
   const price = mc.paymentLink && mc.paymentAmountCop ? formatCop(mc.paymentAmountCop) : pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
-  const paypal = canBuy && !!mc.paypalButtonId;
-  // Página de pago de PayPal del botón (checkout de PayPal: cuenta o tarjeta internacional).
-  const paypalHref = `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
+  // Checkout de PayPal integrado (si están las credenciales); si no, el enlace de pago del botón.
+  const checkoutClientId = canBuy && mc.paypalAmountUsd ? paypalClientId() : null;
+  const paypal = canBuy && (!!checkoutClientId || !!mc.paypalButtonId);
+  const paypalHref = checkoutClientId ? "#pagar-dolares" : `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
   const usdLabel = `Reserva tu cupo en dólares · USD ${mc.paypalAmountUsd}`;
   const paypalTestHref = canBuy && mc.paypalTestButtonId ? `https://www.paypal.com/ncp/payment/${mc.paypalTestButtonId}` : null;
   const PayPalLink = ({ className = "btn btn-yellow" }: { className?: string }) =>
     paypal ? (
-      <a href={paypalHref} target="_blank" rel="noopener noreferrer" className={className} style={{ fontSize: "1.05rem", padding: "14px 26px" }}>{usdLabel}</a>
+      <a href={paypalHref} {...(checkoutClientId ? {} : { target: "_blank", rel: "noopener noreferrer" })} className={className} style={{ fontSize: "1.05rem", padding: "14px 26px" }}>{usdLabel}</a>
     ) : null;
   const buyHref = mc.service ? `/checkout?servicio=${mc.service.slug}` : "/planes";
   // Con enlace de Mercado Pago el pago se hace allá, en otra pestaña.
@@ -414,7 +417,13 @@ export default async function MasterclassPage() {
               </a>
             )}
             <p className="small muted center" style={{ margin: 0 }}>Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo).</p>
-            {paypal && (
+            {checkoutClientId ? (
+              <div id="pagar-dolares" className="stack" style={{ gap: 10, borderTop: "1px solid var(--line)", paddingTop: 16, scrollMarginTop: 90 }}>
+                <p style={{ margin: 0, fontWeight: 800 }}>¿Estás fuera de Colombia? Reserva en dólares · USD {mc.paypalAmountUsd}</p>
+                <p className="small muted" style={{ margin: 0 }}>Paga con tu cuenta de PayPal o con tarjeta de crédito o débito internacional, sin salir de esta página.</p>
+                <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} />
+              </div>
+            ) : paypal && (
               <>
                 <PayPalLink />
                 <p className="small muted center" style={{ margin: 0 }}>Fuera de Colombia: pago en dólares con PayPal, con tu cuenta o con tarjeta internacional.</p>

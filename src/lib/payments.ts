@@ -125,7 +125,7 @@ export async function extendSubscription(
  * Marca la orden como pagada y entrega el acceso. Es idempotente: si la orden
  * ya no está pendiente no hace nada (los webhooks pueden llegar repetidos).
  */
-export async function fulfillOrder(orderId: string, providerRef?: string) {
+export async function fulfillOrder(orderId: string, providerRef?: string, guest?: { name: string; email: string }) {
   return db.$transaction(async (tx) => {
     const updated = await tx.order.updateMany({
       where: { id: orderId, status: "PENDING" },
@@ -133,6 +133,13 @@ export async function fulfillOrder(orderId: string, providerRef?: string) {
     });
     if (updated.count === 0) return false;
     const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { plan: true, user: true } });
+    // Compra sin cuenta (p. ej. la masterclass con PayPal): queda como solicitud pagada con los datos del pagador.
+    if (!order.userId && guest && order.kind === "SERVICE" && order.serviceId) {
+      await tx.serviceRequest.create({
+        data: { serviceId: order.serviceId, orderId: order.id, name: guest.name, email: guest.email, status: "PAID" },
+      });
+      return true;
+    }
     // La cuenta se eliminó antes de confirmarse el pago: queda registrado, sin nada que entregar.
     if (!order.userId || !order.user) return true;
     const { userId, user } = order;
