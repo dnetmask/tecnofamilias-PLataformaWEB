@@ -88,7 +88,7 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
           <div className="field">
             <label htmlFor="mc-pp-button">PayPal · ID del botón</label>
             <input id="mc-pp-button" className="input" name="paypalButtonId" defaultValue={mc.paypalButtonId} placeholder="p. ej. ABCD1234EFGH5" />
-            <span className="hint">Está en el código del botón: <code>hostedButtonId: &quot;…&quot;</code>. Los botones “Reserva tu cupo en dólares” abren su página de pago. Vacío: no se muestran.</span>
+            <span className="hint">Está en el código del botón: <code>hostedButtonId: &quot;…&quot;</code>. El botón “Pagar en dólares” abre su página de pago (PayPal, Apple Pay o tarjeta). Vacío: se usa el checkout propio de PayPal.</span>
           </div>
           <div className="field">
             <label htmlFor="mc-pp-usd">Valor en PayPal (USD)</label>

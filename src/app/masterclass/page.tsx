@@ -5,9 +5,9 @@ import { SeatsBar } from "@/components/SeatsBar";
 import { formatCop } from "@/lib/format";
 import { getMasterclass } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
-import { paypalClientId } from "@/lib/paypal";
+import { paypalEnabled } from "@/lib/paypal";
 import { TEAM } from "@/lib/team";
-import { PayPalCheckout } from "./PayPalCheckout";
+import { PayInDollarsButton } from "./PayInDollarsButton";
 
 export const dynamic = "force-dynamic";
 
@@ -131,15 +131,16 @@ export default async function MasterclassPage() {
   // Con enlace de Mercado Pago se cobra un valor fijo en pesos: ese es el precio que se muestra.
   const price = mc.paymentLink && mc.paymentAmountCop ? formatCop(mc.paymentAmountCop) : pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
-  // Checkout de PayPal integrado (si están las credenciales); si no, el enlace de pago del botón.
-  const checkoutClientId = canBuy && mc.paypalAmountUsd ? paypalClientId() : null;
-  const paypal = canBuy && (!!checkoutClientId || !!mc.paypalButtonId);
-  const paypalHref = checkoutClientId ? "#pagar-dolares" : `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
-  const usdLabel = `Reserva tu cupo en dólares · USD ${mc.paypalAmountUsd}`;
+  // Pago en dólares: con ID de botón de PayPal, su página de pago (PayPal, Apple Pay o tarjeta); si no, el
+  // checkout propio con la API de PayPal.
+  const payLink = canBuy && !!mc.paypalButtonId;
+  const checkout = canBuy && !payLink && !!mc.paypalAmountUsd && paypalEnabled();
+  const paypal = payLink || checkout;
+  const paypalHref = `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
   const paypalTestHref = canBuy && mc.paypalTestButtonId ? `https://www.paypal.com/ncp/payment/${mc.paypalTestButtonId}` : null;
   const PayPalLink = ({ className = "btn btn-yellow" }: { className?: string }) =>
     paypal ? (
-      <a href={paypalHref} {...(checkoutClientId ? {} : { target: "_blank", rel: "noopener noreferrer" })} className={className} style={{ fontSize: "1.05rem", padding: "14px 26px" }}>{usdLabel}</a>
+      <a href={paypalHref} target="_blank" rel="noopener noreferrer" className={className}>Pagar en dólares</a>
     ) : null;
   const buyHref = mc.service ? `/checkout?servicio=${mc.service.slug}` : "/planes";
   // Con enlace de Mercado Pago el pago se hace allá, en otra pestaña.
@@ -174,12 +175,8 @@ export default async function MasterclassPage() {
         {paypal && (
           <div className="mc-pay-opt">
             <span className="mc-pay-label">Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
-            {checkoutClientId ? (
-              <PayPalCheckout clientId={checkoutClientId} amountUsd={mc.paypalAmountUsd} />
-            ) : (
-              <PayPalLink />
-            )}
-            {detail && <span className="small muted">PayPal: con tu cuenta o con tarjeta internacional.</span>}
+            {checkout ? <PayInDollarsButton amountUsd={mc.paypalAmountUsd} /> : <PayPalLink />}
+            <span className="small muted">{payLink ? "PayPal, Apple Pay o tarjeta internacional." : "PayPal o tarjeta internacional."}</span>
             {detail && paypalTestHref && (
               <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
             )}

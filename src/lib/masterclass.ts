@@ -48,7 +48,7 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   paymentAmountCop: 165000,
   testLink: "https://mpago.li/1WMMqMR",
   testAmountCop: 5000,
-  paypalButtonId: "A7S5EMQ4D2QV8",
+  paypalButtonId: "",
   paypalAmountUsd: 60,
   paypalTestButtonId: "3FSMKYMQ93TLG",
   paypalTestAmountUsd: 3,
