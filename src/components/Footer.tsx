@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getPricing } from "@/lib/pricing";
+import { LEGAL } from "@/lib/site";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { CurrencySwitcher } from "./CurrencySwitcher";
 
@@ -15,7 +16,8 @@ export async function Footer() {
         <div className="stack small">
           <div><Link href="/clases">Clases</Link> · <Link href="/herramientas">Caja de herramientas</Link> · <Link href="/pactos">Pactos</Link> · <Link href="/juegos">Juegos</Link> · <Link href="/comunidad">Comunidad</Link></div>
           <div><Link href="/quienes-somos">Quiénes somos</Link> · <Link href="/terminos">Términos y tratamiento de datos</Link> · <Link href="/eliminar-cuenta">Eliminar cuenta</Link></div>
-          <div>Tecnofamilias S.A.S. · www.tecnofamilias.com · WhatsApp <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">+57 300 674 0003</a></div>
+          <div><a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a> · WhatsApp <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">{LEGAL.phone}</a></div>
+          <div>{LEGAL.name} · NIT {LEGAL.nit} · {LEGAL.address}, {LEGAL.city}, {LEGAL.region}, {LEGAL.country}</div>
           <div><CurrencySwitcher current={currency} dark /></div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { isPlatformOpen } from "@/lib/launch";
 import { hasMemberAccess } from "@/lib/access";
 import { getCurrentUser } from "@/lib/auth";
 import "./globals.css";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { LEGAL, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClickTracker } from "@/components/ClickTracker";
@@ -42,7 +42,18 @@ const ORG_JSON_LD = {
       areaServed: ["Latinoamérica", "España", "Estados Unidos"],
       knowsLanguage: "es",
       knowsAbout: ["Control parental", "Ciberseguridad para el hogar", "Seguridad en internet para niños", "Grooming", "Ciberacoso", "Crianza digital"],
-      contactPoint: { "@type": "ContactPoint", telephone: "+57-300-674-0003", contactType: "customer service", availableLanguage: "es" },
+      legalName: LEGAL.name,
+      taxID: LEGAL.nit,
+      email: LEGAL.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: LEGAL.address,
+        addressLocality: LEGAL.city,
+        addressRegion: LEGAL.region,
+        postalCode: LEGAL.postalCode,
+        addressCountry: "CO",
+      },
+      contactPoint: { "@type": "ContactPoint", telephone: "+57-300-674-0003", email: LEGAL.email, contactType: "customer service", availableLanguage: "es" },
     },
     { "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: SITE_URL, name: SITE_NAME, inLanguage: "es", publisher: { "@id": `${SITE_URL}/#organization` } },
   ],

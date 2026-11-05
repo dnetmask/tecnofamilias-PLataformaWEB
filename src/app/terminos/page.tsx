@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LEGAL } from "@/lib/site";
 
 export const metadata = { title: "Términos y tratamiento de datos", alternates: { canonical: "/terminos" } };
 
@@ -8,7 +9,10 @@ export default function TermsPage() {
       <h1>Términos y tratamiento de datos</h1>
       <p className="muted">Política de tratamiento de datos personales conforme a la Ley 1581 de 2012 (Habeas Data) y sus decretos reglamentarios.</p>
       <h3>Responsable del tratamiento</h3>
-      <p>Tecnofamilias S.A.S. · www.tecnofamilias.com · WhatsApp +57 300 674 0003.</p>
+      <p>
+        {LEGAL.name}, NIT {LEGAL.nit}. {LEGAL.address}, {LEGAL.city}, {LEGAL.region}, {LEGAL.country}. Correo{" "}
+        <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a> · WhatsApp {LEGAL.phone} · www.tecnofamilias.com.
+      </p>
       <h3>Datos que recolectamos</h3>
       <p>
         Nombre, correo y contraseña cifrada para la cuenta; historial de compras; mensajes que publiques en la
@@ -31,7 +35,8 @@ export default function TermsPage() {
       </p>
       <h3>Tus derechos</h3>
       <p>
-        Puedes conocer, actualizar, rectificar y solicitar la eliminación de tus datos escribiéndonos. También puedes
+        Puedes conocer, actualizar, rectificar y solicitar la eliminación de tus datos escribiéndonos a{" "}
+        <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>. También puedes
         eliminar tus pactos desde la plataforma en cualquier momento, y eliminar tu cuenta tú mismo desde{" "}
         <Link href="/eliminar-cuenta">Eliminar mi cuenta</Link>: se borran tus datos personales y solo conservamos, sin tu
         nombre ni tu correo, el registro de los pagos que exige la ley contable.
