@@ -47,7 +47,7 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   testLink: "https://mpago.li/1WMMqMR",
   testAmountCop: 5000,
   paypalClientId: "BAAKRhrGkrRv_53iQhYrnUwAXXLHvKAkKCvVn_PkNkSraB8tpxjt4wh5MXIz8d2oeF6qKTss57SEY87u24",
-  paypalButtonId: "",
+  paypalButtonId: "A7S5EMQ4D2QV8",
   paypalAmountUsd: 60,
 };
 
