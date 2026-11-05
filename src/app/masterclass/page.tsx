@@ -133,6 +133,7 @@ export default async function MasterclassPage() {
   // Página de pago de PayPal del botón (checkout de PayPal: cuenta o tarjeta internacional).
   const paypalHref = `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
   const usdLabel = `Reserva tu cupo en dólares · USD ${mc.paypalAmountUsd}`;
+  const paypalTestHref = canBuy && mc.paypalTestButtonId ? `https://www.paypal.com/ncp/payment/${mc.paypalTestButtonId}` : null;
   const PayPalLink = ({ className = "btn btn-yellow" }: { className?: string }) =>
     paypal ? (
       <a href={paypalHref} target="_blank" rel="noopener noreferrer" className={className} style={{ fontSize: "1.05rem", padding: "14px 26px" }}>{usdLabel}</a>
@@ -192,6 +193,11 @@ export default async function MasterclassPage() {
                 </a>
               )}
               <PayPalLink />
+              {paypalTestHref && (
+                <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ color: "#fff", borderColor: "rgb(255 255 255 / 55%)" }}>
+                  Pago de prueba en dólares · USD {mc.paypalTestAmountUsd}
+                </a>
+              )}
               <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender</a>
             </div>
           </div>
@@ -412,6 +418,11 @@ export default async function MasterclassPage() {
               <>
                 <PayPalLink />
                 <p className="small muted center" style={{ margin: 0 }}>Fuera de Colombia: pago en dólares con PayPal, con tu cuenta o con tarjeta internacional.</p>
+                {paypalTestHref && (
+                  <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                    Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)
+                  </a>
+                )}
               </>
             )}
           </div>

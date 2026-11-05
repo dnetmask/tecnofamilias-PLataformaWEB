@@ -95,6 +95,15 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
             <input id="mc-pp-usd" className="input" type="number" min={0} name="paypalAmountUsd" defaultValue={mc.paypalAmountUsd} required />
             <span className="hint">Se muestra en la landing; debe coincidir con el del botón en PayPal.</span>
           </div>
+          <div className="field">
+            <label htmlFor="mc-pp-test">PayPal · ID del botón de prueba</label>
+            <input id="mc-pp-test" className="input" name="paypalTestButtonId" defaultValue={mc.paypalTestButtonId} placeholder="p. ej. ABCD1234EFGH5" />
+            <span className="hint">Muestra “Pago de prueba en dólares”. Déjalo vacío para quitarlo antes de anunciar la masterclass.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-pp-test-usd">Valor de la prueba en PayPal (USD)</label>
+            <input id="mc-pp-test-usd" className="input" type="number" min={0} name="paypalTestAmountUsd" defaultValue={mc.paypalTestAmountUsd} required />
+          </div>
         </div>
         <label className="check"><input type="checkbox" name="showOnHome" defaultChecked={mc.showOnHome} /> Mostrar el aviso en los inicios</label>
         <div><SubmitButton className="btn btn-sm">Guardar</SubmitButton></div>

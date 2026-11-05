@@ -507,6 +507,8 @@ const masterclassSchema = z.object({
   testAmountCop: z.coerce.number().int().min(0).max(100_000_000),
   paypalButtonId: z.string().trim().max(60).regex(/^[A-Za-z0-9]*$/, "El ID del botón de PayPal solo lleva letras y números"),
   paypalAmountUsd: z.coerce.number().int().min(0).max(100_000),
+  paypalTestButtonId: z.string().trim().max(60).regex(/^[A-Za-z0-9]*$/, "El ID del botón de prueba de PayPal solo lleva letras y números"),
+  paypalTestAmountUsd: z.coerce.number().int().min(0).max(100_000),
 });
 
 export async function saveMasterclassAction(formData: FormData) {

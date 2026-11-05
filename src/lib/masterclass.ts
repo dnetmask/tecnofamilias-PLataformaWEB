@@ -26,6 +26,9 @@ export type MasterclassSetting = {
   /** Pago en dólares con un botón de PayPal (su página de pago); sin ID no se muestra. */
   paypalButtonId: string;
   paypalAmountUsd: number;
+  /** Botón de PayPal de prueba (valor bajo) para verificar pagos internacionales; vacío lo oculta. */
+  paypalTestButtonId: string;
+  paypalTestAmountUsd: number;
 };
 
 /** Solo se aceptan enlaces de pago de Mercado Pago. */
@@ -47,6 +50,8 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   testAmountCop: 5000,
   paypalButtonId: "A7S5EMQ4D2QV8",
   paypalAmountUsd: 60,
+  paypalTestButtonId: "",
+  paypalTestAmountUsd: 2,
 };
 
 export const getMasterclass = cache(async () => {
