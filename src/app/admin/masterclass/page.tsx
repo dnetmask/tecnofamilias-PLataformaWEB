@@ -85,6 +85,21 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
             <label htmlFor="mc-test-cop">Valor de la prueba (COP)</label>
             <input id="mc-test-cop" className="input" type="number" min={0} step={1000} name="testAmountCop" defaultValue={mc.testAmountCop} required />
           </div>
+          <div className="field">
+            <label htmlFor="mc-pp-client">PayPal · Client ID</label>
+            <input id="mc-pp-client" className="input" name="paypalClientId" defaultValue={mc.paypalClientId} />
+            <span className="hint">Está en el código del botón que da PayPal: <code>client-id=…</code></span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-pp-button">PayPal · ID del botón</label>
+            <input id="mc-pp-button" className="input" name="paypalButtonId" defaultValue={mc.paypalButtonId} placeholder="p. ej. ABCD1234EFGH5" />
+            <span className="hint">Está en el código del botón: <code>hostedButtonId: &quot;…&quot;</code>. Vacío: no se muestra el pago con PayPal.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-pp-usd">Valor en PayPal (USD)</label>
+            <input id="mc-pp-usd" className="input" type="number" min={0} name="paypalAmountUsd" defaultValue={mc.paypalAmountUsd} required />
+            <span className="hint">Se muestra en la landing; debe coincidir con el del botón en PayPal.</span>
+          </div>
         </div>
         <label className="check"><input type="checkbox" name="showOnHome" defaultChecked={mc.showOnHome} /> Mostrar el aviso en los inicios</label>
         <div><SubmitButton className="btn btn-sm">Guardar</SubmitButton></div>

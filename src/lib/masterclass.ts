@@ -23,6 +23,10 @@ export type MasterclassSetting = {
   /** Enlace de pago de prueba (valor bajo) para verificar el flujo; vacío lo oculta. */
   testLink: string;
   testAmountCop: number;
+  /** Pago en dólares con un botón alojado de PayPal; sin ID del botón no se muestra. */
+  paypalClientId: string;
+  paypalButtonId: string;
+  paypalAmountUsd: number;
 };
 
 /** Solo se aceptan enlaces de pago de Mercado Pago. */
@@ -42,6 +46,9 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   paymentAmountCop: 165000,
   testLink: "https://mpago.li/1WMMqMR",
   testAmountCop: 5000,
+  paypalClientId: "BAAKRhrGkrRv_53iQhYrnUwAXXLHvKAkKCvVn_PkNkSraB8tpxjt4wh5MXIz8d2oeF6qKTss57SEY87u24",
+  paypalButtonId: "",
+  paypalAmountUsd: 60,
 };
 
 export const getMasterclass = cache(async () => {

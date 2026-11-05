@@ -6,6 +6,7 @@ import { formatCop } from "@/lib/format";
 import { getMasterclass } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { TEAM } from "@/lib/team";
+import { PayPalButton } from "./PayPalButton";
 
 export const dynamic = "force-dynamic";
 
@@ -129,6 +130,7 @@ export default async function MasterclassPage() {
   // Con enlace de Mercado Pago se cobra un valor fijo en pesos: ese es el precio que se muestra.
   const price = mc.paymentLink && mc.paymentAmountCop ? formatCop(mc.paymentAmountCop) : pricing.price(usd, cop);
   const canBuy = !!mc.service?.active && !!usd && !mc.isPast;
+  const paypal = canBuy && !!mc.paypalClientId && !!mc.paypalButtonId;
   const buyHref = mc.service ? `/checkout?servicio=${mc.service.slug}` : "/planes";
   // Con enlace de Mercado Pago el pago se hace allá, en otra pestaña.
   const BuyLink = ({ className, style, children }: { className: string; style?: React.CSSProperties; children: React.ReactNode }) =>
@@ -151,7 +153,12 @@ export default async function MasterclassPage() {
     ["¿Queda grabada?", `Sí. La grabación queda disponible durante ${mc.recordingDays} días para quienes compraron su cupo.`],
     ["¿Cómo recibo el enlace?", "Después del pago te llega el enlace de conexión y el kit de materiales al correo con el que te registraste."],
     ["¿Pueden asistir los dos padres con un solo cupo?", "Sí, si se conectan juntos desde el mismo dispositivo. Si van a conectarse desde lugares distintos, cada uno necesita su cupo."],
-    ["¿Puedo pagar desde otro país?", "Sí. El precio base es en dólares; Mercado Pago cobra el equivalente en pesos colombianos y tu banco hace la conversión final."],
+    [
+      "¿Puedo pagar desde otro país?",
+      paypal
+        ? `Sí. Desde fuera de Colombia pagas USD ${mc.paypalAmountUsd} con PayPal, con tu cuenta o con tarjeta internacional. En Colombia pagas con Mercado Pago.`
+        : "Sí. El precio base es en dólares; Mercado Pago cobra el equivalente en pesos colombianos y tu banco hace la conversión final.",
+    ],
   ];
 
   return (
@@ -178,6 +185,7 @@ export default async function MasterclassPage() {
                   Pago de prueba · {formatCop(mc.testAmountCop)}
                 </a>
               )}
+              {paypal && <a href="#pagar-dolares" style={{ color: "#fff", fontWeight: 700 }}>Pagar en dólares (USD {mc.paypalAmountUsd}) con PayPal</a>}
               <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender</a>
             </div>
           </div>
@@ -394,6 +402,13 @@ export default async function MasterclassPage() {
               </a>
             )}
             <p className="small muted center" style={{ margin: 0 }}>Pago seguro con Mercado Pago (tarjeta, PSE, Nequi y efectivo).</p>
+            {paypal && (
+              <div id="pagar-dolares" className="stack" style={{ gap: 8, borderTop: "1px solid var(--line)", paddingTop: 14, scrollMarginTop: 90 }}>
+                <p style={{ margin: 0, fontWeight: 800 }}>¿Estás fuera de Colombia? Paga USD {mc.paypalAmountUsd} con PayPal</p>
+                <p className="small muted" style={{ margin: 0 }}>Con tu cuenta de PayPal o con tarjeta de crédito o débito internacional.</p>
+                <PayPalButton clientId={mc.paypalClientId} buttonId={mc.paypalButtonId} />
+              </div>
+            )}
           </div>
           <p className="center small" style={{ color: "#dce6f2", margin: 0 }}>
             ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ color: "#fff", fontWeight: 800 }}>Pide una propuesta institucional</Link>
