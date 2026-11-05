@@ -30,7 +30,7 @@ export const MP_LINK_PATTERN = /^https:\/\/(mpago\.(li|la)|link\.mercadopago\.co
 
 export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   serviceSlug: "masterclass-crianza-digital-segura",
-  date: "2026-11-26",
+  date: "2026-12-15",
   time: "6:00 p. m. a 9:00 p. m.",
   timezone: "hora de Colombia",
   modality: "En vivo por Zoom",
