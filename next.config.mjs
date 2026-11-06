@@ -35,6 +35,13 @@ const nextConfig = {
         destination: "https://tecnofamilias.com/:path*",
         statusCode: 301,
       },
+      // El dominio de Vercel de producción también lleva a tecnofamilias.com (308 conserva POST de webhooks).
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "tecnofamilias-plataforma.vercel.app" }],
+        destination: "https://tecnofamilias.com/:path*",
+        statusCode: 308,
+      },
       { source: "/recursos", destination: "/herramientas", permanent: true },
       // El podcast "Bullying en redes sociales" tenía la dirección de la herramienta de ejemplo.
       { source: "/herramientas/ejemplo-podcast-para-familias", destination: "/herramientas/bullying-en-redes-sociales-mi-mundo-mis-huellas", permanent: true },
