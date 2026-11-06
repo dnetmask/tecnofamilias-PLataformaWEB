@@ -30,7 +30,7 @@ export default async function DollarPaymentPage() {
         <DollarCheckout clientId={clientId} amountUsd={amount} />
         <p className="small muted" style={{ margin: 0 }}>
           🔒 Pago procesado por PayPal. {LEGAL.name} no ve ni guarda los datos de tu tarjeta. ¿Pagas desde Colombia?{" "}
-          <Link href="/masterclass#precio">Paga en pesos con Mercado Pago</Link>.
+          <Link href="/masterclass#precio">Paga en pesos colombianos</Link>.
         </p>
       </div>
     </div>

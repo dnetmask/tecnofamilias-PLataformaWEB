@@ -20,7 +20,7 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
         El precio se edita en <Link href="/admin/servicios">Otros servicios</Link>
         {mc.service ? <> ({mc.service.name})</> : <> — <strong>no se encontró el servicio {mc.serviceSlug}</strong></>}.
         {mc.paymentLink ? (
-          <> El cobro se hace con el <strong>enlace de pago de Mercado Pago</strong>: las compras aparecen en tu cuenta de Mercado Pago, no en Solicitudes. Verifica que el valor del enlace coincida con el precio del servicio.</>
+          <> El cobro se hace con <strong>enlaces de pago</strong> (Bold o Mercado Pago): esas compras aparecen en la cuenta de la pasarela, no en Solicitudes. Verifica que el valor del enlace coincida con el precio del servicio.</>
         ) : (
           <> Las compras aparecen en <Link href="/admin/solicitudes">Solicitudes</Link>.</>
         )}
@@ -67,9 +67,14 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
         </div>
         <div className="grid grid-2" style={{ gap: 14 }}>
           <div className="field">
-            <label htmlFor="mc-pay">Enlace de pago de Mercado Pago</label>
-            <input id="mc-pay" className="input" type="url" name="paymentLink" defaultValue={mc.paymentLink} placeholder="https://mpago.li/…" />
+            <label htmlFor="mc-pay">Enlace de pago en pesos (Bold o Mercado Pago)</label>
+            <input id="mc-pay" className="input" type="url" name="paymentLink" defaultValue={mc.paymentLink} placeholder="https://checkout.bold.co/payment/…" />
             <span className="hint">Los botones “Reservar mi cupo” abren este enlace. Déjalo vacío para cobrar con el checkout de la plataforma.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-usd">Enlace de pago en dólares (Bold)</label>
+            <input id="mc-usd" className="input" type="url" name="usdLink" defaultValue={mc.usdLink} placeholder="https://checkout.bold.co/payment/…" />
+            <span className="hint">Los botones “Pagar en dólares” abren este enlace. Vacío: se usa el checkout de PayPal.</span>
           </div>
           <div className="field">
             <label htmlFor="mc-pay-cop">Valor que cobra el enlace (COP)</label>

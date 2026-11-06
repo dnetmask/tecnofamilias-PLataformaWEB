@@ -14,7 +14,7 @@ import { notifyIndexNow } from "@/lib/indexnow";
 import { PLATFORM_KEY } from "@/lib/launch";
 import { SITE_URL } from "@/lib/site";
 import sitemap from "@/app/sitemap";
-import { MASTERCLASS_KEY, MP_LINK_PATTERN } from "@/lib/masterclass";
+import { MASTERCLASS_KEY, PAY_LINK_PATTERN } from "@/lib/masterclass";
 import { RATES_KEY } from "@/lib/pricing";
 
 function fail(path: string, message: string): never {
@@ -501,9 +501,10 @@ const masterclassSchema = z.object({
   seatsPct: z.coerce.number().int().min(0).max(100),
   recordingDays: z.coerce.number().int().min(0).max(365),
   showOnHome: z.preprocess((v) => v === "on", z.boolean()),
-  paymentLink: z.string().trim().max(300).refine((v) => v === "" || MP_LINK_PATTERN.test(v), "El enlace de pago debe ser de Mercado Pago (https://mpago.li/…)"),
+  paymentLink: z.string().trim().max(300).refine((v) => v === "" || PAY_LINK_PATTERN.test(v), "El enlace de pago debe ser de Bold (https://checkout.bold.co/payment/…) o de Mercado Pago (https://mpago.li/…)"),
+  usdLink: z.string().trim().max(300).refine((v) => v === "" || PAY_LINK_PATTERN.test(v), "El enlace de pago en dólares debe ser de Bold (https://checkout.bold.co/payment/…)"),
   paymentAmountCop: z.coerce.number().int().min(0).max(100_000_000),
-  testLink: z.string().trim().max(300).refine((v) => v === "" || MP_LINK_PATTERN.test(v), "El enlace de prueba debe ser de Mercado Pago (https://mpago.li/…)"),
+  testLink: z.string().trim().max(300).refine((v) => v === "" || PAY_LINK_PATTERN.test(v), "El enlace de prueba debe ser de Bold o de Mercado Pago"),
   testAmountCop: z.coerce.number().int().min(0).max(100_000_000),
   paypalButtonId: z.string().trim().max(60).regex(/^[A-Za-z0-9]*$/, "El ID del botón de PayPal solo lleva letras y números"),
   paypalAmountUsd: z.coerce.number().int().min(0).max(100_000),

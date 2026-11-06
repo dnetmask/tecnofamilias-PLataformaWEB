@@ -16,8 +16,10 @@ export type MasterclassSetting = {
   seatsPct: number;
   recordingDays: number;
   showOnHome: boolean;
-  /** Enlace de pago de Mercado Pago. Vacío: se compra con el checkout de la plataforma. */
+  /** Enlace de pago en pesos (Bold o Mercado Pago). Vacío: se compra con el checkout de la plataforma. */
   paymentLink: string;
+  /** Enlace de pago en dólares (Bold). Si está, reemplaza al checkout de PayPal. */
+  usdLink: string;
   /** Valor en pesos que cobra el enlace de pago (se muestra en la landing). */
   paymentAmountCop: number;
   /** Enlace de pago de prueba (valor bajo) para verificar el flujo; vacío lo oculta. */
@@ -31,8 +33,14 @@ export type MasterclassSetting = {
   paypalTestAmountUsd: number;
 };
 
-/** Solo se aceptan enlaces de pago de Mercado Pago. */
-export const MP_LINK_PATTERN = /^https:\/\/(mpago\.(li|la)|link\.mercadopago\.com(\.[a-z]{2})?|(www\.)?mercadopago\.com(\.[a-z]{2})?)\/\S+$/;
+/** Solo se aceptan enlaces de pago de Bold o de Mercado Pago. */
+export const PAY_LINK_PATTERN =
+  /^https:\/\/(checkout\.bold\.co\/payment\/[A-Za-z0-9_-]+|(mpago\.(li|la)|link\.mercadopago\.com(\.[a-z]{2})?|(www\.)?mercadopago\.com(\.[a-z]{2})?)\/\S+)$/;
+
+/** Nombre de la pasarela de un enlace de pago, para mostrarlo en la landing. */
+export function payLinkProvider(url: string) {
+  return url.startsWith("https://checkout.bold.co/") ? "Bold" : "Mercado Pago";
+}
 
 export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   serviceSlug: "masterclass-crianza-digital-segura",
@@ -44,7 +52,8 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   seatsPct: 63,
   recordingDays: 30,
   showOnHome: true,
-  paymentLink: "https://mpago.li/2TeDwDw",
+  paymentLink: "https://checkout.bold.co/payment/LNK_T2129MVLCM",
+  usdLink: "https://checkout.bold.co/payment/LNK_YIB3XFGAGO",
   paymentAmountCop: 165000,
   testLink: "https://mpago.li/1WMMqMR",
   testAmountCop: 5000,

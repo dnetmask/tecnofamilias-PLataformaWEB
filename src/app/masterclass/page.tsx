@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { SeatsBar } from "@/components/SeatsBar";
 import { formatCop } from "@/lib/format";
-import { getMasterclass } from "@/lib/masterclass";
+import { getMasterclass, payLinkProvider } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { paypalClientId } from "@/lib/paypal";
 import { TEAM } from "@/lib/team";
@@ -134,7 +134,8 @@ export default async function MasterclassPage() {
   // PayPal, el enlace de pago de un botón de PayPal, si está configurado.
   const checkout = canBuy && !!mc.paypalAmountUsd && !!paypalClientId();
   const payLink = canBuy && !checkout && !!mc.paypalButtonId;
-  const paypal = payLink || checkout;
+  const paypal = payLink || checkout || (canBuy && !!mc.usdLink);
+  const copProvider = mc.paymentLink ? payLinkProvider(mc.paymentLink) : "Mercado Pago";
   const paypalHref = `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
   const paypalTestHref = canBuy && mc.paypalTestButtonId ? `https://www.paypal.com/ncp/payment/${mc.paypalTestButtonId}` : null;
   const PayPalLink = ({ className = "btn btn-yellow" }: { className?: string }) =>
@@ -166,7 +167,7 @@ export default async function MasterclassPage() {
         <div className="mc-pay-opt">
           <span className="mc-pay-label">En Colombia · {price}</span>
           <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
-          <span className="small muted">{detail ? "Mercado Pago: tarjeta, PSE, Nequi y efectivo." : "Tarjeta, PSE, Nequi o efectivo."}</span>
+          <span className="small muted">{copProvider === "Bold" ? "Tarjeta, PSE, Nequi y más, con Bold." : detail ? "Mercado Pago: tarjeta, PSE, Nequi y efectivo." : "Tarjeta, PSE, Nequi o efectivo."}</span>
           {detail && mc.testLink && (
             <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)</a>
           )}
@@ -174,8 +175,14 @@ export default async function MasterclassPage() {
         {paypal && (
           <div className="mc-pay-opt">
             <span className="mc-pay-label">Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
-            {checkout ? <a href="/masterclass/pagar-dolares" target="_blank" rel="noopener" className="btn btn-yellow">Pagar en dólares</a> : <PayPalLink />}
-            <span className="small muted">{checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
+            {mc.usdLink ? (
+              <a href={mc.usdLink} target="_blank" rel="noopener noreferrer" className="btn btn-yellow">Pagar en dólares</a>
+            ) : checkout ? (
+              <a href="/masterclass/pagar-dolares" target="_blank" rel="noopener" className="btn btn-yellow">Pagar en dólares</a>
+            ) : (
+              <PayPalLink />
+            )}
+            <span className="small muted">{mc.usdLink ? "Tarjeta de crédito o débito internacional, con Bold." : checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
             {detail && paypalTestHref && (
               <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
             )}
@@ -195,7 +202,7 @@ export default async function MasterclassPage() {
     [
       "¿Puedo pagar desde otro país?",
       paypal
-        ? `Sí. Desde fuera de Colombia pagas USD ${mc.paypalAmountUsd} con PayPal, con tu cuenta o con tarjeta internacional. En Colombia pagas con Mercado Pago.`
+        ? `Sí. Desde fuera de Colombia pagas USD ${mc.paypalAmountUsd} con tarjeta internacional${mc.usdLink ? "" : " o PayPal"}. En Colombia pagas en pesos con ${copProvider}.`
         : "Sí. El precio base es en dólares; Mercado Pago cobra el equivalente en pesos colombianos y tu banco hace la conversión final.",
     ],
   ];
@@ -414,7 +421,7 @@ export default async function MasterclassPage() {
             <div>
               <span className="price" style={{ fontSize: "2.6rem" }}>{price}</span> <span className="muted">por persona</span>
               {mc.paymentLink ? (
-                <div className="small muted">Se paga en pesos colombianos con Mercado Pago.</div>
+                <div className="small muted">Se paga en pesos colombianos con {copProvider}.</div>
               ) : (
                 usd > 0 && <div className="small muted">Se cobra hoy {formatCop(pricing.charge(usd, cop))} · precio base USD {usd}</div>
               )}

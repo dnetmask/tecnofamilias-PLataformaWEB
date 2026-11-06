@@ -14,6 +14,12 @@ export function ClickTracker() {
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement | null)?.closest?.("a");
+      if (a?.href.startsWith("https://checkout.bold.co/")) {
+        // Clic en un enlace de pago de Bold (masterclass).
+        track("Pago Bold", { pagina: pathname });
+        window.dataLayer?.push({ event: "begin_checkout", pagina: pathname, metodo: "bold" });
+        return;
+      }
       if (a && /^https:\/\/(mpago\.(li|la)|link\.mercadopago|(www\.)?mercadopago\.)/.test(a.href)) {
         // Clic en un enlace de pago de Mercado Pago (masterclass).
         track("Pago Mercado Pago", { pagina: pathname });
