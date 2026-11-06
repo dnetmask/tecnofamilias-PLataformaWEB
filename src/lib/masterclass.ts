@@ -34,6 +34,9 @@ export type MasterclassSetting = {
   /** Enlace de pago de prueba en dólares (Bold, valor bajo); si está, reemplaza al botón de prueba de PayPal. */
   usdTestLink: string;
   usdTestAmountUsd: number;
+  /** Pagos de prueba con el checkout embebido de Bold (webhook y API completos, no reservan cupo); 0 los oculta. */
+  boldTestAmountCop: number;
+  boldTestAmountUsd: number;
 };
 
 /** Solo se aceptan enlaces de pago de Bold o de Mercado Pago. */
@@ -66,6 +69,8 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   paypalTestAmountUsd: 3,
   usdTestLink: "https://checkout.bold.co/payment/LNK_Z7WFZXW32F",
   usdTestAmountUsd: 2,
+  boldTestAmountCop: 3000,
+  boldTestAmountUsd: 2,
 };
 
 export const getMasterclass = cache(async () => {

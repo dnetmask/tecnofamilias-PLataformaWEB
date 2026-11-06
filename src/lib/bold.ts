@@ -37,16 +37,24 @@ export type BoldCheckoutData = {
   redirectionUrl: string;
 };
 
-/** Crea la orden local de la masterclass y devuelve los datos firmados para abrir el checkout de Bold. */
-export async function createBoldMasterclassOrder(currency: BoldCurrency, userId: string | null): Promise<BoldCheckoutData> {
+/** Proveedores de las órdenes de Bold: pesos, dólares y sus pagos de prueba (no reservan cupo). */
+export const BOLD_PROVIDERS = ["bold", "bold-usd", "bold-test", "bold-usd-test"];
+
+/**
+ * Crea la orden local de la masterclass y devuelve los datos firmados para abrir el checkout de Bold.
+ * Con test=true usa el valor de prueba: recorre el mismo flujo (firma, checkout y webhook) pero no reserva cupo.
+ */
+export async function createBoldMasterclassOrder(currency: BoldCurrency, userId: string | null, test = false): Promise<BoldCheckoutData> {
   const c = config();
   if (!c) throw new Error("Bold no está configurado");
   const mc = await getMasterclass();
   const service = mc.service;
-  const amount = currency === "COP" ? mc.paymentAmountCop : mc.paypalAmountUsd;
+  const amount = test
+    ? currency === "COP" ? mc.boldTestAmountCop : mc.boldTestAmountUsd
+    : currency === "COP" ? mc.paymentAmountCop : mc.paypalAmountUsd;
   if (!service?.active || mc.isPast || !amount) throw new Error("La masterclass no está disponible para compra");
 
-  const description = `${service.name} · ${mc.dateLabel}`.slice(0, 100);
+  const description = `${test ? "PRUEBA · " : ""}${service.name} · ${mc.dateLabel}`.slice(0, 100);
   const order = await db.order.create({
     data: {
       userId,
@@ -55,7 +63,7 @@ export async function createBoldMasterclassOrder(currency: BoldCurrency, userId:
       description,
       amountCop: currency === "COP" ? amount : 0,
       amountUsd: currency === "USD" ? amount : null,
-      provider: currency === "COP" ? "bold" : "bold-usd",
+      provider: `${currency === "COP" ? "bold" : "bold-usd"}${test ? "-test" : ""}`,
     },
   });
   const amountStr = String(amount);
@@ -97,20 +105,27 @@ export type BoldEvent = {
 export async function handleBoldEvent(event: BoldEvent) {
   const reference = event.data?.metadata?.reference;
   if (!reference) return { ok: false as const, reason: "sin referencia" };
-  const local = await db.order.findFirst({ where: { id: reference, provider: { in: ["bold", "bold-usd"] } } });
+  const local = await db.order.findFirst({ where: { id: reference, provider: { in: BOLD_PROVIDERS } } });
   if (!local) return { ok: false as const, reason: "orden desconocida" };
 
   if (event.type === "SALE_APPROVED") {
     const currency = event.data?.amount?.currency ?? "";
     const total = Number(event.data?.amount?.total ?? 0);
-    const expectedCurrency = local.provider === "bold" ? "COP" : "USD";
-    const expectedAmount = local.provider === "bold" ? local.amountCop : local.amountUsd ?? Infinity;
+    const usd = local.provider.startsWith("bold-usd");
+    const expectedCurrency = usd ? "USD" : "COP";
+    const expectedAmount = usd ? local.amountUsd ?? Infinity : local.amountCop;
     if (currency.toUpperCase() !== expectedCurrency || !(total >= expectedAmount)) {
       console.error("Bold: monto o moneda no coinciden", { order: local.id, currency, total });
       return { ok: false as const, reason: "monto no coincide" };
     }
+    const paymentRef = event.data?.payment_id ?? event.subject_id;
+    if (local.provider.endsWith("-test")) {
+      // Pago de prueba: confirma el flujo completo pero no reserva cupo.
+      if (local.status !== "PAID") await db.order.update({ where: { id: local.id }, data: { status: "PAID", paidAt: new Date(), providerRef: paymentRef } });
+      return { ok: true as const };
+    }
     const email = event.data?.payer_email ?? "";
-    await fulfillOrder(local.id, event.data?.payment_id ?? event.subject_id, { name: "Pago con Bold", email });
+    await fulfillOrder(local.id, paymentRef, { name: "Pago con Bold", email });
     return { ok: true as const };
   }
   if (event.type === "SALE_REJECTED" && local.status === "PENDING") {

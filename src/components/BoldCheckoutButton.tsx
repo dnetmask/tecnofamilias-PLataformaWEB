@@ -44,7 +44,7 @@ function loadBold(): Promise<BoldCheckoutCtor> {
 }
 
 /** Botón que abre la pasarela de Bold en un modal (Embedded Checkout) con una orden firmada por el servidor. */
-export function BoldCheckoutButton({ currency, label, className = "btn btn-yellow" }: { currency: "COP" | "USD"; label: string; className?: string }) {
+export function BoldCheckoutButton({ currency, label, className = "btn btn-yellow", test = false, note }: { currency: "COP" | "USD"; label: string; className?: string; test?: boolean; note?: string }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -54,11 +54,11 @@ export function BoldCheckoutButton({ currency, label, className = "btn btn-yello
     try {
       const [Bold, res] = await Promise.all([
         loadBold(),
-        fetch("/api/bold/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ currency }) }),
+        fetch("/api/bold/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ currency, test }) }),
       ]);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "No pudimos iniciar el pago");
-      window.dataLayer?.push({ event: "begin_checkout", payment_provider: "Bold embebido", currency });
+      window.dataLayer?.push({ event: "begin_checkout", payment_provider: test ? "Bold embebido (prueba)" : "Bold embebido", currency });
       new Bold({ ...data, renderMode: "embedded" }).open();
     } catch (err) {
       setError(err instanceof Error ? err.message : "No pudimos iniciar el pago");
@@ -72,6 +72,7 @@ export function BoldCheckoutButton({ currency, label, className = "btn btn-yello
       <button type="button" className={className} onClick={pay} disabled={busy}>
         {busy ? "Abriendo pago…" : label}
       </button>
+      {note && <span className="small muted">{note}</span>}
       {error && <span className="small" role="alert" style={{ color: "#b42318" }}>{error}. Intenta de nuevo o usa el otro botón.</span>}
     </>
   );

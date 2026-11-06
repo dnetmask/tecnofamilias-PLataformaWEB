@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BOLD_PROVIDERS } from "@/lib/bold";
 import { db } from "@/lib/db";
 import { LEGAL, NOINDEX } from "@/lib/site";
 
@@ -13,9 +14,10 @@ export default async function BoldResultPage({ searchParams }: { searchParams: P
   const params = await searchParams;
   const orderId = params["bold-order-id"];
   const txStatus = (params["bold-tx-status"] ?? "").toLowerCase();
-  const order = orderId ? await db.order.findFirst({ where: { id: orderId, provider: { in: ["bold", "bold-usd"] } }, select: { status: true } }) : null;
+  const order = orderId ? await db.order.findFirst({ where: { id: orderId, provider: { in: BOLD_PROVIDERS } }, select: { status: true, provider: true } }) : null;
 
   const paid = order?.status === "PAID" || txStatus === "approved";
+  const test = !!order?.provider.endsWith("-test");
   const pending = !paid && (txStatus === "pending" || txStatus === "processing");
 
   return (
@@ -23,10 +25,12 @@ export default async function BoldResultPage({ searchParams }: { searchParams: P
       <div className="card stack" style={{ gap: 14, textAlign: "center" }}>
         <div style={{ fontSize: "2.4rem" }}>{paid ? "🎉" : pending ? "⏳" : "⚠️"}</div>
         <h1 style={{ margin: 0, fontSize: "1.6rem" }}>
-          {paid ? "¡Tu cupo está reservado!" : pending ? "Tu pago está en proceso" : "El pago no se completó"}
+          {paid && test ? "Pago de prueba aprobado" : paid ? "¡Tu cupo está reservado!" : pending ? "Tu pago está en proceso" : "El pago no se completó"}
         </h1>
         <p className="muted" style={{ margin: 0 }}>
-          {paid
+          {paid && test
+            ? "El pago de prueba se aprobó. Este pago no reserva cupo."
+            : paid
             ? `Te enviaremos al correo del pago el enlace de acceso a la masterclass. Si no lo ves, revisa spam o escríbenos a ${LEGAL.email}.`
             : pending
               ? "Bold está confirmando la transacción. Te avisaremos por correo cuando se apruebe."

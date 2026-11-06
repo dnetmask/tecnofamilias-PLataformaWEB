@@ -512,6 +512,8 @@ const masterclassSchema = z.object({
   paypalTestAmountUsd: z.coerce.number().int().min(0).max(100_000),
   usdTestLink: z.string().trim().max(300).refine((v) => v === "" || PAY_LINK_PATTERN.test(v), "El enlace de prueba en dólares debe ser de Bold (https://checkout.bold.co/payment/…)"),
   usdTestAmountUsd: z.coerce.number().int().min(0).max(100_000),
+  boldTestAmountCop: z.coerce.number().int().min(0).max(100_000_000),
+  boldTestAmountUsd: z.coerce.number().int().min(0).max(100_000),
 });
 
 export async function saveMasterclassAction(formData: FormData) {

@@ -170,9 +170,18 @@ export default async function MasterclassPage() {
       <div className={`mc-pay mc-pay-${variant}${detail ? "" : " mc-pay-boxed"}`}>
         <div className="mc-pay-opt">
           <span className="mc-pay-label">En Colombia · {price}</span>
-          <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
-          {boldEmbedded && !!mc.paymentAmountCop && <BoldCheckoutButton currency="COP" label="Pagar aquí en pesos" className="btn" />}
+          {boldEmbedded && !!mc.paymentAmountCop ? (
+            <>
+              <BoldCheckoutButton currency="COP" label="Pagar aquí en pesos" className="btn btn-yellow" />
+              {mc.paymentLink && <BuyLink className="btn">Pagar con link</BuyLink>}
+            </>
+          ) : (
+            <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
+          )}
           <span className="small muted">{copProvider === "Bold" ? "Tarjeta, PSE, Nequi y más, con Bold." : detail ? "Mercado Pago: tarjeta, PSE, Nequi y efectivo." : "Tarjeta, PSE, Nequi o efectivo."}</span>
+          {detail && boldEmbedded && !!mc.boldTestAmountCop && (
+            <BoldCheckoutButton currency="COP" test label={`Pago de prueba · ${formatCop(mc.boldTestAmountCop)}`} className="btn btn-red" note="Con webhook. No reserva cupo." />
+          )}
           {detail && mc.testLink && (
             <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)</a>
           )}
@@ -189,6 +198,9 @@ export default async function MasterclassPage() {
             )}
             {boldEmbedded && !!mc.paypalAmountUsd && <BoldCheckoutButton currency="USD" label="Pagar aquí en dólares" className="btn" />}
             <span className="small muted">{mc.usdLink ? "Tarjeta de crédito o débito internacional, con Bold." : checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
+            {detail && boldEmbedded && !!mc.boldTestAmountUsd && (
+              <BoldCheckoutButton currency="USD" test label={`Pago de prueba · USD ${mc.boldTestAmountUsd}`} className="btn btn-red" note="Con webhook. No reserva cupo." />
+            )}
             {detail && (mc.usdTestLink ? (
               <a href={mc.usdTestLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.usdTestAmountUsd} (no reserva cupo)</a>
             ) : paypalTestHref && (

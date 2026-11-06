@@ -118,6 +118,16 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
             <label htmlFor="mc-usd-test-amount">Valor de la prueba en dólares (USD)</label>
             <input id="mc-usd-test-amount" className="input" type="number" min={0} name="usdTestAmountUsd" defaultValue={mc.usdTestAmountUsd} required />
           </div>
+          <div className="field">
+            <label htmlFor="mc-bold-test-cop">Prueba Bold embebido en pesos (COP)</label>
+            <input id="mc-bold-test-cop" className="input" type="number" min={0} step={1000} name="boldTestAmountCop" defaultValue={mc.boldTestAmountCop} required />
+            <span className="hint">Botón rojo de prueba con el checkout de Bold en el sitio (prueba el webhook; no reserva cupo). 0 lo oculta.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-bold-test-usd">Prueba Bold embebido en dólares (USD)</label>
+            <input id="mc-bold-test-usd" className="input" type="number" min={0} name="boldTestAmountUsd" defaultValue={mc.boldTestAmountUsd} required />
+            <span className="hint">0 lo oculta.</span>
+          </div>
         </div>
         <label className="check"><input type="checkbox" name="showOnHome" defaultChecked={mc.showOnHome} /> Mostrar el aviso en los inicios</label>
         <div><SubmitButton className="btn btn-sm">Guardar</SubmitButton></div>
