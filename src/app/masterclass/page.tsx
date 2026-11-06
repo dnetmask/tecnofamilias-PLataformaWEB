@@ -172,8 +172,8 @@ export default async function MasterclassPage() {
           <span className="mc-pay-label">En Colombia · {price}</span>
           {boldEmbedded && !!mc.paymentAmountCop ? (
             <>
-              <BoldCheckoutButton currency="COP" label={`Pagar ${price} · API`} className="btn btn-yellow" />
-              {mc.paymentLink && <BuyLink className="btn">Pagar {price} · Link</BuyLink>}
+              {mc.paymentLink && <BuyLink className="btn btn-yellow">Pagar {price} · Link</BuyLink>}
+              <BoldCheckoutButton currency="COP" label={`Pagar ${price} · API`} className="btn" />
             </>
           ) : (
             <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
