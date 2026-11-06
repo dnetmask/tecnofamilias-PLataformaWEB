@@ -55,7 +55,7 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   timezone: "hora de Colombia",
   modality: "En vivo por Zoom",
   duration: "3 horas",
-  seatsPct: 63,
+  seatsPct: 13,
   recordingDays: 30,
   showOnHome: true,
   paymentLink: "https://checkout.bold.co/payment/LNK_T2129MVLCM",
