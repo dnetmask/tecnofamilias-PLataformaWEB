@@ -265,7 +265,10 @@ export default async function MasterclassPage() {
       <section className="mc-hero mc-pay-band">
         <div className="container mc-hero-pay" id="precio">
           <div className="mc-hero-pay-head">
-            <h2>Reserva tu cupo</h2>
+            <div>
+              <h2>Reserva tu cupo</h2>
+              <p className="mc-hero-pay-sub">{mc.duration} hoy para dormir más tranquilo mañana.</p>
+            </div>
             <span className="mc-urgency">🔥 {mc.seatsPct} % de cupos ocupados</span>
           </div>
           <PayOptions variant="hero" />

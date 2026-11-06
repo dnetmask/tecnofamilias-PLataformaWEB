@@ -524,3 +524,4 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .mc-kit-section .mc-kit-panel .mc-chips span { background: var(--tint); border-color: var(--line); color: var(--navy); }
 .mc-pay-band .mc-hero-pay { padding-top: 48px; }
 @media (max-width: 560px) { .mc-kit-section { padding: 40px 0 36px; } .mc-pay-band .mc-hero-pay { padding-top: 36px; } }
+.mc-hero-pay-sub { margin: 6px 0 0; color: var(--yellow); font-weight: 800; font-size: clamp(1.05rem, 2vw, 1.25rem); }
