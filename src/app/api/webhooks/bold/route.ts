@@ -19,6 +19,7 @@ export async function POST(request: Request) {
   try {
     const result = await handleBoldEvent(event);
     if (!result.ok) console.warn("Bold: evento sin efecto", { id: event.id, type: event.type, reason: result.reason });
+    else if (event.type === "SALE_APPROVED") console.info("Bold: pago confirmado", { id: event.id, order: event.data?.metadata?.reference });
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error(err);
