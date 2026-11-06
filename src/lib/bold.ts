@@ -38,6 +38,9 @@ export type BoldCheckoutData = {
 };
 
 /** Proveedores de las órdenes de Bold: pesos, dólares y sus pagos de prueba (no reservan cupo). */
+/** Tasa mínima razonable (COP por USD) para aceptar un pago en dólares que Bold reporta en pesos. */
+const MIN_COP_PER_USD = 2500;
+
 export const BOLD_PROVIDERS = ["bold", "bold-usd", "bold-test", "bold-usd-test"];
 
 /**
@@ -112,18 +115,26 @@ export async function handleBoldEvent(event: BoldEvent) {
     const currency = event.data?.amount?.currency ?? "";
     const total = Number(event.data?.amount?.total ?? 0);
     const usd = local.provider.startsWith("bold-usd");
-    const expectedCurrency = usd ? "USD" : "COP";
-    const expectedAmount = usd ? local.amountUsd ?? Infinity : local.amountCop;
-    if (currency.toUpperCase() !== expectedCurrency || !(total >= expectedAmount)) {
+    // Bold liquida en pesos: los pagos en dólares llegan convertidos a COP (p. ej. USD 2 → COP 6.442).
+    // El monto y la moneda ya van protegidos por la firma de integridad; esto es un control adicional.
+    const ok = usd
+      ? currency.toUpperCase() === "USD"
+        ? total >= (local.amountUsd ?? Infinity)
+        : currency.toUpperCase() === "COP" && total >= (local.amountUsd ?? Infinity) * MIN_COP_PER_USD
+      : currency.toUpperCase() === "COP" && total >= local.amountCop;
+    if (!ok) {
       console.error("Bold: monto o moneda no coinciden", { order: local.id, currency, total });
       return { ok: false as const, reason: "monto no coincide" };
     }
     const paymentRef = event.data?.payment_id ?? event.subject_id;
+    // En pagos en dólares se guarda lo recibido en pesos y la tasa aplicada.
+    const copReceived = usd && currency.toUpperCase() === "COP" && local.amountUsd ? { amountCop: Math.round(total), fxRate: total / local.amountUsd } : {};
     if (local.provider.endsWith("-test")) {
       // Pago de prueba: confirma el flujo completo pero no reserva cupo.
-      if (local.status !== "PAID") await db.order.update({ where: { id: local.id }, data: { status: "PAID", paidAt: new Date(), providerRef: paymentRef } });
+      if (local.status !== "PAID") await db.order.update({ where: { id: local.id }, data: { status: "PAID", paidAt: new Date(), providerRef: paymentRef, ...copReceived } });
       return { ok: true as const };
     }
+    if (Object.keys(copReceived).length) await db.order.update({ where: { id: local.id }, data: copReceived });
     const email = event.data?.payer_email ?? "";
     await fulfillOrder(local.id, paymentRef, { name: "Pago con Bold", email });
     return { ok: true as const };

@@ -41,23 +41,19 @@ export default async function MasterclassWelcomePage({ searchParams }: { searchP
   const paid = order?.status === "PAID" || txStatus === "approved" || (!txStatus && !orderId);
   const pending = !paid && (txStatus === "pending" || txStatus === "processing");
 
-  if (!paid || test) {
+  if (!paid) {
     return (
       <div className="container section" style={{ maxWidth: 560 }}>
         <div className="card stack" style={{ gap: 14, textAlign: "center" }}>
-          <div style={{ fontSize: "2.4rem" }}>{paid ? "✅" : pending ? "⏳" : "⚠️"}</div>
-          <h1 style={{ margin: 0, fontSize: "1.6rem" }}>
-            {paid ? "Pago de prueba aprobado" : pending ? "Tu pago está en proceso" : "El pago no se completó"}
-          </h1>
+          <div style={{ fontSize: "2.4rem" }}>{pending ? "⏳" : "⚠️"}</div>
+          <h1 style={{ margin: 0, fontSize: "1.6rem" }}>{pending ? "Tu pago está en proceso" : "El pago no se completó"}</h1>
           <p className="muted" style={{ margin: 0 }}>
-            {paid
-              ? "El pago de prueba se aprobó. Este pago no reserva cupo."
-              : pending
-                ? "Bold está confirmando la transacción. Te avisaremos por correo cuando se apruebe."
-                : "No se hizo ningún cobro. Puedes intentarlo de nuevo con otro medio de pago."}
+            {pending
+              ? "Bold está confirmando la transacción. Te avisaremos por correo cuando se apruebe."
+              : "No se hizo ningún cobro. Puedes intentarlo de nuevo con otro medio de pago."}
           </p>
           {orderId && <p className="small muted" style={{ margin: 0 }}>Referencia: {orderId}</p>}
-          <Link href="/masterclass#precio" className="btn btn-yellow">{paid ? "Volver a la masterclass" : "Volver a intentar"}</Link>
+          <Link href="/masterclass#precio" className="btn btn-yellow">Volver a intentar</Link>
         </div>
       </div>
     );
@@ -82,6 +78,11 @@ export default async function MasterclassWelcomePage({ searchParams }: { searchP
 
   return (
     <>
+      {test && (
+        <div role="status" style={{ background: "var(--red)", color: "#fff", textAlign: "center", padding: "10px 16px", fontWeight: 700 }}>
+          Pago de prueba aprobado: así verá esta página quien compre. Este pago no reserva cupo.
+        </div>
+      )}
       <section className="mc-hero">
         <div className="container" style={{ padding: "64px 16px 72px", textAlign: "center", maxWidth: 760 }}>
           <div style={{ fontSize: "3rem", lineHeight: 1 }} aria-hidden="true">🎉</div>
