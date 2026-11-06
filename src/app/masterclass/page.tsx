@@ -54,7 +54,7 @@ const AGENDA = [
 const KIT = [
   { icon: "📊", title: "Medición de madurez familiar en ciberseguridad", text: "En vivo: sabes dónde está tu familia y qué hacer primero.", highlight: true },
   { icon: "🎥", title: "Sesión en vivo", text: "Con especialistas en ciberseguridad y crianza." },
-  { icon: "📘", title: "Guía maestra en PDF", text: "“Crianza digital segura”, para consultar cuando la necesites." },
+  { icon: "📘", title: "Guía maestra en PDF", text: "Paso a paso para proteger las diferentes plataformas de tu hijo." },
   { icon: "📝", title: "Contrato digital familiar", text: "Imprimible, para acordar reglas sin pelear." },
   { icon: "✅", title: "Checklist del primer celular", text: "Todo lo que debes revisar antes de entregarlo." },
   { icon: "🆘", title: "Tarjeta P.A.R.A.R.", text: "De bolsillo, con las rutas de ayuda." },
@@ -288,7 +288,7 @@ export default async function MasterclassPage() {
             <p>{mc.duration} en vivo · {mc.dateLabel} · {mc.time}</p>
           </div>
           <div className="mc-chips">
-            {["Android", "iPhone", "WhatsApp", "Instagram", "YouTube", "Roblox", "TikTok", "Router de la casa"].map((c) => <span key={c}>{c}</span>)}
+            {["Android", "iPhone", "WhatsApp", "Instagram", "YouTube", "Roblox", "TikTok"].map((c) => <span key={c}>{c}</span>)}
           </div>
           <ol className="mc-agenda">
             {AGENDA.map(([t, d], i) => (
