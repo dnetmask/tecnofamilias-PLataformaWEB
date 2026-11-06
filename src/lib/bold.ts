@@ -35,6 +35,8 @@ export type BoldCheckoutData = {
   integritySignature: string;
   description: string;
   redirectionUrl: string;
+  /** Imagen que muestra el checkout de Bold (isotipo de Tecnofamilias). */
+  imageUrl: string;
 };
 
 /** Proveedores de las órdenes de Bold: pesos, dólares y sus pagos de prueba (no reservan cupo). */
@@ -79,6 +81,7 @@ export async function createBoldMasterclassOrder(currency: BoldCurrency, userId:
     integritySignature,
     description,
     redirectionUrl: `${appUrl()}/masterclass/felicitaciones`,
+    imageUrl: `${appUrl()}/isotipo.png`,
   };
 }
 
