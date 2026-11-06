@@ -463,3 +463,24 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
   .mc-hero .mc-art { display: none; }
   .mc-facts span { font-size: .82rem; padding: 5px 12px; }
 }
+
+/* Masterclass: kit en el hero (antes de los precios) y chips del taller. */
+.mc-kit { max-width: 980px; padding: 0 16px 40px; }
+.mc-kit-head h2 { color: #fff; margin: 4px 0 16px; font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 900; }
+.mc-kit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
+.mc-kit-item { display: flex; gap: 14px; align-items: flex-start; background: rgb(255 255 255 / 8%); border: 1px solid rgb(255 255 255 / 14%); border-radius: 16px; padding: 14px 16px; }
+.mc-kit-item strong { color: #fff; font-size: 1.02rem; }
+.mc-kit-item p { margin: 2px 0 0; color: #c9d6e8; font-size: .9rem; }
+.mc-kit-icon { font-size: 1.6rem; line-height: 1; flex: none; }
+.mc-kit-item.hl { grid-column: 1 / -1; background: var(--yellow); border-color: var(--yellow); }
+.mc-kit-item.hl strong, .mc-kit-item.hl p { color: var(--navy-dark); }
+.mc-kit-new { display: inline-block; margin-left: 8px; background: var(--red); color: #fff; font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+.mc-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-chips span { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-weight: 800; color: var(--navy); }
+.mc-risks li { font-size: 1.02rem; padding: 14px 16px; }
+@media (max-width: 560px) {
+  .mc-kit-grid { gap: 8px; }
+  .mc-kit-item { padding: 10px 14px; align-items: center; }
+  .mc-kit-item:not(.hl) p { display: none; }
+  .mc-kit-icon { font-size: 1.3rem; }
+}

@@ -25,13 +25,6 @@ const SITUATIONS = [
   { color: "var(--red)", text: "El YouTube “para niños” de tu hijo de 5 años termina mostrando videos que nadie eligió." },
 ];
 
-const C4 = [
-  { letter: "C", color: "var(--blue)", title: "Contenido", text: "Lo que ven: violencia, pornografía, retos peligrosos que llegan por recomendación, no porque lo buscaron." },
-  { letter: "C", color: "var(--red)", title: "Contacto", text: "Quién les habla: adultos que se hacen pasar por niños para ganarse su confianza." },
-  { letter: "C", color: "var(--yellow)", title: "Conducta", text: "Lo que hacen ellos o sus pares: ciberacoso, sexting, exponer a otros." },
-  { letter: "C", color: "var(--navy-soft)", title: "Contrato y comercio", text: "Dinero y datos: estafas, robo de cuentas, cajas de premio y apuestas." },
-];
-
 const RISKS = [
   "Ciberacoso",
   "Grooming",
@@ -47,63 +40,6 @@ const RISKS = [
   "Uso problemático y diseño adictivo",
 ];
 
-const AGES = [
-  { range: "0 a 5 años", tag: "Inicio digital", color: "var(--yellow)", uses: "Videos, dibujos animados y juegos simples en la tablet de los papás.", key: "El riesgo principal es para el desarrollo: lenguaje, sueño y atención." },
-  { range: "6 a 9 años", tag: "El auge del juego", color: "var(--blue)", uses: "Roblox, Minecraft, Brawl Stars, YouTube, tablet o consola propia.", key: "Primer contacto con chats, compras dentro del juego y desconocidos." },
-  { range: "10 a 12 años", tag: "El móvil propio", color: "var(--red)", uses: "WhatsApp (grupos del colegio), TikTok, Free Fire, Fortnite, Discord.", key: "La edad de mayor riesgo de grooming y de mentir sobre la edad." },
-  { range: "13 a 17 años", tag: "Socialización intensa", color: "#fff", uses: "Instagram, Snapchat, TikTok, WhatsApp, Twitch, chatbots de IA.", key: "Sexting, sextorsión, comparación social, apuestas y autonomía." },
-];
-
-const PLATFORMS = [
-  {
-    name: "Proteger Roblox",
-    who: "Ideal de 6 a 12 años",
-    bg: "#EEF6FC",
-    color: "var(--blue)",
-    items: [
-      "Cuenta de padre vinculada y controles parentales con PIN",
-      "Chat limitado o desactivado según la edad",
-      "Límites de gasto y alertas de compras de Robux",
-      "Filtro de madurez de las experiencias",
-      "Señal de alerta: cuando un “amigo” pide pasar a otra app",
-    ],
-  },
-  {
-    name: "Proteger Instagram",
-    who: "Ideal de 13 a 17 años",
-    bg: "#FFF6DE",
-    color: "var(--yellow)",
-    items: [
-      "Cuenta privada y cuenta de adolescente",
-      "Supervisión familiar desde tu propio Instagram",
-      "Quién puede escribirle, etiquetarlo y mencionarlo",
-      "Límites de tiempo y modo descanso en la noche",
-      "Cómo reportar y bloquear sin empeorar el problema",
-    ],
-  },
-  {
-    name: "Proteger YouTube",
-    who: "De 3 a 17 años",
-    bg: "#FDECEA",
-    color: "var(--red)",
-    items: [
-      "YouTube Kids con el nivel de contenido según la edad",
-      "Cuenta supervisada para preadolescentes",
-      "Modo restringido en celular, TV y computador",
-      "Historial, búsquedas y canales bloqueados",
-      "Reproducción automática apagada",
-    ],
-  },
-];
-
-const LAYERS = [
-  ["1", "La red de la casa", "Filtro DNS en el router: protege todos los equipos del wifi, incluidos televisores y consolas."],
-  ["2", "El dispositivo", "Family Link en Android y Tiempo de uso en iPhone: tiempo, apps, compras y contenido web."],
-  ["3", "Cada app", "Chat, contacto y contenido dentro de WhatsApp, Instagram, TikTok, YouTube y Roblox."],
-  ["4", "Las cuentas", "Edad real, contraseñas fuertes, verificación en dos pasos y correo de recuperación del adulto."],
-  ["5", "La conversación", "La única capa que funciona en todas las apps, en todos los dispositivos y fuera de casa."],
-];
-
 const AGENDA = [
   ["Apertura: la historia que nadie quiere vivir", "Un caso real compuesto y lo que revela un perfil “inocente”."],
   ["El mapa del mundo digital de tus hijos", "Qué usan por edad, el diccionario para papás y el test de las 5 preguntas para evaluar cualquier app."],
@@ -112,7 +48,17 @@ const AGENDA = [
   ["Crianza digital con disciplina positiva", "Acuerdos por edad, el primer celular y el contrato familiar."],
   ["Taller de controles parentales en vivo", "Android, iPhone, WhatsApp, Instagram, YouTube y Roblox, con tu celular en la mano."],
   ["Cuando el riesgo se materializa", "Señales de alarma, el protocolo P.A.R.A.R. y las rutas de ayuda."],
-  ["Cierre y plan de 7 días", "Cómo convertir lo aprendido en acciones esta misma semana."],
+  ["Cierre: medición de madurez familiar", "Medimos en vivo qué tan protegida está tu familia y qué hacer primero."],
+];
+
+const KIT = [
+  { icon: "📊", title: "Medición de madurez familiar en ciberseguridad", text: "En vivo: sabes dónde está tu familia y qué hacer primero.", highlight: true },
+  { icon: "🎥", title: "Sesión en vivo", text: "Con especialistas en ciberseguridad y crianza." },
+  { icon: "📘", title: "Guía maestra en PDF", text: "“Crianza digital segura”, para consultar cuando la necesites." },
+  { icon: "📝", title: "Contrato digital familiar", text: "Imprimible, para acordar reglas sin pelear." },
+  { icon: "✅", title: "Checklist del primer celular", text: "Todo lo que debes revisar antes de entregarlo." },
+  { icon: "🆘", title: "Tarjeta P.A.R.A.R.", text: "De bolsillo, con las rutas de ayuda." },
+  { icon: "💬", title: "Preguntas para conversar", text: "Con tus hijos, según su edad." },
 ];
 
 const PARAR = [
@@ -263,6 +209,30 @@ export default async function MasterclassPage() {
             </div>
           </div>
         </div>
+        <div className="container mc-kit">
+          <div className="mc-kit-head">
+            <p className="mc-label" style={{ color: "#8fd3f4" }}>Lo que te llevas</p>
+            <h2>Tu kit incluye</h2>
+          </div>
+          <div className="mc-kit-grid">
+            {KIT.map((k) => (
+              <div key={k.title} className={`mc-kit-item${k.highlight ? " hl" : ""}`}>
+                <span className="mc-kit-icon" aria-hidden>{k.icon}</span>
+                <div>
+                  <strong>{k.title}</strong>
+                  {k.highlight && <span className="mc-kit-new">Nuevo</span>}
+                  <p>{k.text}</p>
+                </div>
+              </div>
+            ))}
+            {mc.recordingDays > 0 && (
+              <div className="mc-kit-item">
+                <span className="mc-kit-icon" aria-hidden>⏺️</span>
+                <div><strong>Grabación por {mc.recordingDays} días</strong><p>Por si no puedes asistir o quieres repasar.</p></div>
+              </div>
+            )}
+          </div>
+        </div>
         <div className="container mc-hero-pay" id="precio">
           <div className="mc-hero-pay-head">
             <h2>Reserva tu cupo</h2>
@@ -276,6 +246,20 @@ export default async function MasterclassPage() {
       <div className="container" style={{ marginTop: -28, position: "relative", zIndex: 2 }}>
         <SeatsBar pct={mc.seatsPct} />
       </div>
+
+      {/* 12 RIESGOS */}
+      <section className="mc-section tint" id="riesgos">
+        <div className="container stack" style={{ gap: 24 }}>
+          <div className="mc-head" style={{ marginBottom: 0 }}>
+            <p className="mc-label">Los riesgos reales</p>
+            <h2>Los 12 riesgos que vamos a revisar</h2>
+            <p>Cada uno con su solución concreta: no venimos a asustarte, venimos a que salgas sabiendo qué hacer.</p>
+          </div>
+          <ol className="mc-risks" style={{ padding: 0, margin: 0 }}>
+            {RISKS.map((r) => <li key={r}>{r}</li>)}
+          </ol>
+        </div>
+      </section>
 
       {/* ¿TE SUENA? */}
       <section className="mc-section">
@@ -295,114 +279,22 @@ export default async function MasterclassPage() {
         </div>
       </section>
 
-      {/* RIESGOS: 4C + 12 */}
-      <section className="mc-section tint" id="riesgos">
-        <div className="container stack" style={{ gap: 28 }}>
-          <div className="mc-head" style={{ marginBottom: 0 }}>
-            <p className="mc-label">Los riesgos reales</p>
-            <h2>Las 4C: explicadas en lenguaje de papá y mamá</h2>
-            <p>Cada riesgo se cierra con su solución concreta: no venimos a asustarte, venimos a que salgas sabiendo qué hacer.</p>
-          </div>
-          <div className="mc-c4">
-            {C4.map((c) => (
-              <div key={c.title} className="mc-card">
-                <h3><span className="letter" style={{ background: c.color, color: c.color === "var(--yellow)" ? "var(--navy-dark)" : "#fff" }}>{c.letter}</span>{c.title}</h3>
-                <p className="muted" style={{ margin: 0 }}>{c.text}</p>
-              </div>
-            ))}
-          </div>
-          <div>
-            <h3>Los 12 riesgos que vamos a revisar, cada uno con su solución</h3>
-            <ol className="mc-risks" style={{ padding: 0, margin: 0 }}>
-              {RISKS.map((r) => <li key={r}>{r}</li>)}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* POR EDAD */}
-      <section className="mc-section dark">
-        <div className="container">
-          <div className="mc-head">
-            <p className="mc-label">La línea de vida digital</p>
-            <h2>Cada edad tiene sus propios riesgos</h2>
-          </div>
-          <div className="grid grid-4">
-            {AGES.map((a) => (
-              <div key={a.range} className="mc-age">
-                <span style={{ width: 40, height: 40, borderRadius: "50%", background: a.color, display: "block" }} />
-                <h3>{a.range}</h3>
-                <span className="tag" style={{ color: a.color === "#fff" ? "#fff" : a.color }}>{a.tag}</span>
-                <p><strong style={{ color: "#fff" }}>Usan:</strong> {a.uses}</p>
-                <p>{a.key}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PLATAFORMAS + CAPAS */}
-      <section className="mc-section" id="contenido">
+      {/* TALLER + AGENDA */}
+      <section className="mc-section tint" id="contenido">
         <div className="container stack" style={{ gap: 28 }}>
           <div className="mc-head" style={{ marginBottom: 0 }}>
             <p className="mc-label">Taller en vivo</p>
             <h2>Configuramos juntos, con tu celular en la mano</h2>
-            <p>Además de Android, iPhone y WhatsApp, estas son las plataformas que más usan tus hijos:</p>
+            <p>{mc.duration} en vivo · {mc.dateLabel} · {mc.time}</p>
           </div>
-          <div className="grid grid-3">
-            {PLATFORMS.map((p) => (
-              <article key={p.name} className="mc-platform" style={{ background: p.bg }}>
-                <div className="row">
-                  <span className="icon-dot" style={{ background: p.color, width: 52, height: 52 }}>{p.name.includes("Roblox") ? "🎮" : p.name.includes("Instagram") ? "📷" : "▶"}</span>
-                  <div>
-                    <h3 style={{ margin: 0, fontSize: "1.35rem" }}>{p.name}</h3>
-                    <span className="small muted">{p.who}</span>
-                  </div>
-                </div>
-                <ul>{p.items.map((i) => <li key={i}>{i}</li>)}</ul>
-              </article>
+          <div className="mc-chips">
+            {["Android", "iPhone", "WhatsApp", "Instagram", "YouTube", "Roblox", "TikTok", "Router de la casa"].map((c) => <span key={c}>{c}</span>)}
+          </div>
+          <ol className="mc-agenda">
+            {AGENDA.map(([t, d], i) => (
+              <li key={t}><span className="n">{i + 1}</span><span><strong>{t}.</strong> {d}</span></li>
             ))}
-          </div>
-          <div className="mc-card" style={{ background: "var(--tint)", border: 0 }}>
-            <h3>La protección funciona en capas</h3>
-            <p className="muted" style={{ marginTop: 0 }}>Ningún control es perfecto. Lo que funciona es combinar capas, de modo que si una falla, otra protege.</p>
-            <div className="grid grid-3" style={{ gap: 12 }}>
-              {LAYERS.map(([n, t, d]) => (
-                <div key={n} className="row" style={{ alignItems: "flex-start", flexWrap: "nowrap" }}>
-                  <span className="icon-dot" style={{ background: "var(--navy)", width: 34, height: 34, fontSize: ".95rem", flex: "none" }}>{n}</span>
-                  <div><strong style={{ color: "var(--navy)" }}>{t}</strong><div className="small muted">{d}</div></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* AGENDA + INCLUYE */}
-      <section className="mc-section tint">
-        <div className="container layout-aside">
-          <div>
-            <div className="mc-head"><h2>Así es la masterclass</h2><p>{mc.duration} en vivo · {mc.dateLabel} · {mc.time}</p></div>
-            <ol className="mc-agenda">
-              {AGENDA.map(([t, d], i) => (
-                <li key={t}><span className="n">{i + 1}</span><span><strong>{t}.</strong> {d}</span></li>
-              ))}
-            </ol>
-          </div>
-          <aside className="mc-card stack">
-            <h3 style={{ margin: 0 }}>Tu kit incluye</h3>
-            <ul style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 8 }}>
-              <li>Sesión en vivo con especialistas en ciberseguridad y crianza</li>
-              <li>Guía maestra “Crianza digital segura” en PDF</li>
-              <li>Contrato digital familiar imprimible</li>
-              <li>Checklist “antes del primer celular”</li>
-              <li>Tarjeta de bolsillo P.A.R.A.R. con rutas de ayuda</li>
-              <li>Preguntas para conversar con tus hijos según su edad</li>
-              <li>Plan de 7 días para aplicar lo aprendido</li>
-              <li>Grabación disponible durante {mc.recordingDays} días</li>
-            </ul>
-            <Reserve className="btn btn-red" label={`Reservar · ${price}`} />
-          </aside>
+          </ol>
         </div>
       </section>
 
