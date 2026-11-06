@@ -481,6 +481,26 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 @media (max-width: 560px) {
   .mc-kit-grid { gap: 8px; }
   .mc-kit-item { padding: 10px 14px; align-items: center; }
-  .mc-kit-item:not(.hl) p { display: none; }
+  .mc-kit-item:not(.hl) > div:not(.mc-kit-panel) > p { display: none; }
   .mc-kit-icon { font-size: 1.3rem; }
+}
+
+/* "Sesión en vivo" del kit se amplía para ver la agenda y el taller. */
+.mc-kit-details { display: block; padding: 0; }
+.mc-kit-details summary { list-style: none; cursor: pointer; display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; }
+.mc-kit-details summary::-webkit-details-marker { display: none; }
+.mc-kit-details[open] { grid-column: 1 / -1; background: rgb(255 255 255 / 12%); }
+.mc-kit-more { display: block; margin-top: 6px; font-size: .85rem; font-weight: 800; color: var(--yellow); }
+.mc-kit-more::after { content: " ▾"; }
+.mc-kit-details[open] .mc-kit-more::after { content: " ▴"; }
+.mc-kit-panel { padding: 4px 16px 18px; display: grid; gap: 14px; }
+.mc-kit-panel-lead { margin: 0; color: #fff; font-weight: 700; }
+.mc-kit-panel .mc-agenda li { color: #dce6f2; }
+.mc-kit-panel .mc-agenda strong { color: #fff; }
+.mc-kit-panel .mc-agenda .n { background: var(--yellow); color: var(--navy-dark); }
+.mc-kit-panel .mc-chips span { background: rgb(255 255 255 / 10%); border-color: rgb(255 255 255 / 20%); color: #fff; }
+@media (max-width: 560px) {
+  .mc-kit-details summary { padding: 10px 14px; align-items: center; }
+  .mc-kit-details summary p { display: none; }
+  .mc-kit-more { margin-top: 2px; }
 }

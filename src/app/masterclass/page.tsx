@@ -42,9 +42,9 @@ const RISKS = [
 
 const AGENDA = [
   ["Apertura: la historia que nadie quiere vivir", "Un caso real compuesto y lo que revela un perfil “inocente”."],
-  ["El mapa del mundo digital de tus hijos", "Qué usan por edad, el diccionario para papás y el test de las 5 preguntas para evaluar cualquier app."],
-  ["Los riesgos reales", "Las 4C, doce riesgos explicados con su solución y el semáforo digital."],
+  ["Los 12 riesgos que vamos a revisar", "Explicados con su solución, las 4C y el semáforo digital."],
   ["Pantallas, cuerpo y cerebro", "Sueño, visión, postura, desarrollo y salud mental."],
+  ["El mapa del mundo digital de tus hijos", "Qué usan por edad, el diccionario para papás y el test de las 5 preguntas para evaluar cualquier app."],
   ["Crianza digital con disciplina positiva", "Acuerdos por edad, el primer celular y el contrato familiar."],
   ["Taller de controles parentales en vivo", "Android, iPhone, WhatsApp, Instagram, YouTube y Roblox, con tu celular en la mano."],
   ["Cuando el riesgo se materializa", "Señales de alarma, el protocolo P.A.R.A.R. y las rutas de ayuda."],
@@ -215,7 +215,29 @@ export default async function MasterclassPage() {
             <h2>Tu kit incluye</h2>
           </div>
           <div className="mc-kit-grid">
-            {KIT.map((k) => (
+            {KIT.map((k) => k.title === "Sesión en vivo" ? (
+              <details key={k.title} className="mc-kit-item mc-kit-details" id="contenido">
+                <summary>
+                  <span className="mc-kit-icon" aria-hidden>{k.icon}</span>
+                  <div>
+                    <strong>{k.title}</strong>
+                    <p>{k.text}</p>
+                    <span className="mc-kit-more">Ver la agenda y el taller</span>
+                  </div>
+                </summary>
+                <div className="mc-kit-panel">
+                  <p className="mc-kit-panel-lead">Taller en vivo: configuramos juntos, con tu celular en la mano · {mc.duration} · {mc.dateLabel} · {mc.time}</p>
+                  <div className="mc-chips">
+                    {["Android", "iPhone", "WhatsApp", "Instagram", "YouTube", "Roblox", "TikTok"].map((c) => <span key={c}>{c}</span>)}
+                  </div>
+                  <ol className="mc-agenda">
+                    {AGENDA.map(([t, d], i) => (
+                      <li key={t}><span className="n">{i + 1}</span><span><strong>{t}.</strong> {d}</span></li>
+                    ))}
+                  </ol>
+                </div>
+              </details>
+            ) : (
               <div key={k.title} className={`mc-kit-item${k.highlight ? " hl" : ""}`}>
                 <span className="mc-kit-icon" aria-hidden>{k.icon}</span>
                 <div>
@@ -276,25 +298,6 @@ export default async function MasterclassPage() {
           <p style={{ marginTop: 24, fontSize: "1.15rem", fontWeight: 800, color: "var(--navy)" }}>
             No necesitas ser experto en tecnología. Necesitas saber qué mirar y qué configurar.
           </p>
-        </div>
-      </section>
-
-      {/* TALLER + AGENDA */}
-      <section className="mc-section tint" id="contenido">
-        <div className="container stack" style={{ gap: 28 }}>
-          <div className="mc-head" style={{ marginBottom: 0 }}>
-            <p className="mc-label">Taller en vivo</p>
-            <h2>Configuramos juntos, con tu celular en la mano</h2>
-            <p>{mc.duration} en vivo · {mc.dateLabel} · {mc.time}</p>
-          </div>
-          <div className="mc-chips">
-            {["Android", "iPhone", "WhatsApp", "Instagram", "YouTube", "Roblox", "TikTok"].map((c) => <span key={c}>{c}</span>)}
-          </div>
-          <ol className="mc-agenda">
-            {AGENDA.map(([t, d], i) => (
-              <li key={t}><span className="n">{i + 1}</span><span><strong>{t}.</strong> {d}</span></li>
-            ))}
-          </ol>
         </div>
       </section>
 
