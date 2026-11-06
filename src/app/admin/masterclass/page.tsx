@@ -83,7 +83,7 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
           </div>
           <div className="field">
             <label htmlFor="mc-test">Enlace de pago de prueba</label>
-            <input id="mc-test" className="input" type="url" name="testLink" defaultValue={mc.testLink} placeholder="https://mpago.li/…" />
+            <input id="mc-test" className="input" type="url" name="testLink" defaultValue={mc.testLink} placeholder="https://checkout.bold.co/payment/…" />
             <span className="hint">Muestra un botón “Pago de prueba” en la sección de precio. Déjalo vacío para quitarlo antes de anunciar la masterclass.</span>
           </div>
           <div className="field">
@@ -108,6 +108,15 @@ export default async function AdminMasterclassPage({ searchParams }: { searchPar
           <div className="field">
             <label htmlFor="mc-pp-test-usd">Valor de la prueba en PayPal (USD)</label>
             <input id="mc-pp-test-usd" className="input" type="number" min={0} name="paypalTestAmountUsd" defaultValue={mc.paypalTestAmountUsd} required />
+          </div>
+          <div className="field">
+            <label htmlFor="mc-usd-test">Enlace de prueba en dólares (Bold)</label>
+            <input id="mc-usd-test" className="input" type="url" name="usdTestLink" defaultValue={mc.usdTestLink} placeholder="https://checkout.bold.co/payment/…" />
+            <span className="hint">Si está, reemplaza al botón de prueba de PayPal. Déjalo vacío para quitarlo antes de anunciar la masterclass.</span>
+          </div>
+          <div className="field">
+            <label htmlFor="mc-usd-test-amount">Valor de la prueba en dólares (USD)</label>
+            <input id="mc-usd-test-amount" className="input" type="number" min={0} name="usdTestAmountUsd" defaultValue={mc.usdTestAmountUsd} required />
           </div>
         </div>
         <label className="check"><input type="checkbox" name="showOnHome" defaultChecked={mc.showOnHome} /> Mostrar el aviso en los inicios</label>

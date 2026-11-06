@@ -6,6 +6,8 @@ import { formatCop } from "@/lib/format";
 import { getMasterclass, payLinkProvider } from "@/lib/masterclass";
 import { getPricing } from "@/lib/pricing";
 import { paypalClientId } from "@/lib/paypal";
+import { boldEnabled } from "@/lib/bold";
+import { BoldCheckoutButton } from "@/components/BoldCheckoutButton";
 import { TEAM } from "@/lib/team";
 
 export const dynamic = "force-dynamic";
@@ -135,6 +137,8 @@ export default async function MasterclassPage() {
   const checkout = canBuy && !!mc.paypalAmountUsd && !!paypalClientId();
   const payLink = canBuy && !checkout && !!mc.paypalButtonId;
   const paypal = payLink || checkout || (canBuy && !!mc.usdLink);
+  // Botones adicionales con la pasarela de Bold embebida (modal en el sitio), además de los enlaces de pago.
+  const boldEmbedded = canBuy && boldEnabled();
   const copProvider = mc.paymentLink ? payLinkProvider(mc.paymentLink) : "Mercado Pago";
   const paypalHref = `https://www.paypal.com/ncp/payment/${mc.paypalButtonId}`;
   const paypalTestHref = canBuy && mc.paypalTestButtonId ? `https://www.paypal.com/ncp/payment/${mc.paypalTestButtonId}` : null;
@@ -167,6 +171,7 @@ export default async function MasterclassPage() {
         <div className="mc-pay-opt">
           <span className="mc-pay-label">En Colombia · {price}</span>
           <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
+          {boldEmbedded && !!mc.paymentAmountCop && <BoldCheckoutButton currency="COP" label="Pagar aquí en pesos" className="btn" />}
           <span className="small muted">{copProvider === "Bold" ? "Tarjeta, PSE, Nequi y más, con Bold." : detail ? "Mercado Pago: tarjeta, PSE, Nequi y efectivo." : "Tarjeta, PSE, Nequi o efectivo."}</span>
           {detail && mc.testLink && (
             <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba · {formatCop(mc.testAmountCop)} (no reserva cupo)</a>
@@ -182,10 +187,13 @@ export default async function MasterclassPage() {
             ) : (
               <PayPalLink />
             )}
+            {boldEmbedded && !!mc.paypalAmountUsd && <BoldCheckoutButton currency="USD" label="Pagar aquí en dólares" className="btn" />}
             <span className="small muted">{mc.usdLink ? "Tarjeta de crédito o débito internacional, con Bold." : checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
-            {detail && paypalTestHref && (
+            {detail && (mc.usdTestLink ? (
+              <a href={mc.usdTestLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.usdTestAmountUsd} (no reserva cupo)</a>
+            ) : paypalTestHref && (
               <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
-            )}
+            ))}
           </div>
         )}
       </div>
