@@ -17,7 +17,6 @@ export default async function DollarPaymentPage() {
 
   return (
     <div className="container section" style={{ maxWidth: 560 }}>
-      <p className="small"><Link href="/masterclass#precio">← Volver a la masterclass</Link></p>
       <div className="card stack" style={{ gap: 18 }}>
         <div>
           <p className="mc-label" style={{ margin: 0 }}>Reserva tu cupo · Pago en dólares</p>

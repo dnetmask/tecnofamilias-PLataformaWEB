@@ -174,7 +174,7 @@ export default async function MasterclassPage() {
         {paypal && (
           <div className="mc-pay-opt">
             <span className="mc-pay-label">Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
-            {checkout ? <Link href="/masterclass/pagar-dolares" className="btn btn-yellow">Pagar en dólares</Link> : <PayPalLink />}
+            {checkout ? <a href="/masterclass/pagar-dolares" target="_blank" rel="noopener" className="btn btn-yellow">Pagar en dólares</a> : <PayPalLink />}
             <span className="small muted">{checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
             {detail && paypalTestHref && (
               <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
