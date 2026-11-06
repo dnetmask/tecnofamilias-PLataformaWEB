@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CurrencySwitcher } from "@/components/CurrencySwitcher";
 import { SeatsBar } from "@/components/SeatsBar";
 import { formatCop } from "@/lib/format";
 import { getMasterclass, payLinkProvider } from "@/lib/masterclass";
@@ -244,7 +243,7 @@ export default async function MasterclassPage() {
               <span>🕕 {mc.time} ({mc.timezone})</span>
               <span>💻 {mc.modality}</span>
             </div>
-            <PayOptions variant="hero" />
+            <div id="precio" style={{ scrollMarginTop: 96 }}><PayOptions variant="hero" /></div>
             <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender ↓</a>
           </div>
           <div className="mc-art" aria-hidden>
@@ -430,37 +429,6 @@ export default async function MasterclassPage() {
         </div>
       </section>
 
-      {/* PRECIO */}
-      <section className="mc-section dark" id="precio">
-        <div className="container stack" style={{ gap: 24 }}>
-          <h2 className="center" style={{ margin: 0 }}>Reserva tu cupo</h2>
-          <div style={{ maxWidth: 760, margin: "0 auto", width: "100%" }}><SeatsBar pct={mc.seatsPct} /></div>
-          <div className="mc-price">
-            <span className="mc-label">Familias con hijos de 3 a 17 años</span>
-            <h3 style={{ margin: 0, fontSize: "1.7rem" }}>Masterclass: Crianza digital segura</h3>
-            <div>
-              <span className="price" style={{ fontSize: "2.6rem" }}>{price}</span> <span className="muted">por persona</span>
-              {mc.paymentLink ? (
-                <div className="small muted">Se paga en pesos colombianos con {copProvider}.</div>
-              ) : (
-                usd > 0 && <div className="small muted">Se cobra hoy {formatCop(pricing.charge(usd, cop))} · precio base USD {usd}</div>
-              )}
-            </div>
-            {!mc.paymentLink && <CurrencySwitcher current={pricing.currency} />}
-            <ul style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 6 }}>
-              <li>{mc.dateLabel} · {mc.time} ({mc.timezone})</li>
-              <li>{mc.modality} · {mc.duration}</li>
-              <li>Taller en vivo de controles parentales</li>
-              <li>Kit completo de materiales y grabación por {mc.recordingDays} días</li>
-            </ul>
-            <PayOptions variant="detail" />
-          </div>
-          <p className="center small" style={{ color: "#dce6f2", margin: 0 }}>
-            ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ color: "#fff", fontWeight: 800 }}>Pide una propuesta institucional</Link>
-          </p>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section className="mc-section" id="preguntas">
         <div className="container mc-faq" style={{ maxWidth: 860 }}>
@@ -474,7 +442,12 @@ export default async function MasterclassPage() {
       {/* CTA FINAL */}
       <section className="mc-final">
         <div className="container row between" style={{ gap: 20 }}>
-          <h2 style={{ margin: 0, color: "var(--navy-dark)", flex: "1 1 420px" }}>{mc.duration} hoy para dormir más tranquilo mañana.</h2>
+          <div style={{ flex: "1 1 420px" }}>
+            <h2 style={{ margin: 0, color: "var(--navy-dark)" }}>{mc.duration} hoy para dormir más tranquilo mañana.</h2>
+            <p className="small" style={{ margin: "10px 0 0", color: "var(--navy-dark)" }}>
+              ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ fontWeight: 800 }}>Pide una propuesta institucional</Link>
+            </p>
+          </div>
           <div style={{ flex: "1 1 460px", minWidth: 0 }}><PayOptions variant="final" /></div>
         </div>
       </section>
