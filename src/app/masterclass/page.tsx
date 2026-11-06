@@ -179,7 +179,7 @@ export default async function MasterclassPage() {
             <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
           )}
           <span className="small muted">{copProvider === "Bold" ? "Tarjeta, PSE, Nequi y más, con Bold." : detail ? "Mercado Pago: tarjeta, PSE, Nequi y efectivo." : "Tarjeta, PSE, Nequi o efectivo."}</span>
-          {detail && boldEmbedded && !!mc.boldTestAmountCop && (
+          {boldEmbedded && !!mc.boldTestAmountCop && (
             <BoldCheckoutButton currency="COP" test label={`Prueba ${formatCop(mc.boldTestAmountCop)} · API`} className="btn btn-red" note="Con webhook. No reserva cupo." />
           )}
           {detail && mc.testLink && (
@@ -198,7 +198,7 @@ export default async function MasterclassPage() {
             )}
             {boldEmbedded && !!mc.paypalAmountUsd && <BoldCheckoutButton currency="USD" label={`Pagar USD ${mc.paypalAmountUsd} · API`} className="btn" />}
             <span className="small muted">{mc.usdLink ? "Tarjeta de crédito o débito internacional, con Bold." : checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
-            {detail && boldEmbedded && !!mc.boldTestAmountUsd && (
+            {boldEmbedded && !!mc.boldTestAmountUsd && (
               <BoldCheckoutButton currency="USD" test label={`Prueba USD ${mc.boldTestAmountUsd} · API`} className="btn btn-red" note="Con webhook. No reserva cupo." />
             )}
             {detail && (mc.usdTestLink ? (
