@@ -249,7 +249,6 @@ export default async function MasterclassPage() {
               <span>💻 {mc.modality}</span>
             </div>
             <div className="mc-hero-ctas">
-              {canBuy && <a href="#precio" className="btn btn-yellow mc-cta-big">Quiero mi cupo · desde {price} ↓</a>}
               <a href="#contenido" className="mc-link-light">Ver qué vas a aprender</a>
             </div>
           </div>
