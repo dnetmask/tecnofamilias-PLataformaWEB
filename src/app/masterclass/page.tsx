@@ -165,46 +165,51 @@ export default async function MasterclassPage() {
   const PayOptions = ({ variant }: { variant: "hero" | "final" | "detail" }) => {
     if (!canBuy) return <Reserve />;
     const detail = variant === "detail";
+    const hasTests = boldEmbedded && (!!mc.boldTestAmountCop || !!mc.boldTestAmountUsd);
     return (
-      <div className={`mc-pay mc-pay-${variant}${detail ? "" : " mc-pay-boxed"}`}>
-        <div className="mc-pay-opt">
-          <span className="mc-pay-label">En Colombia · {price}</span>
-          {boldEmbedded && !!mc.paymentAmountCop ? (
-            <>
-              {mc.paymentLink && <BuyLink className="btn btn-yellow">Pagar {price} · Link</BuyLink>}
-              <BoldCheckoutButton currency="COP" label={`Pagar ${price} · API`} className="btn" />
-            </>
-          ) : (
-            <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
-          )}
-          <span className="small muted">{copProvider === "Bold" ? "Tarjeta, PSE, Nequi y más, con Bold." : detail ? "Mercado Pago: tarjeta, PSE, Nequi y efectivo." : "Tarjeta, PSE, Nequi o efectivo."}</span>
-          {boldEmbedded && !!mc.boldTestAmountCop && (
-            <BoldCheckoutButton currency="COP" test label={`Prueba ${formatCop(mc.boldTestAmountCop)} · API`} className="btn btn-red" note="Con webhook. No reserva cupo." />
-          )}
-          {detail && mc.testLink && (
-            <a href={mc.testLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Prueba {formatCop(mc.testAmountCop)} · Link (no reserva cupo)</a>
+      <div className={`mc-pay-wrap mc-pay-wrap-${variant}`}>
+        <div className={`mc-pay mc-pay-${variant}${detail ? "" : " mc-pay-boxed"}`}>
+          <div className="mc-pay-opt">
+            <div className="mc-pay-head"><span aria-hidden>🇨🇴</span><span className="mc-pay-label">En Colombia</span></div>
+            <div className="mc-pay-price">{price}<small>por persona</small></div>
+            {boldEmbedded && !!mc.paymentAmountCop ? (
+              <>
+                {mc.paymentLink && <BuyLink className="btn btn-yellow">Pagar {price} · Link</BuyLink>}
+                <BoldCheckoutButton currency="COP" label={`Pagar ${price} · API`} className="btn" />
+              </>
+            ) : (
+              <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
+            )}
+            <span className="mc-pay-help">💳 {copProvider === "Bold" ? "Tarjeta, PSE, Nequi y más" : "Tarjeta, PSE, Nequi o efectivo"}</span>
+          </div>
+          {paypal && (
+            <div className="mc-pay-opt">
+              <div className="mc-pay-head"><span aria-hidden>🌎</span><span className="mc-pay-label">Fuera de Colombia</span></div>
+              <div className="mc-pay-price">USD {mc.paypalAmountUsd}<small>por persona</small></div>
+              {mc.usdLink ? (
+                <a href={mc.usdLink} target="_blank" rel="noopener noreferrer" className="btn btn-yellow">Pagar USD {mc.paypalAmountUsd} · Link</a>
+              ) : checkout ? (
+                <a href="/masterclass/pagar-dolares" target="_blank" rel="noopener" className="btn btn-yellow">Pagar en dólares</a>
+              ) : (
+                <PayPalLink />
+              )}
+              {boldEmbedded && !!mc.paypalAmountUsd && <BoldCheckoutButton currency="USD" label={`Pagar USD ${mc.paypalAmountUsd} · API`} className="btn" />}
+              <span className="mc-pay-help">💳 {mc.usdLink ? "Tarjeta de crédito o débito internacional" : checkout ? "Tarjeta de crédito o débito, o PayPal" : "PayPal, Apple Pay o tarjeta internacional"}</span>
+            </div>
           )}
         </div>
-        {paypal && (
-          <div className="mc-pay-opt">
-            <span className="mc-pay-label">Fuera de Colombia · USD {mc.paypalAmountUsd}</span>
-            {mc.usdLink ? (
-              <a href={mc.usdLink} target="_blank" rel="noopener noreferrer" className="btn btn-yellow">Pagar USD {mc.paypalAmountUsd} · Link</a>
-            ) : checkout ? (
-              <a href="/masterclass/pagar-dolares" target="_blank" rel="noopener" className="btn btn-yellow">Pagar en dólares</a>
-            ) : (
-              <PayPalLink />
-            )}
-            {boldEmbedded && !!mc.paypalAmountUsd && <BoldCheckoutButton currency="USD" label={`Pagar USD ${mc.paypalAmountUsd} · API`} className="btn" />}
-            <span className="small muted">{mc.usdLink ? "Tarjeta de crédito o débito internacional, con Bold." : checkout ? "Tarjeta de crédito o débito, o PayPal." : "PayPal, Apple Pay o tarjeta internacional."}</span>
-            {boldEmbedded && !!mc.boldTestAmountUsd && (
-              <BoldCheckoutButton currency="USD" test label={`Prueba USD ${mc.boldTestAmountUsd} · API`} className="btn btn-red" note="Con webhook. No reserva cupo." />
-            )}
-            {detail && (mc.usdTestLink ? (
-              <a href={mc.usdTestLink} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Prueba USD {mc.usdTestAmountUsd} · Link (no reserva cupo)</a>
-            ) : paypalTestHref && (
-              <a href={paypalTestHref} target="_blank" rel="noopener noreferrer" className="small mc-pay-test">Pago de prueba en dólares · USD {mc.paypalTestAmountUsd} (no reserva cupo)</a>
-            ))}
+        <ul className="mc-trust">
+          <li>🔒 Pago seguro con {copProvider}</li>
+          <li>✉️ Acceso por correo</li>
+          {mc.recordingDays > 0 && <li>🎥 Grabación por {mc.recordingDays} días</li>}
+        </ul>
+        {hasTests && (
+          <div className="mc-pay-tests">
+            <span className="mc-pay-tests-label">Zona de pruebas · no reserva cupo</span>
+            <div className="mc-pay-tests-row">
+              {!!mc.boldTestAmountCop && <BoldCheckoutButton currency="COP" test label={`Prueba ${formatCop(mc.boldTestAmountCop)} · API`} className="btn btn-red" />}
+              {!!mc.boldTestAmountUsd && <BoldCheckoutButton currency="USD" test label={`Prueba USD ${mc.boldTestAmountUsd} · API`} className="btn btn-red" />}
+            </div>
           </div>
         )}
       </div>
@@ -233,7 +238,7 @@ export default async function MasterclassPage() {
         <div className="container mc-hero-grid">
           <div className="stack" style={{ gap: 20 }}>
             <p className="mc-eyebrow">Masterclass en vivo · Familias con hijos de 3 a 17 años</p>
-            <h1>Tus hijos ya están en Roblox, Instagram y YouTube. ¿Sabes cómo protegerlos?</h1>
+            <h1>Tus hijos ya están en Roblox, Instagram y YouTube. <span className="mc-accent">¿Sabes cómo protegerlos?</span></h1>
             <p className="mc-lead">
               En {mc.duration} entiendes los riesgos reales según la edad de tus hijos y sales con sus cuentas y dispositivos configurados,
               paso a paso y sin tecnicismos.
@@ -243,8 +248,10 @@ export default async function MasterclassPage() {
               <span>🕕 {mc.time} ({mc.timezone})</span>
               <span>💻 {mc.modality}</span>
             </div>
-            <div id="precio" style={{ scrollMarginTop: 96 }}><PayOptions variant="hero" /></div>
-            <a href="#contenido" style={{ color: "#fff", fontWeight: 700 }}>Ver qué vas a aprender ↓</a>
+            <div className="mc-hero-ctas">
+              {canBuy && <a href="#precio" className="btn btn-yellow mc-cta-big">Quiero mi cupo · desde {price} ↓</a>}
+              <a href="#contenido" className="mc-link-light">Ver qué vas a aprender</a>
+            </div>
           </div>
           <div className="mc-art" aria-hidden>
             <span className="b" style={{ right: 10, top: 0, width: 280, height: 280, background: "var(--blue)" }} />
@@ -256,6 +263,13 @@ export default async function MasterclassPage() {
               <div style={{ marginLeft: 72 }}><strong>YouTube</strong>Un video infantil que termina en contenido inapropiado</div>
             </div>
           </div>
+        </div>
+        <div className="container mc-hero-pay" id="precio">
+          <div className="mc-hero-pay-head">
+            <h2>Reserva tu cupo</h2>
+            <span className="mc-urgency">🔥 {mc.seatsPct} % de cupos ocupados</span>
+          </div>
+          <PayOptions variant="hero" />
         </div>
       </section>
 
@@ -441,14 +455,19 @@ export default async function MasterclassPage() {
 
       {/* CTA FINAL */}
       <section className="mc-final">
-        <div className="container row between" style={{ gap: 20 }}>
-          <div style={{ flex: "1 1 420px" }}>
-            <h2 style={{ margin: 0, color: "var(--navy-dark)" }}>{mc.duration} hoy para dormir más tranquilo mañana.</h2>
-            <p className="small" style={{ margin: "10px 0 0", color: "var(--navy-dark)" }}>
-              ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ fontWeight: 800 }}>Pide una propuesta institucional</Link>
+        <div className="container" style={{ maxWidth: 980 }}>
+          <div className="center" style={{ marginBottom: 22 }}>
+            <h2 style={{ margin: 0, color: "var(--navy-dark)", fontSize: "clamp(1.6rem, 3.2vw, 2.3rem)", fontWeight: 900 }}>
+              {mc.duration} hoy para dormir más tranquilo mañana.
+            </h2>
+            <p style={{ margin: "8px 0 0", color: "var(--navy-dark)", fontWeight: 700 }}>
+              🔥 {mc.seatsPct} % de cupos ocupados · {mc.dateLabel}
             </p>
           </div>
-          <div style={{ flex: "1 1 460px", minWidth: 0 }}><PayOptions variant="final" /></div>
+          <PayOptions variant="final" />
+          <p className="small center" style={{ margin: "18px 0 0", color: "var(--navy-dark)" }}>
+            ¿Colegio, empresa o entidad pública? <Link href="/planes#servicios" style={{ fontWeight: 800, color: "var(--navy-dark)" }}>Pide una propuesta institucional</Link>
+          </p>
         </div>
       </section>
 
@@ -456,7 +475,7 @@ export default async function MasterclassPage() {
         <div className="mc-sticky">
           <div className="container row between" style={{ flexWrap: "nowrap" }}>
             <span className="small"><strong>{mc.shortDate}</strong> · {mc.seatsPct} % ocupado</span>
-            <BuyLink className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>Reservar · {price}</BuyLink>
+            <a href="#precio" className="btn btn-yellow btn-sm" style={{ color: "var(--navy-dark)" }}>Reservar mi cupo</a>
           </div>
         </div>
       )}
