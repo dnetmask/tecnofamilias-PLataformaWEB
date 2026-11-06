@@ -58,13 +58,13 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   paymentLink: "https://checkout.bold.co/payment/LNK_T2129MVLCM",
   usdLink: "https://checkout.bold.co/payment/LNK_YIB3XFGAGO",
   paymentAmountCop: 165000,
-  testLink: "https://checkout.bold.co/payment/LNK_BZ8GBHNNLJ",
+  testLink: "https://checkout.bold.co/payment/LNK_PU6CL27X5X",
   testAmountCop: 5000,
   paypalButtonId: "",
   paypalAmountUsd: 60,
   paypalTestButtonId: "3FSMKYMQ93TLG",
   paypalTestAmountUsd: 3,
-  usdTestLink: "https://checkout.bold.co/payment/LNK_NPA5AD95OK",
+  usdTestLink: "https://checkout.bold.co/payment/LNK_Z7WFZXW32F",
   usdTestAmountUsd: 2,
 };
 
