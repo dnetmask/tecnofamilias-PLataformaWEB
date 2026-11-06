@@ -75,7 +75,7 @@ export async function createBoldMasterclassOrder(currency: BoldCurrency, userId:
     apiKey: c.apiKey,
     integritySignature,
     description,
-    redirectionUrl: `${appUrl()}/masterclass/pago-bold`,
+    redirectionUrl: `${appUrl()}/masterclass/felicitaciones`,
   };
 }
 
