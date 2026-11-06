@@ -209,6 +209,10 @@ export default async function MasterclassPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* KIT (fondo claro) */}
+      <section className="mc-kit-section">
         <div className="container mc-kit">
           <div className="mc-kit-head">
             <p className="mc-label" style={{ color: "#8fd3f4" }}>Lo que te llevas</p>
@@ -255,6 +259,10 @@ export default async function MasterclassPage() {
             )}
           </div>
         </div>
+      </section>
+
+      {/* PRECIOS (franja oscura corta) */}
+      <section className="mc-hero mc-pay-band">
         <div className="container mc-hero-pay" id="precio">
           <div className="mc-hero-pay-head">
             <h2>Reserva tu cupo</h2>

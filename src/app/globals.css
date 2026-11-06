@@ -504,3 +504,23 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
   .mc-kit-details summary p { display: none; }
   .mc-kit-more { margin-top: 2px; }
 }
+
+/* Kit en fondo claro: tarjetas blancas fáciles de escanear; precios en franja oscura corta. */
+.mc-kit-section { background: #fff; padding: 56px 0 48px; }
+.mc-kit-section .mc-kit { padding-bottom: 0; }
+.mc-kit-section .mc-kit-head .mc-label { color: var(--blue-dark) !important; }
+.mc-kit-section .mc-kit-head h2 { color: var(--navy-dark); }
+.mc-kit-section .mc-kit-item { background: var(--tint); border: 1px solid var(--line); }
+.mc-kit-section .mc-kit-item strong { color: var(--navy-dark); }
+.mc-kit-section .mc-kit-item p { color: var(--muted); }
+.mc-kit-section .mc-kit-item.hl { background: var(--yellow); border-color: var(--yellow); box-shadow: 0 10px 24px rgb(253 190 48 / 30%); }
+.mc-kit-section .mc-kit-item.hl p { color: var(--navy-dark); }
+.mc-kit-section .mc-kit-more { color: var(--blue-dark); }
+.mc-kit-section .mc-kit-details[open] { background: #fff; box-shadow: 0 12px 28px rgb(15 25 50 / 10%); }
+.mc-kit-section .mc-kit-panel-lead { color: var(--navy-dark); }
+.mc-kit-section .mc-kit-panel .mc-agenda li { color: var(--ink); }
+.mc-kit-section .mc-kit-panel .mc-agenda strong { color: var(--navy-dark); }
+.mc-kit-section .mc-kit-panel .mc-agenda .n { background: var(--navy); color: #fff; }
+.mc-kit-section .mc-kit-panel .mc-chips span { background: var(--tint); border-color: var(--line); color: var(--navy); }
+.mc-pay-band .mc-hero-pay { padding-top: 48px; }
+@media (max-width: 560px) { .mc-kit-section { padding: 40px 0 36px; } .mc-pay-band .mc-hero-pay { padding-top: 36px; } }
