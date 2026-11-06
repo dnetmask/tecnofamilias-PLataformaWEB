@@ -24,6 +24,7 @@ function calendarRange(date: string, time: string) {
 
 /**
  * Página a la que vuelve la persona después de pagar con el checkout embebido de Bold (API).
+ * También es la página de éxito de los links de pago de Bold (sin parámetros).
  * El estado de la URL solo decide el mensaje: el cupo se confirma con el webhook firmado de Bold.
  */
 export default async function MasterclassWelcomePage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
@@ -36,7 +37,8 @@ export default async function MasterclassWelcomePage({ searchParams }: { searchP
   ]);
 
   const test = !!order?.provider.endsWith("-test");
-  const paid = order?.status === "PAID" || txStatus === "approved";
+  // Sin estado en la URL: llega desde un link de pago de Bold (su página de éxito redirige aquí).
+  const paid = order?.status === "PAID" || txStatus === "approved" || (!txStatus && !orderId);
   const pending = !paid && (txStatus === "pending" || txStatus === "processing");
 
   if (!paid || test) {
