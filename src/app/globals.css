@@ -535,3 +535,16 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 /* El hero y la franja de pago van seguidos (mismo fondo): sin doble espacio entre ellos. */
 .mc-pay-band .mc-hero-pay { padding-top: 0; }
 @media (max-width: 560px) { .mc-pay-band .mc-hero-pay { padding-top: 0; } }
+/* Hero de la masterclass: cada bloque de texto se lee por separado; titular con interlineado más compacto. */
+.mc-hero .mc-eyebrow { margin: 0 0 14px; }
+.mc-hero h1 { line-height: 1.02; margin: 0 0 22px; }
+.mc-hero .mc-lead { margin: 0 0 6px; }
+/* "Lo que incluye": lista más compacta y bien separada de la franja del 13 %. */
+.mc-includes { margin-top: 30px; }
+.mc-includes li { line-height: 1.32; padding: 3px 0 3px 26px; }
+.mc-includes li::before { top: 3px; }
+@media (max-width: 560px) {
+  .mc-hero h1 { line-height: 1.05; margin-bottom: 18px; }
+  .mc-includes { margin-top: 34px; }
+  .mc-includes li { font-size: .97rem; }
+}
