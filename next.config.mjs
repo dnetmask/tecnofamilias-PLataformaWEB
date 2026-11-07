@@ -43,6 +43,9 @@ const nextConfig = {
         statusCode: 308,
       },
       { source: "/recursos", destination: "/herramientas", permanent: true },
+      // La medición de madurez ahora es el diagnóstico de protección digital familiar.
+      { source: "/herramientas/medicion-madurez-tecnofamilia", destination: "/herramientas/diagnostico-proteccion-digital-familiar", permanent: true },
+      { source: "/interactivas/medicion-madurez-tecnofamilia.html", destination: "/interactivas/diagnostico-proteccion-digital-familiar.html", permanent: true },
       // El podcast "Bullying en redes sociales" tenía la dirección de la herramienta de ejemplo.
       { source: "/herramientas/ejemplo-podcast-para-familias", destination: "/herramientas/bullying-en-redes-sociales-mi-mundo-mis-huellas", permanent: true },
       // Otros servicios ahora vive dentro de Planes.
