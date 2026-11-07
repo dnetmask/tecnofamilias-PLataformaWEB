@@ -120,10 +120,7 @@ export default async function MasterclassPage() {
             <div className="mc-pay-head"><span aria-hidden>🇨🇴</span><span className="mc-pay-label">En Colombia</span></div>
             <div className="mc-pay-price">{price}<small>por persona</small></div>
             {boldEmbedded && !!mc.paymentAmountCop ? (
-              <>
-                {mc.paymentLink && <BuyLink className="btn btn-yellow">Pagar {price} · Link</BuyLink>}
-                <BoldCheckoutButton currency="COP" label={`Pagar ${price} · API`} className="btn" />
-              </>
+              <BoldCheckoutButton currency="COP" label={`Pagar ${price}`} className="btn btn-yellow" />
             ) : (
               <Reserve className="btn btn-yellow" label="Reservar mi cupo" />
             )}
@@ -133,15 +130,16 @@ export default async function MasterclassPage() {
             <div className="mc-pay-opt">
               <div className="mc-pay-head"><span aria-hidden>🌎</span><span className="mc-pay-label">Fuera de Colombia</span></div>
               <div className="mc-pay-price">USD {mc.paypalAmountUsd}<small>por persona</small></div>
-              {mc.usdLink ? (
-                <a href={mc.usdLink} target="_blank" rel="noopener noreferrer" className="btn btn-yellow">Pagar USD {mc.paypalAmountUsd} · Link</a>
+              {boldEmbedded && !!mc.paypalAmountUsd ? (
+                <BoldCheckoutButton currency="USD" label={`Pagar USD ${mc.paypalAmountUsd}`} className="btn btn-yellow" />
+              ) : mc.usdLink ? (
+                <a href={mc.usdLink} target="_blank" rel="noopener noreferrer" className="btn btn-yellow">Pagar en dólares</a>
               ) : checkout ? (
                 <a href="/masterclass/pagar-dolares" target="_blank" rel="noopener" className="btn btn-yellow">Pagar en dólares</a>
               ) : (
                 <PayPalLink />
               )}
-              {boldEmbedded && !!mc.paypalAmountUsd && <BoldCheckoutButton currency="USD" label={`Pagar USD ${mc.paypalAmountUsd} · API`} className="btn" />}
-              <span className="mc-pay-help">💳 {mc.usdLink ? "Tarjeta de crédito o débito internacional" : checkout ? "Tarjeta de crédito o débito, o PayPal" : "PayPal, Apple Pay o tarjeta internacional"}</span>
+              <span className="mc-pay-help">💳 {boldEmbedded || mc.usdLink ? "Tarjeta de crédito o débito internacional" : checkout ? "Tarjeta de crédito o débito, o PayPal" : "PayPal, Apple Pay o tarjeta internacional"}</span>
             </div>
           )}
         </div>
