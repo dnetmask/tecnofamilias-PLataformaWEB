@@ -43,12 +43,11 @@ const RISKS = [
 const AGENDA = [
   ["Apertura: la historia que nadie quiere vivir", "Un caso real compuesto y lo que revela un perfil “inocente”."],
   ["Los 12 riesgos que vamos a revisar", "Explicados con su solución, las 4C y el semáforo digital."],
-  ["Pantallas, cuerpo y cerebro", "Sueño, visión, postura, desarrollo y salud mental."],
+  ["Medición de madurez familiar", "Medimos en vivo qué tan protegida está tu familia y qué hacer primero."],
   ["El mapa del mundo digital de tus hijos", "Qué usan por edad, el diccionario para papás y el test de las 5 preguntas para evaluar cualquier app."],
   ["Crianza digital con disciplina positiva", "Acuerdos por edad, el primer celular y el contrato familiar."],
   ["Taller de controles parentales en vivo", "Android, iPhone, WhatsApp, Instagram, YouTube y Roblox, con tu celular en la mano."],
   ["Cuando el riesgo se materializa", "Señales de alarma, el protocolo P.A.R.A.R. y las rutas de ayuda."],
-  ["Cierre: medición de madurez familiar", "Medimos en vivo qué tan protegida está tu familia y qué hacer primero."],
 ];
 
 const INCLUDES = [
