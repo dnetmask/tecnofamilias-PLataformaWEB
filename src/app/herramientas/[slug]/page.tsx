@@ -11,6 +11,7 @@ import { FavoriteButton } from "../FavoriteButton";
 import { isPlatformOpen } from "@/lib/launch";
 import { NOINDEX, pageMeta, SITE_URL } from "@/lib/site";
 import { breadcrumbs, JsonLd } from "@/components/JsonLd";
+import { InteractiveToolFrame } from "@/components/InteractiveToolFrame";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +54,9 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
   const video = usable && tool.kind === "VIDEO" ? resolveVideo(tool.url) : null;
   const podcast = usable && tool.kind === "PODCAST" ? resolvePodcastEmbed(tool.url) : null;
-  const embedded = video?.type === "iframe" || !!podcast;
+  // Herramientas interactivas propias (HTML en /interactivas/): se usan aquí mismo.
+  const interactive = usable && tool.url.startsWith("/interactivas/") ? tool.url : null;
+  const embedded = video?.type === "iframe" || !!podcast || !!interactive;
   // Ver el video o el podcast en la página también cuenta como uso.
   if (embedded && user) await recordToolUse(user.id, tool.id);
 
@@ -98,6 +101,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           {video?.type === "iframe" && (
             <iframe className="player" src={video.src} title={tool.title} allowFullScreen allow="encrypted-media; picture-in-picture; fullscreen" />
           )}
+          {interactive && <InteractiveToolFrame src={interactive} title={tool.title} />}
           {podcast && (
             <iframe src={podcast} title={tool.title} height={152} style={{ width: "100%", border: 0, borderRadius: 12 }} allow="encrypted-media" />
           )}

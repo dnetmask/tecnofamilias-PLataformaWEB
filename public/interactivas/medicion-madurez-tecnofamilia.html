@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Medición de madurez de la Tecnofamilia | Tecnofamilias</title>
+<meta name="description" content="Cuestionario de Tecnofamilias para mamás, papás y cuidadores: qué tiene la familia y qué necesita antes del primer celular.">
+<link rel="icon" type="image/png" href="data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/wAARCADEAMQDACIAAREBAhEB/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMPFB0aHx4dGhwcICQuJyAiLCMcHCg3KSwwMTQ0NB8nOT04MjwuMzQy/9sAQwEJCQkMCwwYDQ0YMiEcITIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMAAAERAhEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKr3l9bafbme6lWOMdz3PoB3puo6hBpljJdXDYVeg7sewFeV6tq1zq92Z52OBwiDoo9BXTh8NKs+yOPF4yGHWurfQ6LUvHczsU0+ERJ/z0kGW/LoP1rn59d1W4YtJfz89lcqPyHFZ1FexDC0YK3Lf11PAq46vUd3K3poW11TUEOUvbhT7SEVqWXjDVrQgPMJ0H8Moz+vX9awKKp4ek1ZxREcXXi7qb+89Q0bxTZasREf3Fyf8Alm54b6HvW7XiYJByDgiu/wDCfiVr3Gn3r5nA/dyHq49D7+/f+fm4rBci56e35HsYLMfaP2dXfo+//BOtooorzj1gooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKZNIsMMkrfdRSx+gFAHnfjTVWvNU+xo37m34IB4L9z+HT8D61zNSTyPNPJLIcu7EsfU1HX0dCkqVNRPkMVWdaq59OnoFFFFbGAUUUUAFPileCZJY2KuhDKw6gimUUAewaRfrqelwXYwC6/MB2YcH9au1x/gC5L2d3bHpG6uPxBH/sorsK+cxFNU6rij67CVXVoxm9wooorE6AooooAKKKKACiiigAooooAKKKKACiiigAqpqoJ0i9A6mB8f8AfJq3SModSrDIIwRQB4o33j9aSp722ezvZrd/vRuVJ9cGoK+oUlJXR8VKLi3F7oKKKKYgooooAKKKKAO0+H4PnXp7BVz+tdzXKeBLQxaXNcsMGd8D3C9/zJ/KurrwMa068rf1ofU5cmsNG/n+YUUUVynaFFFFABRRRQAUUUUAFFFFABRRXP67qThzZxHAA/eEd/b6VhiMRDD03UqbIunTlUlyxNG41iytyVMm9h2Tn9elRxa7ZStgl4/94f4ZrlKK+alxBX5rxirfO/36fkemsvhbVu53iOsiB0YMp6EHINOrkdL1F7KcKzEwMfmB7e9ddXv4HHQxcOaOjW6OCvQlRlZnC+ONIZZl1OFco+Fmx2PY/lx+HvXGV7VNDHcQvDMgeNxhlPcV5p4g8Mz6TK00QaW0J4cDlfZv8f8A9VfSYHEppU5b9D5rMsG1J1oLR7/5mBRRRXpHjhRRRQAVZsLKXUL2K1hXLyNj6epplraT3s6wW0TSSMeFUV6Z4d8PR6Lbl3w93IMO47D0HtWGIrxoxu9+h04XDSxE0lt1ZqWdrHY2cVtEPkiUKPf3/Gluru3soGnupkhiXqztgUtzcRWdrLczNtiiQux9gM14nr+vXWvag08zERAkRRA/Ki/4+pr5jEYj2fvS1bPusuy+WKlyQ0jH+kejz/ELQoZNqPcTD+9HHx+pBrS0zxRpGruI7W7Xzj0ikG1j9M9fwrxClVirAqSCOhFcCx076pH0EuH6DjaMmn8n+Fl+Z9DUVx3gXxLJq1s9heOXuoF3K56yJ059xxz3z9a7GvRpzU480T5nEYeeHqOnU3QUUUVZgFFFFABRRRQAVw10xe7mY9Wck/jzXc1yGsWrW1+5wdkhLqfr1rxc+i3hk10a/JndgGlV17FCiiivjz2A6c12unknT7fP/PMD9K46CF550ijGWY4Art4YhDBHEvRFCjPtX0PD8J+0nP7NrfP+r/eedmElyqPUfSMoZSrAFSMEHoaWivqTyjmtS8F6feMZLZjayHsoyn5dvwNc9P4F1OMnynglXthsH9cV6NRXXTxtaHW/qcNXLsPU1tb0/qx5pH4L1h2w0UaD1aQY/Q1qWXgFshr67GO6QjOfxP8AhXb0VcswrNaWX9eZnDKqEXd3fz/ysVLDTLPTIvLtIFjB6t1Zvqat0UVxSk5O8ndnoRhGC5YqyOa8eSNH4TuQufnZFJHpuB/pXjte66/pv9r6Hd2Q+/ImU5x8wOR+oFeGSxvDK8UilXQlWVhggjtXl45PmT6H1vD84exnDre/ytp+TG0UUVwn0B0XgaR4/F1ltJw29WHqNpr2WvL/AIcaQ8+qPqbriK3UqjerkY/QE/mK9Qr1cEmqfzPj8+knikk9kvzbCiiiuw8QKKKKACiiigAqC6tIryExSrkdiOoPtU9FKUVJNNXTGm07o5e48P3UbHySsq9sHB/X/Go4tCvnbDxrGPVmH9M11lFeNLIsK5XTa8r/AOaudix9VK2hR0/TIrBSQd8p6uR+gq9RWXrniLSvDln9q1S7SBD9xerufRVHJr1aFCnRjyUlZHLOpKb5pM1KK8Q1742307NFodklrF0E1x88h9wo+Uf+PVwWo+MPEWrFje6xeSK3VBIUT/vlcD9K640JsxdRI+pLi/s7MZubuCAessgX+ZrObxb4bQ4bxBpYPp9sj/xr5S3E96StPq3mT7XyPq9PFnhyQ4TX9LY+gu4/8a0oLy2ul3W9zDMvrG4b+VfH1OV2VgysQRyCO1H1bzD2vkfYtFfK+neN/EulMDaa1dgAYCSSeYg/4C2RXe6F8brqNli13T0mj6Ga1+Vx9VJwfwIrOVCaKVRM9rrl/Engu011zcwv9mvMcuBlX/3h6+/861dE8QaX4is/tWl3aToOGUcMh9GU8itOuedOM1yyR00MRUoS56TszyCf4f6/FJtS3imH95JVA/8AHiDWnpXw2u5JVfU50hi6mOI7nPtnoP1r0yiuVYKmnfU9SefYqUbJJedv820QWdnb2FpHa2sSxQxjCqtT0UV1pJKyPGlJyblJ3bCiiimIKKKKACiiigAooooAKKKQkKCSQAOSTQBy/jnxnb+DtI87as19NlbaAngnuzf7I/Xge4+b9X1i/wBc1GS+1G4ee4fqzdh6Adh7CtLxp4ik8T+KLvUCxMG7y7dT/DEPu/TPU+5Nc/XbRpqKu9zCcruwUUUVuZhRW/pXgnxJrcYksNIuHiYZWRwI0YezMQD+FdJD8GfFMqAv9ihP9158n9AalyitGx2bPPKK9AuPg54rhQtHHaXB/uxz4P8A48BXM6t4S1/Q1LajpVzBGOsm3cg/4EuR+tClF6JhZoxaKKKoRf0fWb/QtRjvtOuHgnTuvRh6Edx7GvpDwP4ztvGGkecFWK9hwtzAD0PZh/snn6cj3r5groPBXiKTwx4otL8MRBu8u4UfxRH735cEe4FZVaamvMuErM+p6KQEMAQQQeQRS1wHQFFFFABRRRQAUUUUAFFFFABRRRQAVz3ju/Om+BtYuQxVvs7RqQeQX+QH82roa4j4svt+Hl8v9+SIf+Pg/wBKqKvJITdkfN560UUV6RyhXuvw1+G9vYWMOs61bLLeygPDBKuRCvUEg/xd+en1ryHwrDHc+LdHgmQPFJewq6MMhgXGQa+sK5683FWRpTim9QooorjNwpCAylWAIPBB70tFAHkHxM+GtstnNruhQLC0QL3VrGMKV7uo7Edx0xz1HPi9fYxAZSrAEHgg96+TPEdnFp3ibVLKAYhgu5Y0HoocgfpXXQqN+6zGpG2qMygdaKK6TI+pvAt+dT8DaPclizfZ1jYnqSnyE/mtdDXE/CZ93w7sF/uSSj/yIx/rXbV5s/iZ1R2QUUUVIwooooAKKKKACiiigAooooAK4f4trn4e3h/uyxH/AMfFdxXGfFYZ+HGqH0MJ/wDIqVdP40KWzPmuiiivROU2/B//ACOmh/8AX/B/6GK+rK+U/B//ACOmh/8AX/B/6GK+rK5MT0NqXUKKKK5jUKKKKACvlTxl/wAjtrn/AF/zf+hmvquvlTxl/wAjtrn/AF/zf+hmt8P8RnU2MOiiiu0wPo/4SLj4e2Z9ZZT/AOPmu4ri/hQMfDjTD6tMf/Ir12ledP4mdUdkFFFFQMKKKKACiiigAooooAKKKKACuR+J6GT4c6uApJ2xnAGekimuuopp2dxPVHxwRiivqbWPA3hvXCzXulQea3JmiHluT6krjP45rgNY+B0bBn0XVWU44ivFyCf99en/AHya7I14vfQxdNo8z8H/API6aH/1/wAH/oYr6sr550rwB4l0Dxjo8t3psj26X8JM8H7xAA45OOVH1Ar6GrPENO1iqatcKKKK5jUKKKKACvlTxl/yO2uf9f8AN/6Ga+q6+etW8AeJPEHjLWJbTTZEt3v5iJ5/3aEFzyM8sPoDW9BpSbZnU2PPaMV7Po/wOjUK+taqzHHMVouAD/vt1/75FegaP4I8N6GVay0qASryJpR5jg+oZs4/DFbyrwXmQqbZnfCxGj+HGlK6lT+9OCMcGVyK7GiiuKTu2zZKysFFFFIYUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAf/Z">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --navy:#27395F; --sky:#3CAEE4; --sun:#FDBF2E; --tomato:#EE4936; --leaf:#1F9D6B;
+  --bg:#F2F6FA; --surface:#FFFFFF; --surface-2:#F7FAFC; --ink:#1D2A45; --ink-soft:#55627A; --line:#DCE4EE; --track:#E7EDF4;
+  --primary:#27395F; --on-primary:#FFFFFF; --focus:#1F8FCB;
+  --c-limites:#EE4936; --c-conversar:#3CAEE4; --c-configurar:#27395F; --c-acompanar:#FDBF2E; --c-acordar:#1F9D6B;
+  --t-limites:#FDEEEC; --t-conversar:#E8F5FC; --t-configurar:#EAEEF5; --t-acompanar:#FFF6DB; --t-acordar:#E5F5EE;
+  --on-limites:#FFFFFF; --on-conversar:#13203A; --on-configurar:#FFFFFF; --on-acompanar:#13203A; --on-acordar:#FFFFFF;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1729; --surface:#162239; --surface-2:#1B2A45; --ink:#EDF2F9; --ink-soft:#A9B5C9; --line:#2B3B59; --track:#24334F;
+    --primary:#FDBF2E; --on-primary:#16213A; --focus:#7CCBF0;
+    --c-limites:#F2705F; --c-conversar:#5BC2EE; --c-configurar:#9FB4E2; --c-acompanar:#FDBF2E; --c-acordar:#3CC48D;
+    --t-limites:rgba(242,112,95,.15); --t-conversar:rgba(91,194,238,.14); --t-configurar:rgba(159,180,226,.14); --t-acompanar:rgba(253,191,46,.13); --t-acordar:rgba(60,196,141,.14);
+    --on-limites:#13203A; --on-conversar:#13203A; --on-configurar:#13203A; --on-acompanar:#13203A; --on-acordar:#13203A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1729; --surface:#162239; --surface-2:#1B2A45; --ink:#EDF2F9; --ink-soft:#A9B5C9; --line:#2B3B59; --track:#24334F;
+  --primary:#FDBF2E; --on-primary:#16213A; --focus:#7CCBF0;
+  --c-limites:#F2705F; --c-conversar:#5BC2EE; --c-configurar:#9FB4E2; --c-acompanar:#FDBF2E; --c-acordar:#3CC48D;
+  --t-limites:rgba(242,112,95,.15); --t-conversar:rgba(91,194,238,.14); --t-configurar:rgba(159,180,226,.14); --t-acompanar:rgba(253,191,46,.13); --t-acordar:rgba(60,196,141,.14);
+  --on-limites:#13203A; --on-conversar:#13203A; --on-configurar:#13203A; --on-acompanar:#13203A; --on-acordar:#13203A;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Poppins","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.55}
+img{max-width:100%}
+a{color:inherit;text-decoration-thickness:1.5px;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+[tabindex="-1"]:focus{outline:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.app{max-width:720px;margin:0 auto;padding:18px 16px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;min-height:52px}
+.logo{display:inline-flex;background:#fff;border-radius:14px;padding:6px 10px}
+.logo img{display:block;height:38px;width:auto}
+
+.dots{display:flex;gap:7px;list-style:none;margin:0;padding:0}
+.dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:transparent}
+.dot.done{background:var(--c);border-color:var(--c)}
+.dot.now{border-color:var(--c);outline:2px solid var(--c);outline-offset:2px}
+
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:clamp(20px,4.2vw,40px)}
+
+/* Inicio */
+.arc{display:flex;justify-content:space-between;align-items:flex-end;gap:6px;list-style:none;margin:6px 0 26px;padding:18px 0 0}
+.arc li{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:8px;transform:translateY(var(--y,0));min-width:0}
+.bubble{width:clamp(48px,11vw,64px);height:clamp(48px,11vw,64px);border-radius:50%;display:grid;place-items:center;background:var(--t);border:3px solid var(--c);font-size:clamp(20px,4.6vw,26px);line-height:1}
+.arc .lbl{font-size:clamp(.6rem,.46rem + .75vw,.85rem);font-weight:600;color:var(--ink);text-align:center;line-height:1.2}
+h1{font-size:clamp(1.65rem,1.2rem + 2.2vw,2.45rem);line-height:1.15;letter-spacing:-.015em;margin:0 0 14px;font-weight:700;text-wrap:balance}
+.lead{font-size:1.06rem;color:var(--ink-soft);margin:0 0 20px;max-width:60ch}
+.facts{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:8px}
+.facts li{display:flex;gap:10px;align-items:flex-start;color:var(--ink)}
+.facts li span{flex:none;width:1.4em;text-align:center}
+.tip{background:var(--t-acompanar);border-radius:16px;padding:14px 16px;margin:0 0 24px;font-size:.95rem}
+
+/* Botones */
+.btn{font:inherit;font-weight:600;font-size:1rem;border-radius:999px;padding:12px 24px;border:2px solid transparent;cursor:pointer;background:var(--primary);color:var(--on-primary);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px}
+.btn:hover{filter:brightness(1.08)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;filter:none}
+.btn-lg{font-size:1.06rem;padding:14px 28px;width:100%;max-width:340px}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink-soft);filter:none}
+
+/* Pregunta */
+.kicker{display:flex;justify-content:space-between;align-items:center;gap:6px 14px;flex-wrap:wrap;font-size:.875rem;color:var(--ink-soft);font-weight:500}
+.kicker .pz{display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:600}
+.kicker .pz::before{content:"";width:11px;height:11px;border-radius:50%;background:var(--c);flex:none}
+.bar{height:5px;border-radius:5px;background:var(--track);margin:12px 0 22px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--c);border-radius:5px;transition:width .3s ease}
+h2.q{font-size:clamp(1.2rem,1.02rem + .9vw,1.55rem);line-height:1.32;font-weight:600;margin:0 0 16px;letter-spacing:-.005em;text-wrap:pretty}
+.ayuda{margin:-6px 0 14px;color:var(--ink-soft);font-size:.95rem}
+.nota{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border:1px dashed var(--line);border-radius:14px;padding:12px 14px;margin:0 0 18px;font-size:.92rem;color:var(--ink)}
+.nota strong{font-weight:600}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:14px;width:100%;text-align:left;font:inherit;font-weight:500;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;transition:border-color .15s,background-color .15s;line-height:1.4}
+.opt:hover{border-color:var(--ink-soft)}
+.mk{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;margin-top:-1px;transition:background-color .15s,border-color .15s}
+.opt.multi .mk{border-radius:7px}
+.mk svg{width:14px;height:14px;opacity:0;stroke:var(--on-c)}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--t)}
+.opt[aria-pressed="true"] .mk{background:var(--c);border-color:var(--c)}
+.opt[aria-pressed="true"] .mk svg{opacity:1}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px}
+.kbd{font-size:.8rem;color:var(--ink-soft);margin-top:14px}
+
+/* Resultado */
+.result .eyebrow{font-size:.9rem;font-weight:600;color:var(--ink-soft);margin:0 0 4px;text-align:center}
+.verdict{text-align:center}
+.verdict h1{margin:4px auto 10px;max-width:22ch}
+.verdict .lead{margin:0 auto 14px}
+.pill{display:inline-block;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);padding:6px 14px;font-weight:600;font-size:.92rem;margin:0}
+.rarc{display:flex;justify-content:space-between;gap:6px;list-style:none;margin:0 0 18px;padding:22px 0 0}
+.rarc li{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:6px;transform:translateY(var(--y,0));min-width:0}
+.ringwrap{position:relative;width:clamp(52px,12vw,68px);height:clamp(52px,12vw,68px)}
+.ring{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .trk{fill:none;stroke:var(--track);stroke-width:7}
+.ring .fil{fill:none;stroke-width:7;stroke-linecap:round}
+.ringwrap .ico{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(18px,4.2vw,24px)}
+.rarc .lbl{font-size:clamp(.6rem,.46rem + .75vw,.84rem);font-weight:600;text-align:center;line-height:1.2}
+.rarc .lv{font-size:clamp(.58rem,.46rem + .5vw,.74rem);color:var(--ink-soft);text-align:center;line-height:1.15}
+
+.block{margin-top:30px}
+.block h2,.box h2{font-size:1.14rem;font-weight:700;margin:0 0 12px;line-height:1.3}
+.box{border-radius:20px;padding:18px 20px;margin-top:24px}
+.box p{margin:0 0 10px}
+.box p:last-child{margin-bottom:0}
+.box-edad{background:var(--t-conversar)}
+.box-recuerden{background:var(--t-acompanar)}
+.fine{font-size:.88rem;color:var(--ink-soft)}
+
+.prio{list-style:none;counter-reset:p;margin:0;padding:0;display:grid;gap:10px}
+.prio li{counter-increment:p;display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;background:var(--surface-2);border-radius:16px;padding:12px 14px}
+.prio li::before{content:counter(p);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--on-c);font-weight:700}
+.prio small{display:block;color:var(--ink-soft);font-size:.82rem;margin-top:2px}
+
+.rows{display:grid;gap:12px}
+.row{border:1.5px solid var(--line);border-radius:18px;padding:14px 16px}
+.row-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.row-head .ringwrap{width:42px;height:42px}
+.row-head .ringwrap .ico{font-size:17px}
+.row-head h3{margin:0;font-size:1.02rem;font-weight:700;flex:1 1 auto}
+.lvl{font-size:.8rem;font-weight:600;border-radius:999px;padding:3px 10px;background:var(--t);color:var(--ink)}
+.needs{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.needs li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline;font-size:.95rem}
+.tag{font-size:.72rem;font-weight:600;border-radius:999px;padding:2px 8px;white-space:nowrap;border:1.5px solid var(--c)}
+.tag.afinar{border-style:dashed;color:var(--ink-soft)}
+.ok{margin:10px 0 0;font-size:.95rem;color:var(--ink-soft)}
+.where{margin:10px 0 0;font-size:.86rem;color:var(--ink-soft)}
+.where strong{color:var(--ink);font-weight:600}
+
+.steps{margin:0;padding-left:1.4em;display:grid;gap:8px}
+.steps li::marker{font-weight:700;color:var(--ink-soft)}
+.pelis{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.pelis li{background:var(--surface-2);border-radius:16px;padding:12px 14px;font-size:.92rem}
+.pelis strong{display:block;font-size:1rem}
+.pelis .yr{font-weight:500;color:var(--ink-soft)}
+.adultos{margin-top:12px;font-size:.92rem}
+
+.promo{margin-top:26px;border-radius:20px;padding:18px 20px;background:var(--primary);color:var(--on-primary);display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between}
+.promo p{margin:0;font-weight:500;max-width:46ch}
+.promo .btn{background:var(--on-primary);color:var(--primary)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.share{margin-top:22px;border:1.5px dashed var(--line);border-radius:18px;padding:14px 16px;font-size:.92rem}
+.share label{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.share input{margin-top:5px;width:18px;height:18px;flex:none}
+.fuentes{margin-top:26px;font-size:.88rem;color:var(--ink-soft)}
+.fuentes summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.fuentes ul{margin:10px 0 0;padding-left:1.2em;display:grid;gap:6px}
+.pie{margin-top:18px;text-align:center;font-size:.82rem;color:var(--ink-soft)}
+
+.lead-box{margin-top:24px;border:2px solid var(--ink);border-radius:20px;padding:18px 20px}
+.lead-box h2{font-size:1.14rem;font-weight:700;margin:0 0 6px;line-height:1.3}
+.lead-txt{margin:0 0 14px;color:var(--ink-soft)}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.campo label{display:block;font-size:.85rem;font-weight:600;margin:0 0 4px}
+.campo input{width:100%;font:inherit;font-size:1rem;padding:10px 14px;min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;margin:0 0 10px;cursor:pointer}
+.check input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--primary)}
+.legal{font-size:.78rem;color:var(--ink-soft);margin:12px 0 0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+@media (max-width:520px){.campos{grid-template-columns:1fr}}
+@media (max-width:420px){
+  .app{padding:12px 10px 32px}
+  .logo img{height:32px}
+  .dot{width:12px;height:12px}
+  .arc,.rarc{gap:3px}
+  .needs li{grid-template-columns:1fr;gap:4px}
+  .tag{justify-self:start}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+@media print{
+  body{background:#fff;color:#1D2A45}
+  .no-print{display:none!important}
+  .app{max-width:none;padding:0}
+  .sheet{border:0;padding:0}
+  .row,.box,.prio li,.pelis li{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div id="anuncio" class="sr-only" aria-live="polite"></div>
+<main id="app" class="app"></main>
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   CONFIGURACIÓN: edita estos valores al montar el cuestionario
+   en la plataforma de Tecnofamilias.
+   ===================================================================== */
+var CONFIG = {
+  urlClases: 'https://tecnofamilias.com/clases',
+  textoBotonClases: 'Ir a las clases de Tecnofamilias',
+  // Enlace al cuestionario de niños dentro de la plataforma (si se deja vacío, solo se menciona).
+  urlCuestionarioNinos: '',
+  // Enlace al juego de cartas (si se deja vacío, solo se recomienda).
+  urlJuegoCartas: '',
+  // Dónde trabaja Tecnofamilias cada pieza (cámbialo por los nombres reales de las clases).
+  dondeLoVemos: {
+    limites: 'Clases por etapa',
+    conversar: 'Clases por etapa: grooming, sexting y ciberacoso',
+    configurar: 'Caja de herramientas',
+    acompanar: 'Clases por etapa y comunidad Tecnofamilias',
+    acordar: 'Pactos digitales por aplicación'
+  },
+  // Aviso comercial opcional en el resultado. Se oculta solo después de la fecha "visibleHasta".
+  promo: {
+    activa: true,
+    texto: 'Masterclass en vivo de Tecnofamilias el 15 de diciembre, de 6 a 9 p. m. (hora de Colombia).',
+    boton: 'Ver la masterclass',
+    url: 'https://tecnofamilias.com/masterclass',
+    visibleHasta: '2026-12-15T21:00:00-05:00'
+  },
+  // true = muestra un botón para compartir con la plataforma resultados ANÓNIMOS (por postMessage),
+  // solo con consentimiento explícito. Antes de activarlo, valida el aviso de privacidad (Ley 1581 de 2012).
+  compartirResultados: false,
+  // Origen exacto de la plataforma que contiene el cuestionario (por ejemplo 'https://app.tecnofamilias.com').
+  // Con '*' nunca se envían datos personales por postMessage.
+  origenPlataforma: '*',
+  // Formulario opcional para que el papá o la mamá reciba su resultado por correo (captura de contactos).
+  // Solo aparece cuando hay destino, enlace a la política de datos y correo de contacto.
+  correo: {
+    destino: '',                  // URL de la aplicación web del receptor (Apps Script, termina en /exec).
+    enviarAPlataforma: false,     // true = también entrega el registro a la plataforma por postMessage.
+    urlPolitica: '',              // Enlace a la Política de Tratamiento de Datos de Tecnofamilias.
+    versionPolitica: 'v1',        // Queda guardada con cada autorización, como prueba.
+    responsable: 'Tecnofamilias', // Nombre legal del responsable del tratamiento de datos.
+    contacto: '',                 // Correo para ejercer los derechos sobre los datos.
+    telefono: '+57 313 874 3101',
+    token: 'cambia-esta-clave',   // Igual a AJUSTES.TOKEN del receptor. Queda visible en el código: solo frena bots básicos.
+    titulo: 'Lleva este resultado a tu correo',
+    texto: 'Te enviamos tu veredicto y tus tres prioridades para que los tengas a mano.'
+  }
+};
+
+/* ===================== Contenido ===================== */
+var PIEZAS = [
+  {id:'limites', nombre:'Poner límites con amor', corto:'Límites', icono:'❤️'},
+  {id:'conversar', nombre:'Conversar', corto:'Conversar', icono:'💬'},
+  {id:'configurar', nombre:'Configurar', corto:'Configurar', icono:'⚙️'},
+  {id:'acompanar', nombre:'Acompañar', corto:'Acompañar', icono:'🤗'},
+  {id:'acordar', nombre:'Acordar', corto:'Acordar', icono:'🤝'}
+];
+
+var PREGUNTAS = [
+  {id:'edad', tipo:'unica', texto:'¿Cuántos años tiene tu hijo o hija?', opciones:[
+    {t:'8 años o menos', v:'8'},
+    {t:'9 o 10 años', v:'9-10'},
+    {t:'11 o 12 años', v:'11-12'},
+    {t:'13 o 14 años', v:'13-14'},
+    {t:'15 años o más', v:'15'}
+  ]},
+  {id:'motivo', tipo:'multiple', texto:'¿Para qué necesitaría el celular, o por qué lo pide?', ayuda:'Puedes elegir varias respuestas.', opciones:[
+    {t:'Para comunicarnos (transporte, actividades, emergencias)', v:'comunicar'},
+    {t:'Porque sus amigos ya tienen', v:'amigos'},
+    {t:'Para tareas del colegio', v:'tareas'},
+    {t:'Para jugar o ver videos', v:'jugar'},
+    {t:'Para WhatsApp o redes sociales', v:'redes'}
+  ]},
+
+  /* Pieza 1: Poner límites con amor (disciplina positiva) */
+  {id:'l1', pieza:'limites', tipo:'unica', prio:5,
+   texto:'Cuando pones una regla en casa (hora de dormir, apagar la tablet), ¿qué suele pasar?',
+   meta:'Sostener las reglas con amabilidad y firmeza a la vez: sin gritos y sin ceder ante la presión.',
+   opciones:[
+    {t:'La explico, la sostengo con calma y casi siempre se cumple', p:3},
+    {t:'La sostengo, pero a veces termino gritando o amenazando', p:2},
+    {t:'Si hay pataleta o mucha insistencia, termino cediendo', p:1},
+    {t:'Nos cuesta mucho poner reglas y sostenerlas', p:0}]},
+  {id:'l2', pieza:'limites', tipo:'unica', prio:4,
+   texto:'Cuando tu hijo/a incumple un acuerdo, ¿qué haces normalmente?',
+   meta:'Cambiar castigos por consecuencias acordadas de antemano, que ayuden a reparar lo que pasó.',
+   opciones:[
+    {t:'Hablamos cuando estamos tranquilos y buscamos juntos cómo repararlo', p:3},
+    {t:'Aplico una consecuencia que ya conocía de antemano', p:2},
+    {t:'Le quito lo que más le gusta, aunque no tenga que ver con lo que pasó', p:1},
+    {t:'Lo dejo pasar para no pelear', p:0}]},
+  {id:'l3', pieza:'limites', tipo:'unica', prio:9,
+   texto:'Si tu hijo/a te contara que vio algo que lo asustó en internet, o que cometió un error, ¿cómo crees que reaccionarías?',
+   meta:'Ser un lugar seguro: que pueda contarnos cualquier cosa sin miedo a un regaño o a perder el celular.',
+   opciones:[
+    {t:'Lo escucharía con calma, le agradecería por contarme y buscaríamos la solución juntos', p:3},
+    {t:'Me asustaría, pero intentaría no regañarlo', p:2},
+    {t:'Le quitaría el aparato de inmediato', p:1},
+    {t:'Me enojaría mucho y lo regañaría', p:0}]},
+  {id:'l4', pieza:'limites', tipo:'unica', prio:4,
+   texto:'¿Los adultos que cuidan a tu hijo/a (mamá, papá, abuelos, otra casa) están de acuerdo con las reglas de pantallas?',
+   meta:'Ponernos de acuerdo todos los adultos que lo cuidan, también abuelos u otra casa.',
+   opciones:[
+    {t:'Sí, estamos alineados y nos apoyamos', p:3},
+    {t:'Más o menos: a veces uno da permiso y el otro no', p:2},
+    {t:'Cada uno tiene sus propias reglas', p:1},
+    {t:'No lo hemos hablado', p:0}]},
+
+  /* Pieza 2: Conversar */
+  {id:'c1', pieza:'conversar', tipo:'unica', prio:7,
+   texto:'¿Han hablado en casa sobre el cuerpo, la intimidad y el consentimiento (que nadie puede tocarlo, pedirle fotos o mostrarle cosas que lo hagan sentir incómodo)?',
+   meta:'Hablar del cuerpo, la intimidad y el consentimiento con palabras claras para su edad.',
+   opciones:[
+    {t:'Sí, con naturalidad y con palabras claras para su edad', p:3},
+    {t:'Alguna vez, pero por encima', p:2},
+    {t:'No; me da pena o no sé cómo empezar', p:1},
+    {t:'Creo que todavía es muy pequeño/a para eso', p:0}]},
+  {id:'c2', pieza:'conversar', tipo:'unica', prio:10,
+   texto:'¿Tu hijo/a sabe qué hacer si alguien en internet le pide fotos, le ofrece regalos (como monedas para juegos) o le pide guardar un secreto?',
+   meta:'Que reconozca las señales de alerta (fotos, regalos, secretos, pasar a otra app) y sepa que siempre puede contarlo.',
+   opciones:[
+    {t:'Sí: sabe que debe contarnos y lo hemos practicado', p:3},
+    {t:'Lo hemos hablado, pero poco', p:2},
+    {t:'No, aunque creo que se daría cuenta', p:1},
+    {t:'No lo hemos hablado', p:0}]},
+  {id:'c3', pieza:'conversar', tipo:'unica', prio:6,
+   texto:'¿Han hablado del ciberacoso: qué hacer si se burlan de él/ella en un chat, o si ve que molestan a otra persona?',
+   meta:'Hablar de ciberacoso: cómo pedir ayuda, bloquear y no ser parte de las burlas.',
+   opciones:[
+    {t:'Sí: sabe pedir ayuda, bloquear y no unirse a las burlas', p:3},
+    {t:'Lo hemos hablado un poco', p:2},
+    {t:'Solo cuando ha pasado algo', p:1},
+    {t:'No lo hemos hablado', p:0}]},
+  {id:'c4', pieza:'conversar', tipo:'unica', prio:5,
+   texto:'¿Tiene claro qué información es privada (dirección, colegio, uniforme, ubicación, contraseñas, fotos)?',
+   meta:'Definir juntos qué información es privada y no se comparte.',
+   opciones:[
+    {t:'Sí, lo tiene muy claro', p:3},
+    {t:'Más o menos', p:2},
+    {t:'Solo sabe lo de las contraseñas', p:1},
+    {t:'No lo hemos hablado', p:0}]},
+  {id:'c5', pieza:'conversar', tipo:'unica', prio:6,
+   texto:'¿Has pensado cómo hablarle de los contenidos para adultos (sexuales o violentos) que podría encontrar en internet aunque no los busque?',
+   meta:'Prepararlo para los contenidos de adultos que puede encontrar sin buscarlos, y qué hacer si pasa.',
+   opciones:[
+    {t:'Sí, ya lo hablamos', p:3},
+    {t:'Lo he pensado, pero aún no lo hemos hablado', p:2},
+    {t:'Me cuesta imaginar esa conversación', p:1},
+    {t:'No creo que le pase', p:0}]},
+
+  /* Pieza 3: Configurar */
+  {id:'so', pieza:'configurar', tipo:'unica', contexto:true,
+   texto:'¿Qué tipo de celular tendría tu hijo/a?',
+   opciones:[
+    {t:'Android (Samsung, Motorola, Xiaomi, entre otros)', v:'android'},
+    {t:'iPhone', v:'iphone'},
+    {t:'Todavía no lo sabemos', v:'nose'}]},
+  {id:'k1', pieza:'configurar', tipo:'unica', prio:8,
+   texto:'¿Sabes configurar el control parental en ese celular?',
+   nota:'El control parental son herramientas gratuitas para poner horarios, filtrar contenido y aprobar descargas. En Android se usa la app Google Family Link; en iPhone, las funciones Tiempo en pantalla y Compartir en familia.',
+   meta:'Aprender a configurar el control parental: {herramientas}.',
+   opciones:[
+    {t:'Sí, ya lo he configurado o sabría hacerlo', p:3},
+    {t:'Sé que existe y podría aprender', p:2},
+    {t:'Lo intenté y me enredé', p:1},
+    {t:'No sabía que existía', p:0}]},
+  {id:'k2', pieza:'configurar', tipo:'unica', prio:5,
+   texto:'¿Sabes crear la cuenta de tu hijo/a (de Google o de Apple) con su fecha de nacimiento real y vinculada a la tuya?',
+   nota:'El control parental funciona cuando la cuenta del niño está conectada a la de un adulto. Con la fecha de nacimiento real, el celular sabe su edad y puede aplicar las protecciones que corresponden.',
+   meta:'Crear su propia cuenta con la fecha de nacimiento real y vincularla a la de un adulto.',
+   opciones:[
+    {t:'Sí, sé hacerlo', p:3},
+    {t:'Creo que podría, con ayuda', p:2},
+    {t:'Pensaba usar mi propia cuenta en su celular', p:1},
+    {t:'No sabía que eso importaba', p:0}]},
+  {id:'k3', pieza:'configurar', tipo:'unica', prio:5,
+   texto:'¿Sabes hacer que las apps y las compras necesiten tu aprobación antes de descargarse?',
+   nota:'Cada vez que tu hijo/a quiera descargar una app o comprar algo (como monedas de un juego), te llega una solicitud para aprobarla o rechazarla. En Android se activa con Family Link; en iPhone, en Compartir en familia, con la opción “Pedir la compra” (en algunas versiones aparece como “Preguntar antes de comprar”).',
+   meta:'Activar la aprobación de descargas y compras antes de entregar el celular.',
+   opciones:[
+    {t:'Sí, sé cómo hacerlo', p:3},
+    {t:'Sé que se puede, pero no sé cómo', p:2},
+    {t:'No sabía que se pudiera', p:1},
+    {t:'No lo había pensado', p:0}]},
+  {id:'k4', pieza:'configurar', tipo:'unica', prio:4,
+   texto:'¿Sabes revisar la privacidad dentro de las apps y juegos (WhatsApp, YouTube, TikTok, Roblox): quién le puede escribir, agregarlo a grupos o ver su perfil?',
+   nota:'Además del control parental del celular, cada app tiene su propia configuración de privacidad. Ahí se decide quién puede contactar a tu hijo/a y qué ven los demás de su perfil.',
+   meta:'Revisar la privacidad de cada app o juego antes de instalarlo.',
+   opciones:[
+    {t:'Sí, en las apps que va a usar', p:3},
+    {t:'En algunas, no en todas', p:2},
+    {t:'Nunca lo he revisado', p:1},
+    {t:'No sabía que cada app tenía su propia configuración', p:0}]},
+
+  /* Pieza 4: Acompañar */
+  {id:'a1', pieza:'acompanar', tipo:'unica', prio:4,
+   texto:'¿Cuánto tiempo podrías dedicar cada semana a revisar con tu hijo/a cómo le va con el celular (apps, tiempos, cómo se siente)?',
+   meta:'Reservar un momento fijo a la semana para revisar juntos cómo va.',
+   opciones:[
+    {t:'Un momento fijo cada semana', p:3},
+    {t:'De vez en cuando', p:2},
+    {t:'Muy poco: mis horarios no me lo permiten', p:1},
+    {t:'Prefiero no revisar: que aprenda solo/a', p:0}]},
+  {id:'a2', pieza:'acompanar', tipo:'unica', prio:7,
+   texto:'¿Cómo piensas acompañar el uso del celular?',
+   meta:'Diseñar un plan de autonomía gradual: más acompañamiento al inicio y más libertad a medida que crece la confianza.',
+   opciones:[
+    {t:'Con más acompañamiento al principio y más libertad a medida que demuestre responsabilidad', p:3},
+    {t:'Controlando todo, siempre, aunque no le explique por qué', p:1},
+    {t:'Revisando su celular a escondidas si sospecho algo', p:1},
+    {t:'Dándoselo y confiando en que todo saldrá bien', p:0}]},
+  {id:'a3', pieza:'acompanar', tipo:'unica', prio:4,
+   texto:'Cuando tú no estás (por ejemplo, en la tarde después del colegio), ¿quién está pendiente?',
+   meta:'Definir quién acompaña cuando ustedes no están, y reforzar los controles para esos momentos.',
+   opciones:[
+    {t:'Un adulto que conoce y aplica nuestros acuerdos', p:3},
+    {t:'Alguien, pero no conoce los acuerdos', p:2},
+    {t:'Muchas veces está solo/a', p:1},
+    {t:'No lo he pensado', p:0}]},
+  {id:'a4', pieza:'acompanar', tipo:'unica', prio:3,
+   texto:'Y tú, ¿cómo usas tu celular frente a tus hijos?',
+   meta:'Revisar nuestro propio uso del celular: los hijos aprenden más de lo que ven que de lo que oyen.',
+   opciones:[
+    {t:'Tengo momentos sin celular (comidas, antes de dormir) y los cumplo', p:3},
+    {t:'Lo intento, pero a veces el celular me gana', p:2},
+    {t:'Lo uso casi todo el tiempo, también en la mesa', p:1},
+    {t:'Nunca lo había pensado', p:1}]},
+
+  /* Pieza 5: Acordar */
+  {id:'e1', pieza:'acordar', tipo:'unica', prio:6,
+   texto:'¿Ya pensaron los acuerdos de uso del celular (horarios, lugares sin celular, qué pasa si se incumplen)?',
+   nota:'Un pacto digital es un acuerdo escrito y firmado por la familia y el niño sobre cómo, cuándo y dónde se usa el celular.',
+   meta:'Construir y firmar con él/ella el pacto digital de la familia.',
+   opciones:[
+    {t:'Sí, y los vamos a construir y escribir con él/ella', p:3},
+    {t:'Tengo ideas, pero no las hemos conversado', p:2},
+    {t:'Pensaba ir viendo sobre la marcha', p:1},
+    {t:'No sabía que eso se hacía', p:0}]},
+  {id:'e2', pieza:'acordar', tipo:'unica', prio:4,
+   texto:'¿Ya decidieron con qué apps empezará y cuáles tendrán que esperar?',
+   meta:'Elegir con qué pocas apps empezar y cuándo se podrán sumar otras.',
+   opciones:[
+    {t:'Sí: empezará con pocas y las iremos sumando', p:3},
+    {t:'Más o menos', p:2},
+    {t:'No lo hemos pensado', p:1},
+    {t:'Las que él/ella quiera', p:0}]},
+  {id:'e3', pieza:'acordar', tipo:'unica', prio:5,
+   texto:'WhatsApp y la mayoría de redes sociales (TikTok, Instagram, Snapchat) piden mínimo 13 años en sus condiciones de uso. ¿Qué piensan hacer en casa?',
+   meta:'Respetar las edades mínimas de WhatsApp y redes sociales (13 años).',
+   opciones:[
+    {t:'Respetar esa edad, y quizá esperar un poco más', p:3},
+    {t:'Respetarla, aunque nos va a costar', p:2},
+    {t:'Abrirle una cuenta antes, pero supervisada', p:1},
+    {t:'Dejar que use lo mismo que sus amigos', p:0}]},
+  {id:'e4', pieza:'acordar', tipo:'unica', prio:6,
+   texto:'En la noche, ¿dónde dormirá el celular?',
+   meta:'Acordar que el celular duerma fuera del cuarto, cargando en un lugar común.',
+   opciones:[
+    {t:'Fuera de su cuarto, cargando en un lugar común', p:3},
+    {t:'En su cuarto, pero apagado', p:1},
+    {t:'No lo hemos pensado', p:1},
+    {t:'En su cuarto, con él/ella', p:0}]}
+];
+
+var PELIS = [
+  {t:'Ron da error', a:2021, d:'Barney es el único de su clase sin un robot-amigo. Para hablar de sentirse diferente y de la amistad de verdad.'},
+  {t:'WiFi Ralph', a:2018, d:'Ralph y Vanellope llegan a internet. Para hablar de comentarios, videos virales y amistad.'},
+  {t:'Los Mitchell contra las máquinas', a:2021, d:'Una familia en viaje por carretera enfrenta una rebelión de las máquinas. Para hablar de pantallas y tiempo en familia.'},
+  {t:'WALL·E', a:2008, d:'Un robot descubre a una humanidad pegada a las pantallas. Para hablar del tiempo sin pantallas.'},
+  {t:'Extraordinario', a:2017, d:'Auggie empieza el colegio y vive el rechazo y la amistad. Para hablar de bullying y de elegir ser amable.'},
+  {t:'Intensa-Mente 2', a:2024, d:'Llegan nuevas emociones con la adolescencia. Para hablar de la ansiedad y las ganas de encajar.'}
+];
+
+/* ===================== Motor ===================== */
+var LOGO = 'data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/wAARCAEYAtgDACIAAREBAhEB/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMPFB0aHx4dGhwcICQuJyAiLCMcHCg3KSwwMTQ0NB8nOT04MjwuMzQy/9sAQwEJCQkMCwwYDQ0YMiEcITIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMAAAERAhEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoorO1DXdO0vi5uVEn/ADzX5m/IdPxppNuyFKSirydkaNFcXdeP0BItLFmH96V8foP8az28eamT8sFoo/3WP/s1dCwddq/Kcksww0XZy/M9Eorz6Lx9fg/vbS2Yf7O5f6mtaz8d2ExC3UEtuT/EPnUflz+lEsJWiruIRx+Gk7KX6fmdXRUFreW17EJbWdJU9UOcfX0qeuZq2jOtNNXQUUUUDCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApk00dvC8srqkaDLMxwAKcSFUkkADkk9q808T+IX1a5NvAxFnGflx/y0P94/0rahQlWlyo58TiYYeHNL5It654znumaDTS0MHQy9Hf6eg/WuUJLEkkknkk0lFe9SoQpK0UfMV8TUryvN/5BRRRWpgFFFFAE9pe3NjOJrWZ4pB3U9fr613/AIf8Wxaky2t5tiujwrDhZP8AA+1ec0A4OR1rnr4eFZa79zqw2LqYd+7t2PbaK5bwl4iOoR/Ybt83MY+Rz/y0Uf1FdTXhVaUqUuWR9PRrQrQU4bBRRRWZqFFFFABRRRQAUUUUAFFFFABRRWZquq/YNscahpWGeegFZ1asKUHObskVCEpy5Y7mnRXKf29ff3k/75o/t6+/vJ/3zXmf23hO7+46vqNY6uiuU/t6+/vJ/wB80f29ff3k/wC+aP7bwnd/cH1GsdXRXKf29ff3k/75o/t6+/vJ/wB80f23hO7+4PqNY6uiuU/t6+/vJ/3zV/Tdcee4WC5VcucK6jHPvV084wtSSina/dEywdWKvY3KKKK9Q5QooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAOW8basbSwWxibEtwDvx1Cf/AF+n5153Wt4kvTfa/dSZyiN5afReP8T+NZNe/g6Sp0l3ep8tmFd1a7XRaBRRRXUcQUUUUAFFFFABRRRQBLbXEtpcx3ELbZI2DKfevXtNvo9S06C7j6SLkj0PcfnXjld14BvS0N1YsfuE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E+mOtfTHw+8PT+GvCFrY3eBdMWmmUHO1m7fgMD6104VQxYAZPU4pa0qVudWsTGFnczfEGl/234e1DTA4RrmBo1Y9AxHBP44r5W1PSb/Rr6Sy1C1kt50OCrjGfcHuPcV9d0hVWxkA45GR0pU6vIEocx5D8GfC19Yz3Wu3sDwRyw+RbrIMFwWDFsenyjHrzXr9FFTObm7jjHlVipqemWesadNYX8CzW0owyN/MehHrXg3i34T6vokslxpSSajp/UbBmWMejKOv1H5CvoSinCo4bBKKkfHLo0blHUqynBUjBBpK+uL/AEPSdUOb/TLO6PrNCrn8yKoR+CfC8Um9NA07d1+aBSPyNdCxEeqM/ZM+atE8Oav4iuRBpdjLcHOGcDCJ/vMeBXqh+Da2vgy8QSLc686h0YHCLg5KLn1GRk+3QZr1yGGK3iWKGNI414VEUAD6AU+s5V29ilTS3Pj+ezurW7a1nt5YrhW2mJ0IYH0x1r3z4ReGL3QNCurvUImgnv3VhC4wyooOMjsTuPH0r0MqpYMQMjocUtKdfmjawRp2dynqml2Ws6dNYahAs9tKMMjfzB7EeteF+KfhDrGlSyT6OrajZckKuPOQehX+L6j8hX0BRUQqShsVKKkfHtxbT2kzQ3MMkMq9UkUqw/A1FX1/d2Nnfx+XeWsFwn92aMOPyNZD+B/C0jbm0DTwf9mBVH5Ct1iF1Rm6TPlhVZ2CqCzE4AAyTXfeEvhVrGuzRz6lHJp2n5BZpBiWQeiqen1P617xYaFpGlnNhplnat/ehgVT+YGa0KUsR/Khqn3KmmabaaPp0NhYwrDbQrtRF/mfUnrmrdFFcrdzUKKKKACiiigAooooAKKKKACiiigAooooAKhubS2vYDBdW8U8TdUlQMp/A1NRQBwusfCTwtqm54LeXT5Tzutnwuf905GPpit/wn4f/wCEX8OwaSLn7QIWciTZtyGYt0yfWtuiqc5NWbEopO6CiiipGFFFFABRRRQAVleJNH/4SDw9eaUJ/I+0oE8zbu28g9MjPStWihOwHAaP8H/DOm7Xu0m1GUc5nfamfZVx+ua7ezsLPToBBZWsNtEOiQxhB+QqxRVSnKW7EopbBRRRUjCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==';
+var CHECK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var PZ = {}; PIEZAS.forEach(function(p,i){ p.n = i+1; PZ[p.id] = p; });
+var TOTAL = PREGUNTAS.length;
+var app = document.getElementById('app');
+var anuncio = document.getElementById('anuncio');
+var st = {pantalla:'inicio', idx:0, r:{}, lock:false};
+
+function estiloPieza(id){
+  return '--c:var(--c-'+id+');--t:var(--t-'+id+');--on-c:var(--on-'+id+')';
+}
+function valor(id){
+  var q = PREGUNTAS.filter(function(x){return x.id===id;})[0];
+  var i = st.r[id];
+  return (q && i !== undefined) ? q.opciones[i].v : undefined;
+}
+function motivos(){
+  var q = PREGUNTAS[1], arr = st.r.motivo || [];
+  return arr.map(function(i){ return q.opciones[i].v; });
+}
+function puntos(){
+  var q = PREGUNTAS[st.idx];
+  var actual = (st.pantalla==='pregunta' && q && q.pieza) ? PZ[q.pieza].n : 0;
+  return '<ol class="dots" aria-label="Piezas del cuestionario">' + PIEZAS.map(function(p){
+    var cls = (st.pantalla==='resultado' || p.n < actual) ? 'done' : (p.n===actual ? 'now' : '');
+    var est = cls==='done' ? ' (completa)' : (cls==='now' ? ' (en curso)' : '');
+    return '<li class="dot '+cls+'" style="'+estiloPieza(p.id)+'"><span class="sr-only">'+p.nombre+est+'</span></li>';
+  }).join('') + '</ol>';
+}
+function cabecera(conPuntos){
+  return '<header class="top"><span class="logo"><img src="'+LOGO+'" alt="Tecnofamilias" width="99" height="38"></span>'+(conPuntos?puntos():'')+'</header>';
+}
+function pie(){
+  var priv;
+  if (correoActivo()) priv = 'Tus respuestas se quedan en tu pantalla. Solo si nos dejas tu correo y lo autorizas, recibimos tu nombre, tu correo y el resumen de tu resultado.';
+  else if (CONFIG.compartirResultados) priv = 'Tus respuestas no se guardan. Solo si tú lo autorizas al final, se comparten de forma anónima.';
+  else priv = 'Tus respuestas se quedan en tu pantalla: no se guardan ni se envían.';
+  return '<p class="pie">Tecnofamilias: protegemos a las familias en el mundo digital. '+priv+'</p>';
+}
+function avisarAltura(){
+  try{
+    if (window.parent && window.parent !== window){
+      window.parent.postMessage({tipo:'tecnofamilias:altura', cuestionario:'padres', altura:document.documentElement.scrollHeight}, '*');
+    }
+  }catch(e){}
+}
+function render(){
+  if (st.pantalla==='inicio') renderInicio();
+  else if (st.pantalla==='pregunta') renderPregunta();
+  else renderResultado();
+  try{ window.scrollTo(0,0); }catch(e){}
+  setTimeout(avisarAltura, 50);
+}
+
+function renderInicio(){
+  var ys = [0,-12,-18,-12,0];
+  app.innerHTML = cabecera(false) +
+  '<section class="sheet">' +
+    '<ul class="arc" aria-label="Las cinco piezas del cuestionario">' + PIEZAS.map(function(p,i){
+      return '<li style="'+estiloPieza(p.id)+';--y:'+ys[i]+'px"><span class="bubble" aria-hidden="true">'+p.icono+'</span><span class="lbl">'+p.corto+'</span></li>';
+    }).join('') + '</ul>' +
+    '<h1 id="titulo" tabindex="-1">Primer celular: ¿qué necesitamos como familia?</h1>' +
+    '<p class="lead">Un cuestionario para mamás, papás y cuidadores de niños que ya piden celular o están cerca de tenerlo. No te va a decir “sí” o “no”: te muestra qué piezas ya tienen y qué necesitan para llegar.</p>' +
+    '<ul class="facts">' +
+      '<li><span aria-hidden="true">⏱️</span>Unos 8 minutos: '+TOTAL+' preguntas cortas.</li>' +
+      '<li><span aria-hidden="true">🧩</span>Cinco piezas: poner límites con amor, conversar, configurar, acompañar y acordar.</li>' +
+      '<li><span aria-hidden="true">🗺️</span>Al final, tu mapa con lo que ya tienen y lo que necesitan para llegar.</li>' +
+    '</ul>' +
+    '<p class="tip">Lo ideal es que tu hijo o hija responda su propio cuestionario, “Misión: mi primer celular”, y que después conversen con los dos resultados.</p>' +
+    '<button type="button" class="btn btn-lg" id="empezar">Empezar el cuestionario</button>' +
+  '</section>' + pie();
+}
+
+function renderPregunta(){
+  var q = PREGUNTAS[st.idx];
+  var p = q.pieza ? PZ[q.pieza] : null;
+  var sel = st.r[q.id];
+  var multi = q.tipo === 'multiple';
+  var estilo = p ? estiloPieza(p.id) : estiloPieza('conversar');
+  var nombre = p ? ('Pieza '+p.n+' de 5: '+p.nombre) : 'Antes de empezar';
+  var opts = q.opciones.map(function(o,i){
+    var on = multi ? (Array.isArray(sel) && sel.indexOf(i) >= 0) : sel === i;
+    return '<button type="button" class="opt'+(multi?' multi':'')+'" data-i="'+i+'" aria-pressed="'+on+'"><span class="mk">'+CHECK+'</span><span>'+o.t+'</span></button>';
+  }).join('');
+  var seguir = '';
+  if (multi) seguir = '<button type="button" class="btn" id="seguir"'+((Array.isArray(sel)&&sel.length)?'':' disabled')+'>Continuar</button>';
+  else if (sel !== undefined) seguir = '<button type="button" class="btn" id="seguir">Siguiente</button>';
+  app.innerHTML = cabecera(true) +
+  '<section class="sheet" style="'+estilo+'">' +
+    '<div class="kicker"><span class="pz">'+nombre+'</span><span>Pregunta '+(st.idx+1)+' de '+TOTAL+'</span></div>' +
+    '<div class="bar" aria-hidden="true"><span style="width:'+((st.idx/TOTAL)*100).toFixed(1)+'%"></span></div>' +
+    '<h2 class="q" id="q" tabindex="-1">'+q.texto+'</h2>' +
+    (q.ayuda ? '<p class="ayuda">'+q.ayuda+'</p>' : '') +
+    (q.nota ? '<p class="nota"><span aria-hidden="true">💡</span><span><strong>Nota:</strong> '+q.nota+'</span></p>' : '') +
+    '<div class="opts" role="group" aria-labelledby="q">'+opts+'</div>' +
+    '<div class="nav"><button type="button" class="btn btn-ghost" id="atras">Atrás</button>'+seguir+'</div>' +
+  '</section>' + pie();
+  var h = document.getElementById('q'); if (h) h.focus({preventScroll:true});
+  anuncio.textContent = 'Pregunta '+(st.idx+1)+' de '+TOTAL+'. '+nombre+'.';
+}
+
+function elegir(i){
+  if (st.lock) return;
+  var q = PREGUNTAS[st.idx];
+  var botones = app.querySelectorAll('.opt');
+  if (q.tipo === 'multiple'){
+    var arr = Array.isArray(st.r[q.id]) ? st.r[q.id].slice() : [];
+    var k = arr.indexOf(i);
+    if (k >= 0) arr.splice(k,1); else arr.push(i);
+    st.r[q.id] = arr;
+    Array.prototype.forEach.call(botones, function(b){ b.setAttribute('aria-pressed', String(arr.indexOf(+b.getAttribute('data-i')) >= 0)); });
+    var s = document.getElementById('seguir'); if (s) s.disabled = arr.length === 0;
+    return;
+  }
+  st.r[q.id] = i;
+  Array.prototype.forEach.call(botones, function(b){ b.setAttribute('aria-pressed', String(+b.getAttribute('data-i') === i)); });
+  st.lock = true;
+  var enIdx = st.idx;
+  setTimeout(function(){ st.lock = false; if (st.pantalla === 'pregunta' && st.idx === enIdx) siguiente(); }, 320);
+}
+function siguiente(){
+  var q = PREGUNTAS[st.idx];
+  if (q.tipo === 'multiple' && !(st.r[q.id] || []).length) return;
+  if (q.tipo === 'unica' && st.r[q.id] === undefined) return;
+  if (st.idx < TOTAL-1){ st.idx++; } else { st.pantalla = 'resultado'; }
+  render();
+}
+function atras(){
+  if (st.idx === 0) st.pantalla = 'inicio'; else st.idx--;
+  render();
+}
+
+/* ===================== Resultado ===================== */
+function herramientas(){
+  var so = valor('so');
+  if (so === 'android') return 'Google Family Link';
+  if (so === 'iphone') return 'Tiempo en pantalla y Compartir en familia';
+  return 'Google Family Link en Android, o Tiempo en pantalla en iPhone';
+}
+function calcular(){
+  var piezas = PIEZAS.map(function(p){
+    var qs = PREGUNTAS.filter(function(q){ return q.pieza === p.id && !q.contexto; });
+    var s = 0, m = 0, pend = [];
+    qs.forEach(function(q){
+      var pts = q.opciones[st.r[q.id]].p;
+      s += pts; m += 3;
+      if (pts <= 2) pend.push({id:q.id, texto:q.meta.replace('{herramientas}', herramientas()), prio:q.prio, nivel:(pts<=1?'construir':'afinar'), pieza:p});
+    });
+    pend.sort(ordenPend);
+    var pct = m ? s/m : 0;
+    return {p:p, pct:pct, nivel:(pct>=0.75?'lista':(pct>=0.5?'construccion':'construir')), pend:pend};
+  });
+  var todas = [];
+  piezas.forEach(function(x){ todas = todas.concat(x.pend); });
+  todas.sort(ordenPend);
+  var L = piezas.filter(function(x){return x.nivel==='lista';}).length;
+  var P = piezas.filter(function(x){return x.nivel==='construir';}).length;
+  return {piezas:piezas, top:todas.slice(0,3), L:L, P:P};
+}
+function ordenPend(a,b){
+  if (a.nivel !== b.nivel) return a.nivel === 'construir' ? -1 : 1;
+  return b.prio - a.prio;
+}
+function veredicto(L,P){
+  var v = veredictoBase(L,P), e = valor('edad');
+  if ((e === '8' || e === '9-10') && (L === 5 || (P === 0 && L >= 3))) v.texto += ' Por la edad de su hijo/a, revisen abajo lo que recomiendan los expertos: muchas familias empiezan con un paso intermedio.';
+  return v;
+}
+function veredictoBase(L,P){
+  if (L === 5) return {id:'solidas', icono:'🌟', titulo:'Tienen bases sólidas para acompañar este paso', texto:'Lo que sigue es construir con su hijo/a el pacto digital y acompañar de cerca los primeros meses. El momento lo deciden ustedes, según su madurez y las recomendaciones para su edad.'};
+  if (P === 0 && L >= 3) return {id:'encaminados', icono:'🧭', titulo:'Van muy bien encaminados', texto:'Tienen buena parte del camino recorrido. Estas son las piezas que conviene afinar antes de dar el paso.'};
+  if (P === 0) return {id:'buencamino', icono:'👣', titulo:'Van por buen camino', texto:'Tienen bases en todas las piezas y varias por afinar. Este es su mapa de lo que necesitan para llegar.'};
+  if (P <= 2) return {id:'piezasclave', icono:'🧩', titulo:'Hay piezas clave por construir', texto:'Antes del primer celular vale la pena trabajar lo que aparece abajo. No es un “no”: es saber qué les falta para llegar.'};
+  return {id:'preparar', icono:'🌱', titulo:'Es momento de preparar el camino', texto:'Estas piezas son la base para que el primer celular llegue en el mejor momento. Empiecen por sus tres prioridades.'};
+}
+function bloqueEdad(){
+  var e = valor('edad'), mot = motivos();
+  var base = {
+    '8':'Las guías de expertos coinciden en que a esta edad todavía no es momento de un celular propio. La Comisión de expertos sobre pantallas de Francia (2024) recomienda no tenerlo antes de los 11 años.',
+    '9-10':'Las guías de expertos recomiendan esperar. La Comisión de expertos sobre pantallas de Francia (2024) sugiere no tener celular propio antes de los 11 años, y Jonathan Haidt (2024) propone que, antes de los 14, sea un teléfono básico, sin internet.',
+    '11-12':'Como referencia, la Comisión de expertos sobre pantallas de Francia (2024) sugiere un teléfono sin internet entre los 11 y los 13 años, y desde los 13 un celular con internet pero sin redes sociales. Jonathan Haidt (2024) propone esperar hasta los 14 para el celular inteligente.',
+    '13-14':'WhatsApp y la mayoría de redes sociales piden mínimo 13 años en sus condiciones de uso. Como referencia, varias guías recomiendan esperar hasta los 15 o 16 años para las redes sociales (Comisión de expertos sobre pantallas de Francia, 2024; Jonathan Haidt, 2024).',
+    '15':'A esta edad el foco está en la autonomía con acuerdos. Como referencia, varias guías sitúan el acceso a redes sociales entre los 15 y los 16 años, con conversación y ejemplo en casa.'
+  }[e] || '';
+  var menor = (e === '8' || e === '9-10' || e === '11-12');
+  var extra = '';
+  if (menor && mot.indexOf('comunicar') >= 0) extra += '<p>Si lo principal es estar en contacto, un teléfono básico (solo llamadas y mensajes) o un reloj con llamadas cubren esa necesidad sin abrir todo internet.</p>';
+  if (menor && mot.indexOf('redes') >= 0) extra += '<p>Para tener en cuenta: WhatsApp y las redes sociales piden mínimo 13 años en sus condiciones de uso.</p>';
+  if (mot.indexOf('amigos') >= 0) extra += '<p>Si la presión viene de los amigos, ayuda conversar con otras familias del curso: cuando varias familias acuerdan esperar, para los niños es más fácil.</p>';
+  return '<div class="box box-edad"><h2>Sobre la edad</h2><p>'+base+'</p>'+extra+'<p class="fine">Son referencias, no reglas: ustedes deciden según la madurez de su hijo/a y lo que estén listos para acompañar.</p></div>';
+}
+function anillo(id, pct, icono){
+  var r = 26, c = 2*Math.PI*r, f = Math.max(pct, 0.04)*c;
+  return '<span class="ringwrap"><svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="'+r+'" class="trk"/><circle cx="32" cy="32" r="'+r+'" class="fil" style="stroke:var(--c-'+id+');stroke-dasharray:'+f.toFixed(1)+' '+c.toFixed(1)+'"/></svg><span class="ico" aria-hidden="true">'+icono+'</span></span>';
+}
+var NIVEL = {lista:'Pieza lista', construccion:'En construcción', construir:'Por construir'};
+function promoVigente(){
+  var pr = CONFIG.promo;
+  if (!pr || !pr.activa || !pr.url) return false;
+  if (!pr.visibleHasta) return true;
+  var lim = new Date(pr.visibleHasta).getTime();
+  return isNaN(lim) ? true : Date.now() <= lim;
+}
+
+function renderResultado(){
+  var R = calcular(), v = veredicto(R.L, R.P), ys = [0,-12,-18,-12,0];
+  var rarc = '<ul class="rarc" aria-label="Estado de las cinco piezas">' + R.piezas.map(function(x,i){
+    return '<li style="'+estiloPieza(x.p.id)+';--y:'+ys[i]+'px">'+anillo(x.p.id, x.pct, x.p.icono)+'<span class="lbl">'+x.p.corto+'</span><span class="lv">'+NIVEL[x.nivel]+'</span></li>';
+  }).join('') + '</ul>';
+
+  var prio = R.top.length
+    ? '<ol class="prio">' + R.top.map(function(n){ return '<li style="'+estiloPieza(n.pieza.id)+'"><span>'+n.texto+'<small>'+n.pieza.nombre+'</small></span></li>'; }).join('') + '</ol>'
+    : '<p>No encontramos pendientes urgentes. Su siguiente paso: construir juntos el pacto digital y acompañar de cerca los primeros meses.</p>';
+
+  var filas = R.piezas.map(function(x){
+    var construir = x.pend.filter(function(n){return n.nivel==='construir';});
+    var afinar = x.pend.filter(function(n){return n.nivel==='afinar';}).slice(0,2);
+    var lista = construir.concat(afinar);
+    var cuerpo = lista.length
+      ? '<ul class="needs">' + lista.map(function(n){ return '<li><span class="tag '+n.nivel+'">'+(n.nivel==='construir'?'Por construir':'Para afinar')+'</span><span>'+n.texto+'</span></li>'; }).join('') + '</ul>'
+        + '<p class="where">Lo trabajamos en Tecnofamilias: <strong>'+CONFIG.dondeLoVemos[x.p.id]+'</strong></p>'
+      : '<p class="ok">Esta pieza ya la tienen. ¡Sigan así!</p>';
+    return '<article class="row" style="'+estiloPieza(x.p.id)+'"><div class="row-head">'+anillo(x.p.id, x.pct, x.p.icono)+'<h3>'+x.p.nombre+'</h3><span class="lvl">'+NIVEL[x.nivel]+'</span></div>'+cuerpo+'</article>';
+  }).join('');
+
+  var linkNinos = CONFIG.urlCuestionarioNinos ? ' <a href="'+CONFIG.urlCuestionarioNinos+'" target="_top">Abrir el cuestionario para niños</a>.' : '';
+  var linkJuego = CONFIG.urlJuegoCartas ? ' <a href="'+CONFIG.urlJuegoCartas+'" target="_top">Ver el juego de cartas</a>.' : '';
+  var pasos = '<ol class="steps">' +
+    '<li>Que su hijo/a responda su cuestionario, “Misión: mi primer celular”.'+linkNinos+'</li>' +
+    '<li>Comparen sus resultados en un momento tranquilo: ¿en qué coinciden? ¿Qué los sorprendió?</li>' +
+    '<li>Jueguen en familia el juego de cartas de Tecnofamilias: abre estas conversaciones de forma divertida.'+linkJuego+'</li>' +
+    '<li>Vean juntos una de las películas de abajo y conversen al final.</li>' +
+    '<li>Elijan por cuál pieza empezar y trabájenla en las clases de Tecnofamilias.</li>' +
+  '</ol>';
+
+  var pelis = '<ul class="pelis">' + PELIS.map(function(m){ return '<li><strong>'+m.t+' <span class="yr">('+m.a+')</span></strong>'+m.d+'</li>'; }).join('') + '</ul>' +
+    '<p class="adultos"><strong>Para ustedes, los adultos:</strong> <em>El dilema de las redes sociales</em> (documental, 2020), para entender cómo se diseñan las apps para captar la atención. Recomendado para adultos y adolescentes.</p>' +
+    '<p class="fine">Revisen la clasificación por edad y en qué plataforma está disponible cada película en su país.</p>';
+
+  var promo = promoVigente()
+    ? '<div class="promo no-print"><p>'+CONFIG.promo.texto+'</p><a class="btn" href="'+CONFIG.promo.url+'" target="_top">'+CONFIG.promo.boton+'</a></div>' : '';
+
+  var share = CONFIG.compartirResultados
+    ? '<div class="share no-print"><label><input type="checkbox" id="consiento"><span>Acepto compartir con Tecnofamilias estos resultados de forma anónima (sin nombres ni datos de contacto) para mejorar los contenidos.</span></label><button type="button" class="btn btn-ghost" id="compartir" disabled>Compartir resultados anónimos</button><p class="fine" id="share-msg" aria-live="polite"></p></div>' : '';
+
+  app.innerHTML = cabecera(true) +
+  '<section class="sheet result">' +
+    '<div class="verdict">' +
+      '<p class="eyebrow">Su veredicto Tecnofamilias</p>' + rarc +
+      '<h1 id="titulo" tabindex="-1"><span aria-hidden="true">'+v.icono+' </span>'+v.titulo+'</h1>' +
+      '<p class="lead">'+v.texto+'</p>' +
+      '<p class="pill">'+R.L+' de 5 piezas listas</p>' +
+    '</div>' +
+    bloqueEdad() +
+    '<div class="block"><h2>Sus prioridades para empezar</h2>'+prio+'</div>' + bloqueCorreo() +
+    '<div class="block"><h2>Su mapa, pieza por pieza</h2><div class="rows">'+filas+'</div></div>' +
+    '<div class="box box-recuerden"><h2>Recuerden</h2>' +
+      '<p><strong>Decir “todavía no” no es un castigo:</strong> es un acto de amor y cuidado. Explíquenle el porqué y lo que necesitan para llegar.</p>' +
+      '<p><strong>Cada familia tiene sus normas y acuerdos.</strong> No tienen que ser iguales a los de otras casas, y está bien que su hijo/a lo escuche de ustedes con calma.</p>' +
+      '<p><strong>Amabilidad y firmeza al mismo tiempo:</strong> validar lo que siente (“entiendo que te moleste”) y sostener lo que acordaron.</p>' +
+    '</div>' +
+    '<div class="block"><h2>Ahora, en familia</h2>'+pasos+'</div>' +
+    '<div class="block"><h2>Para ver juntos</h2>'+pelis+'</div>' +
+    promo +
+    '<div class="actions no-print">' +
+      '<button type="button" class="btn" id="imprimir">Guardar o imprimir mi resultado</button>' +
+      (CONFIG.urlClases ? '<a class="btn btn-ghost" href="'+CONFIG.urlClases+'" target="_top">'+CONFIG.textoBotonClases+'</a>' : '') +
+      '<button type="button" class="btn btn-ghost" id="reiniciar">Volver a empezar</button>' +
+    '</div>' +
+    share +
+    '<details class="fuentes"><summary>Fuentes de las recomendaciones</summary><ul>' +
+      '<li>Comisión de expertos sobre el impacto de la exposición de los jóvenes a las pantallas. Informe “Enfants et écrans”, Presidencia de Francia, abril de 2024: no tener celular antes de los 11 años; de 11 a 13, sin internet; desde los 13, con internet pero sin redes sociales; desde los 15, solo redes sociales “éticas”.</li>' +
+      '<li>Jonathan Haidt, <em>La generación ansiosa</em> (2024): teléfono básico hasta los 14 años y redes sociales desde los 16 (<a href="https://anxiousgeneration.com/about" target="_blank" rel="noopener">anxiousgeneration.com</a>).</li>' +
+      '<li>Condiciones de uso de WhatsApp y de las principales redes sociales: edad mínima de 13 años.</li>' +
+      '<li>Herramientas de control parental: <a href="https://support.apple.com/es-lamr/108806" target="_blank" rel="noopener">Tiempo en pantalla (soporte de Apple)</a> y <a href="https://families.google/familylink/" target="_blank" rel="noopener">Google Family Link</a>.</li>' +
+      '<li>Enfoque de disciplina positiva (Jane Nelsen): amabilidad y firmeza al mismo tiempo, y consecuencias que reparan en lugar de castigos.</li>' +
+    '</ul><p>Este cuestionario es orientativo y no reemplaza la asesoría de un profesional.</p></details>' +
+  '</section>' + pie();
+
+  var h = document.getElementById('titulo'); if (h) h.focus({preventScroll:true});
+  anuncio.textContent = 'Resultado listo: ' + v.titulo + '.';
+}
+
+function compartir(){
+  var R = calcular(), msg = document.getElementById('share-msg');
+  if (!window.parent || window.parent === window){
+    msg.textContent = 'Esta opción funciona cuando el cuestionario está dentro de la plataforma de Tecnofamilias.';
+    return;
+  }
+  var piezas = {};
+  R.piezas.forEach(function(x){ piezas[x.p.id] = Math.round(x.pct*100); });
+  try{
+    window.parent.postMessage({tipo:'tecnofamilias:resultado', cuestionario:'padres', version:1, edad:valor('edad'), sistema:valor('so'), piezas:piezas, piezasListas:R.L}, CONFIG.origenPlataforma || '*');
+    msg.textContent = 'Listo. Gracias por ayudarnos a mejorar.';
+    document.getElementById('compartir').disabled = true;
+  }catch(e){ msg.textContent = 'No se pudo compartir en este momento.'; }
+}
+
+/* ===================== Correo opcional ===================== */
+var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function plataformaLista(){
+  var c = CONFIG.correo;
+  return !!(c && c.enviarAPlataforma && CONFIG.origenPlataforma && CONFIG.origenPlataforma !== '*' && window.parent && window.parent !== window);
+}
+function correoActivo(){
+  var c = CONFIG.correo;
+  return !!(c && (c.destino || plataformaLista()) && c.urlPolitica && c.contacto);
+}
+function textoAutorizacion(){
+  var c = CONFIG.correo;
+  return 'Autorizo a '+c.responsable+' a guardar y usar mi nombre, mi correo y el resumen de este resultado para enviármelo y para analizar, de forma agregada, qué temas necesitan más las familias, según su Política de Tratamiento de Datos.';
+}
+function bloqueCorreo(){
+  if (!correoActivo()) return '';
+  var c = CONFIG.correo;
+  var autoriza = textoAutorizacion().replace('Política de Tratamiento de Datos', '<a href="'+c.urlPolitica+'" target="_blank" rel="noopener">Política de Tratamiento de Datos</a>');
+  return '<form class="lead-box no-print" id="form-correo" novalidate>' +
+    '<h2>'+c.titulo+'</h2><p class="lead-txt">'+c.texto+'</p>' +
+    '<div class="campos">' +
+      '<div class="campo"><label for="f-nombre">Tu nombre (opcional)</label><input id="f-nombre" type="text" autocomplete="given-name" maxlength="40"></div>' +
+      '<div class="campo"><label for="f-email">Tu correo</label><input id="f-email" type="email" autocomplete="email" inputmode="email" maxlength="120" required></div>' +
+    '</div>' +
+    '<div class="hp" aria-hidden="true"><label for="f-web">Deja este campo vacío</label><input id="f-web" type="text" tabindex="-1" autocomplete="off"></div>' +
+    '<label class="check"><input type="checkbox" id="f-ok"><span>'+autoriza+'</span></label>' +
+    '<label class="check"><input type="checkbox" id="f-mkt"><span>Opcional: también acepto recibir por correo invitaciones a charlas, masterclass y recursos de Tecnofamilias.</span></label>' +
+    '<button type="submit" class="btn" id="f-enviar" disabled>Enviarme mi resultado</button>' +
+    '<p class="fine" id="f-msg" aria-live="polite"></p>' +
+    '<p class="legal">Responsable: '+c.responsable+' ('+c.contacto+(c.telefono ? ', '+c.telefono : '')+'). Puedes conocer, actualizar, rectificar o suprimir tus datos, y retirar esta autorización, escribiendo a <a href="mailto:'+c.contacto+'">'+c.contacto+'</a>. No pedimos ni enviamos el nombre ni la edad de tu hijo o hija.</p>' +
+  '</form>';
+}
+function actualizarBotonCorreo(){
+  var b = document.getElementById('f-enviar'); if (!b) return;
+  var em = document.getElementById('f-email'), ok = document.getElementById('f-ok');
+  b.disabled = !(em && ok && EMAIL_RE.test(em.value.trim()) && ok.checked);
+}
+function utm(nombre){
+  try { return (new URLSearchParams(window.location.search).get(nombre) || '').slice(0,80); } catch(e){ return ''; }
+}
+function enviarCorreo(){
+  var c = CONFIG.correo, msg = document.getElementById('f-msg'), btn = document.getElementById('f-enviar');
+  var email = document.getElementById('f-email').value.trim();
+  if (!EMAIL_RE.test(email) || !document.getElementById('f-ok').checked){
+    msg.textContent = 'Escribe un correo válido y marca la autorización para continuar.'; return;
+  }
+  if (document.getElementById('f-web').value){ terminarCorreo(); return; }
+  var R = calcular(), v = veredicto(R.L, R.P);
+  var datos = {
+    token: c.token || '',
+    email: email,
+    nombre: document.getElementById('f-nombre').value.trim().slice(0,40),
+    consentimiento: 'si',
+    marketing: document.getElementById('f-mkt').checked ? 'si' : 'no',
+    texto_autorizacion: textoAutorizacion(),
+    version_politica: c.versionPolitica || '',
+    veredicto: v.id,
+    piezas_listas: String(R.L),
+    piezas: R.piezas.map(function(x){ return x.p.id+':'+Math.round(x.pct*100); }).join('|'),
+    prioridades: R.top.map(function(n){ return n.id; }).join(','),
+    utm_source: utm('utm_source'), utm_medium: utm('utm_medium'), utm_campaign: utm('utm_campaign'),
+    origen: 'cuestionario-padres'
+  };
+  if (plataformaLista()){
+    var copia = {}; Object.keys(datos).forEach(function(k){ if (k !== 'token') copia[k] = datos[k]; });
+    try{ window.parent.postMessage({tipo:'tecnofamilias:correo', cuestionario:'padres', version:1, datos:copia}, CONFIG.origenPlataforma); }catch(e){}
+  }
+  if (!c.destino){ terminarCorreo(); return; }
+  btn.disabled = true; msg.textContent = 'Enviando…';
+  fetch(c.destino, {method:'POST', mode:'no-cors', body:new URLSearchParams(datos)})
+    .then(function(){ terminarCorreo(); })
+    .catch(function(){ btn.disabled = false; msg.textContent = 'No pudimos enviar tus datos. Revisa tu conexión e inténtalo de nuevo.'; });
+}
+function terminarCorreo(){
+  var f = document.getElementById('form-correo'); if (!f) return;
+  f.innerHTML = '<h2>¡Listo!</h2><p class="lead-txt" role="status">Enviamos tu solicitud. En unos minutos te debe llegar el correo; si no lo ves, revisa las carpetas de spam o promociones.</p>';
+  setTimeout(avisarAltura, 50);
+}
+
+/* ===================== Eventos ===================== */
+app.addEventListener('click', function(e){
+  var t = e.target.closest ? e.target.closest('button') : null;
+  if (!t) return;
+  if (t.id === 'empezar'){ st.pantalla = 'pregunta'; st.idx = 0; render(); return; }
+  if (t.classList.contains('opt')){ elegir(+t.getAttribute('data-i')); return; }
+  if (t.id === 'seguir'){ siguiente(); return; }
+  if (t.id === 'atras'){ atras(); return; }
+  if (t.id === 'imprimir'){ window.print(); return; }
+  if (t.id === 'reiniciar'){ st = {pantalla:'inicio', idx:0, r:{}, lock:false}; render(); return; }
+  if (t.id === 'compartir'){ compartir(); return; }
+});
+app.addEventListener('change', function(e){
+  if (e.target && e.target.id === 'consiento'){
+    var b = document.getElementById('compartir'); if (b) b.disabled = !e.target.checked;
+  }
+  if (e.target && e.target.id === 'f-ok') actualizarBotonCorreo();
+});
+app.addEventListener('input', function(e){
+  if (e.target && e.target.id === 'f-email') actualizarBotonCorreo();
+});
+app.addEventListener('submit', function(e){
+  if (e.target && e.target.id === 'form-correo'){ e.preventDefault(); enviarCorreo(); }
+});
+document.addEventListener('keydown', function(e){
+  if (st.pantalla !== 'pregunta' || e.altKey || e.ctrlKey || e.metaKey) return;
+  var n = parseInt(e.key, 10), q = PREGUNTAS[st.idx];
+  if (n >= 1 && n <= q.opciones.length){ e.preventDefault(); elegir(n-1); }
+});
+var tAltura = null;
+function avisarAlturaPronto(){ clearTimeout(tAltura); tAltura = setTimeout(avisarAltura, 120); }
+if ('ResizeObserver' in window){ new ResizeObserver(avisarAlturaPronto).observe(document.body); }
+window.addEventListener('load', avisarAltura);
+
+render();
+})();
+</script>
+</body>
+</html>

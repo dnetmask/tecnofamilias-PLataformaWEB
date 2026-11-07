@@ -66,8 +66,13 @@ const nextConfig = {
       },
       {
         // Los juegos (/juegos/<slug>/jugar) traen su propia política aislada (sandbox) y cargan librerías externas.
-        source: "/((?!juegos/[^/]+/jugar).*)",
+        source: "/((?!juegos/[^/]+/jugar|interactivas/).*)",
         headers: [{ key: "Content-Security-Policy", value: CSP }],
+      },
+      {
+        // Herramientas interactivas propias (HTML estático): su código, Google Fonts y nada más; solo se insertan en el sitio.
+        source: "/interactivas/:path*",
+        headers: [{ key: "Content-Security-Policy", value: "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'self'" }],
       },
     ];
   },
