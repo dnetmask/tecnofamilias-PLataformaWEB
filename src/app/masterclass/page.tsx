@@ -51,14 +51,15 @@ const AGENDA = [
   ["Cierre: medición de madurez familiar", "Medimos en vivo qué tan protegida está tu familia y qué hacer primero."],
 ];
 
-const KIT = [
-  { icon: "📊", title: "Medición de madurez familiar en ciberseguridad", text: "En vivo: sabes dónde está tu familia y qué hacer primero.", highlight: true },
-  { icon: "🎥", title: "Sesión en vivo", text: "Con especialistas en ciberseguridad y crianza." },
-  { icon: "📘", title: "Guía maestra en PDF", text: "Paso a paso para proteger las diferentes plataformas de tu hijo." },
-  { icon: "📝", title: "Contrato digital familiar", text: "Imprimible, para acordar reglas sin pelear." },
-  { icon: "✅", title: "Checklist del primer celular", text: "Todo lo que debes revisar antes de entregarlo." },
-  { icon: "🆘", title: "Tarjeta P.A.R.A.R.", text: "De bolsillo, con las rutas de ayuda." },
-  { icon: "💬", title: "Preguntas para conversar", text: "Con tus hijos, según su edad." },
+const INCLUDES = [
+  "Medición de madurez familiar en ciberseguridad, en vivo",
+  "Sesión en vivo con especialistas en ciberseguridad y crianza",
+  "Guía maestra en PDF: paso a paso para proteger las plataformas de tu hijo",
+  "Contrato digital familiar imprimible",
+  "Checklist “antes del primer celular”",
+  "Tarjeta de bolsillo P.A.R.A.R. con rutas de ayuda",
+  "Preguntas para conversar con tus hijos según su edad",
+  "Acceso por correo",
 ];
 
 const PARAR = [
@@ -146,8 +147,6 @@ export default async function MasterclassPage() {
         </div>
         <ul className="mc-trust">
           <li>🔒 Pago seguro con {copProvider}</li>
-          <li>✉️ Acceso por correo</li>
-          {mc.recordingDays > 0 && <li>🎥 Grabación por {mc.recordingDays} días</li>}
         </ul>
         {hasTests && (
           <div className="mc-pay-tests">
@@ -211,56 +210,6 @@ export default async function MasterclassPage() {
         </div>
       </section>
 
-      {/* KIT (fondo claro) */}
-      <section className="mc-kit-section">
-        <div className="container mc-kit">
-          <div className="mc-kit-head">
-            <p className="mc-label" style={{ color: "#8fd3f4" }}>Lo que te llevas</p>
-            <h2>Tu kit incluye</h2>
-          </div>
-          <div className="mc-kit-grid">
-            {KIT.map((k) => k.title === "Sesión en vivo" ? (
-              <details key={k.title} className="mc-kit-item mc-kit-details" id="contenido">
-                <summary>
-                  <span className="mc-kit-icon" aria-hidden>{k.icon}</span>
-                  <div>
-                    <strong>{k.title}</strong>
-                    <p>{k.text}</p>
-                    <span className="mc-kit-more">Ver la agenda y el taller</span>
-                  </div>
-                </summary>
-                <div className="mc-kit-panel">
-                  <p className="mc-kit-panel-lead">Taller en vivo: configuramos juntos, con tu celular en la mano · {mc.duration} · {mc.dateLabel} · {mc.time}</p>
-                  <div className="mc-chips">
-                    {["Android", "iPhone", "WhatsApp", "Instagram", "YouTube", "Roblox", "TikTok"].map((c) => <span key={c}>{c}</span>)}
-                  </div>
-                  <ol className="mc-agenda">
-                    {AGENDA.map(([t, d], i) => (
-                      <li key={t}><span className="n">{i + 1}</span><span><strong>{t}.</strong> {d}</span></li>
-                    ))}
-                  </ol>
-                </div>
-              </details>
-            ) : (
-              <div key={k.title} className={`mc-kit-item${k.highlight ? " hl" : ""}`}>
-                <span className="mc-kit-icon" aria-hidden>{k.icon}</span>
-                <div>
-                  <strong>{k.title}</strong>
-                  {k.highlight && <span className="mc-kit-new">Nuevo</span>}
-                  <p>{k.text}</p>
-                </div>
-              </div>
-            ))}
-            {mc.recordingDays > 0 && (
-              <div className="mc-kit-item">
-                <span className="mc-kit-icon" aria-hidden>⏺️</span>
-                <div><strong>Grabación por {mc.recordingDays} días</strong><p>Por si no puedes asistir o quieres repasar.</p></div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
       {/* PRECIOS (franja oscura corta) */}
       <section className="mc-hero mc-pay-band">
         <div className="container mc-hero-pay" id="precio">
@@ -270,6 +219,13 @@ export default async function MasterclassPage() {
               <p className="mc-hero-pay-sub">{mc.duration} hoy para dormir más tranquilo mañana.</p>
             </div>
             <span className="mc-urgency">🔥 {mc.seatsPct} % de cupos ocupados</span>
+          </div>
+          <div className="mc-includes">
+            <p className="mc-includes-title">Lo que incluye</p>
+            <ul>
+              {INCLUDES.map((i) => <li key={i}>{i}</li>)}
+              {mc.recordingDays > 0 && <li>Grabación por {mc.recordingDays} días</li>}
+            </ul>
           </div>
           <PayOptions variant="hero" />
         </div>
@@ -290,6 +246,22 @@ export default async function MasterclassPage() {
           </div>
           <ol className="mc-risks" style={{ padding: 0, margin: 0 }}>
             {RISKS.map((r) => <li key={r}>{r}</li>)}
+          </ol>
+        </div>
+      </section>
+
+      {/* AGENDA */}
+      <section className="mc-section" id="contenido">
+        <div className="container" style={{ maxWidth: 900 }}>
+          <div className="mc-head">
+            <p className="mc-label">Sesión en vivo</p>
+            <h2>Así es la masterclass</h2>
+            <p>{mc.duration} en vivo · {mc.dateLabel} · {mc.time}. Configuramos juntos Android, iPhone, WhatsApp, Instagram, YouTube, Roblox y TikTok, con tu celular en la mano.</p>
+          </div>
+          <ol className="mc-agenda">
+            {AGENDA.map(([t, d], i) => (
+              <li key={t}><span className="n">{i + 1}</span><span><strong>{t}.</strong> {d}</span></li>
+            ))}
           </ol>
         </div>
       </section>

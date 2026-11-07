@@ -525,3 +525,13 @@ table.table { width: 100%; border-collapse: collapse; font-size: .92rem; backgro
 .mc-pay-band .mc-hero-pay { padding-top: 48px; }
 @media (max-width: 560px) { .mc-kit-section { padding: 40px 0 36px; } .mc-pay-band .mc-hero-pay { padding-top: 36px; } }
 .mc-hero-pay-sub { margin: 6px 0 0; color: var(--yellow); font-weight: 800; font-size: clamp(1.05rem, 2vw, 1.25rem); }
+
+/* "Lo que incluye": texto sencillo sobre el recuadro azul de pago. */
+.mc-includes { margin: 0 0 22px; }
+.mc-includes-title { margin: 0 0 10px; color: #8fd3f4; font-weight: 800; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
+.mc-includes ul { margin: 0; padding: 0; list-style: none; columns: 2 300px; column-gap: 32px; }
+.mc-includes li { color: #e6edf6; font-size: 1rem; line-height: 1.5; padding: 4px 0 4px 26px; position: relative; break-inside: avoid; }
+.mc-includes li::before { content: "✓"; position: absolute; left: 0; top: 4px; color: var(--yellow); font-weight: 900; }
+/* El hero y la franja de pago van seguidos (mismo fondo): sin doble espacio entre ellos. */
+.mc-pay-band .mc-hero-pay { padding-top: 0; }
+@media (max-width: 560px) { .mc-pay-band .mc-hero-pay { padding-top: 0; } }

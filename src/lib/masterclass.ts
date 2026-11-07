@@ -69,8 +69,8 @@ export const MASTERCLASS_DEFAULTS: MasterclassSetting = {
   paypalTestAmountUsd: 3,
   usdTestLink: "",
   usdTestAmountUsd: 2,
-  boldTestAmountCop: 3000,
-  boldTestAmountUsd: 2,
+  boldTestAmountCop: 0,
+  boldTestAmountUsd: 0,
 };
 
 export const getMasterclass = cache(async () => {
