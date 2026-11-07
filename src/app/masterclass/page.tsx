@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 };
 
 const SITUATIONS = [
-  { color: "var(--blue)", text: "Tu hijo de 8 años juega Roblox todas las tardes y habla con “amigos” que tú no conoces." },
-  { color: "var(--yellow)", text: "Tu hija de 13 quiere Instagram y no sabes qué puede ver, quién le escribe ni cómo poner reglas sin pelear." },
-  { color: "var(--red)", text: "El YouTube “para niños” de tu hijo de 5 años termina mostrando videos que nadie eligió." },
+  { emoji: "🎮", color: "var(--blue)", text: "Tu hijo de 8 años juega Roblox todas las tardes y habla con “amigos” que tú no conoces." },
+  { emoji: "📱", color: "var(--yellow)", text: "Tu hija de 13 quiere Instagram y no sabes qué puede ver, quién le escribe ni cómo poner reglas sin pelear." },
+  { emoji: "📺", color: "var(--red)", text: "El YouTube “para niños” de tu hijo de 5 años termina mostrando videos que nadie eligió." },
 ];
 
 const RISKS = [
@@ -43,7 +43,7 @@ const RISKS = [
 const AGENDA = [
   ["Apertura: la historia que nadie quiere vivir", "Un caso real compuesto y lo que revela un perfil “inocente”."],
   ["Los 12 riesgos que vamos a revisar", "Explicados con su solución, las 4C y el semáforo digital."],
-  ["Medición de madurez familiar", "Medimos en vivo qué tan protegida está tu familia y qué hacer primero."],
+  ["Diagnóstico de Protección Digital Familiar", "En vivo: qué tan protegida está tu familia y qué hacer primero."],
   ["El mapa del mundo digital de tus hijos", "Qué usan por edad, el diccionario para papás y el test de las 5 preguntas para evaluar cualquier app."],
   ["Crianza digital con disciplina positiva", "Acuerdos por edad, el primer celular y el contrato familiar."],
   ["Taller de controles parentales en vivo", "Android, iPhone, WhatsApp, Instagram, YouTube y Roblox, con tu celular en la mano."],
@@ -51,7 +51,7 @@ const AGENDA = [
 ];
 
 const INCLUDES = [
-  "Medición de madurez familiar en ciberseguridad, en vivo",
+  "Diagnóstico de Protección Digital Familiar, en vivo",
   "Sesión en vivo con especialistas en ciberseguridad y crianza",
   "Guía maestra en PDF: paso a paso para proteger las plataformas de tu hijo",
   "Contrato digital familiar imprimible",
@@ -267,10 +267,10 @@ export default async function MasterclassPage() {
       <section className="mc-section">
         <div className="container">
           <div className="mc-head"><h2>¿Te suena alguna de estas situaciones?</h2></div>
-          <div className="grid grid-3">
+          <div className="grid grid-3" style={{ gap: 12 }}>
             {SITUATIONS.map((s) => (
-              <div key={s.text} className="mc-card stack" style={{ background: "var(--tint)", border: 0 }}>
-                <span style={{ width: 14, height: 14, borderRadius: "50%", background: s.color, display: "block" }} />
+              <div key={s.text} className="mc-card mc-situation">
+                <span aria-hidden className="mc-situation-emoji">{s.emoji}</span>
                 <p style={{ margin: 0, fontSize: "1.1rem" }}>{s.text}</p>
               </div>
             ))}
